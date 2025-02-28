@@ -1,0 +1,257 @@
+
+
+php artisan shield:setup
+
+php artisan shield:install admin
+
+php artisan shield:generate --all
+
+php artisan shield:super-admin
+
+php artisan make:filament-resource categoryNilai --generate
+
+php artisan make:filament-resource categoryNilai --generate --soft-deletes
+
+
+CATATAN : SETIAP TABEL HARUS ADA (
+    created at
+    updated_at
+    deleted at
+)
+sangnus full Backend
+
+user
+
+Tabel DB
+    user
+        nama
+        email
+        password
+        image -> nullable
+        email_verified_at
+        deskripsi -> nullable
+        remember_token
+
+    Alamat
+        id
+        id_user
+        alamat
+        kabupaten
+        provinsi
+        kode pos
+
+group pembelian
+
+CREATE TABLE carts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    item_id INT, -- ID dari item (event, produk)
+    item_type ENUM('event', 'produk'), -- Jenis item
+    jumlah INT DEFAULT 1,
+    harga DECIMAL(10,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    total_pembelian DECIMAL(10,2),
+    status_pembelian ENUM(
+            'pending',
+            'sudah dibayar',
+            'kadaluarsa',
+            'gagal',
+            'dibatalkan',
+            'dikembalikan'
+        ) DEFAULT 'pending',,
+    order_id VARCHAR(255) UNIQUE, -- ID dari Midtrans
+    metode_pembayaran ENUM('midtrans', 'qris', 'ewallet', 'manual_transfer'),
+    transaction_id VARCHAR(255) UNIQUE NULL, -- ID transaksi dari Midtrans
+    payment_url TEXT NULL, -- URL pembayaran jika menggunakan Midtrans
+    midtrans_response TEXT NULL, -- Simpan response JSON dari Midtrans untuk tracking
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE midtrans_logs (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    transaction_id VARCHAR(255),
+    order_id VARCHAR(255),
+    status_code VARCHAR(10),
+    gross_amount DECIMAL(15,2),
+    payment_type VARCHAR(50),
+    transaction_status ENUM('pending', 'settlement', 'deny', 'expire', 'cancel', 'refund', 'partial_refund', 'chargeback'),
+    fraud_status ENUM('accept', 'deny', 'challenge') DEFAULT 'accept',
+    midtrans_response TEXT, -- Simpan response JSON dari webhook
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+artikel => semua orang bisa posting, nanti di moderasi oleh admin website
+
+
+Tabel DB
+    kategori artikel
+        id
+        nama
+
+    artikel
+        id
+        title
+        views
+        user_id
+        kategori_id
+        slug
+        image
+        excerpt
+        keyword
+        content
+        status_artikel => draft, publish, premium
+        published_at
+        created at
+        updated_at
+        deleted at
+
+
+event => konek ke payment gateaway (Midtrans)
+
+Tabel DB
+    kategori event
+        id
+        nama
+
+    harga event
+        id
+        id_event
+        nama
+        harga
+
+    event
+        nama
+        slug
+        image
+        status_artikel => draft, publish, premium
+        keyword
+        excerpt
+        deskripsi
+        tempat
+        tanggal
+        link_gmap
+        created_at
+        updated_at
+        deleted_at
+
+    pembelian event
+        id_pembelian_produk
+        id_event
+        orders_id
+        jumlah_tiket
+        jenis_tiket
+        nama
+        harga
+        tanggal
+
+
+Subscription
+
+50k
+99k
+199k
+
+CREATE TABLE plans (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nama VARCHAR(255),
+    harga DECIMAL(10,2), -- Harga per bulan/tahun
+    durasi ENUM('30', '90', '365'), -- Durasi dalam hari (misal: 30 hari, 90 hari, 365 hari)
+    fitur TEXT, -- JSON berisi daftar fitur yang tersedia. misal ["akses_video", "tanpa_iklan", "unduh_materi", "peta_interaktif_full"]
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE subscriptions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    plan_id INT,
+    status ENUM('aktif', 'expired', 'cancelled') DEFAULT 'aktif',
+    tanggal_mulai TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tanggal_berakhir TIMESTAMP,
+    transaction_id VARCHAR(255) NULL, -- ID dari Midtrans atau payment gateway
+    payment_status ENUM('pending', 'paid', 'failed', 'refunded') DEFAULT 'pending', -- Status pembayaran
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE
+);
+
+
+
+
+
+produk (E-Commerce) => konek ke payment gateaway (Midtrans)
+
+Tabel DB
+    produk
+    pembayaran produk
+    pembelian produk
+    riwayat pembelian produk
+
+kontak
+Tabel DB
+    kontak
+        id
+        email
+        pesan
+
+Group Ragam Indonesia
+    Peta Interaktif
+        judul
+        tipe => [lagu,alat musik, rumah adat, makanan khas]
+        asal
+        image
+        lat
+        lng
+
+    Lagu Daerah
+        nama
+        pencipta
+        tahun_diciptakan
+        asal_lagu
+        image
+        audio (file mp3)
+        video
+        kategori ENUM('tradisional', 'modern')
+        lirik
+        sejarah
+
+    Alat Musik
+        nama
+        asal
+        image
+        cara_main ENUM('dipetik', 'ditiup', 'dipukul', 'digesek')
+        audio (file mp3)
+        video
+        excerpt
+        deskripsi
+
+
+    Rumah Adat
+        nama: string;
+        user_id
+        asal_rumah: string;
+        image: string;
+        excerpt
+        deskripsi
+
+    Makanan Khas
+        nama: string;
+        user_id
+        asal_makanan: string;
+        image: string;
+        bahan_utama
+        deskripsi
+
+
+
