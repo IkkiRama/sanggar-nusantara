@@ -1,4 +1,4 @@
-
+php artisan migrate:refresh --seed
 
 php artisan shield:setup
 
@@ -34,7 +34,7 @@ Tabel DB
 
     Alamat
         id
-        id_user
+        user_id
         alamat
         kabupaten
         provinsi
@@ -95,16 +95,19 @@ artikel => semua orang bisa posting, nanti di moderasi oleh admin website
 Tabel DB
     kategori artikel
         id
-        nama
+        slug
+        image => nullable
+        nama => nullable
+        deksripsi => nullable
 
     artikel
         id
         title
+        slug
         views
         user_id
         kategori_id
-        slug
-        image
+        image => nullable
         excerpt
         keyword
         content
@@ -121,14 +124,16 @@ Tabel DB
     kategori event
         id
         nama
+        slug
 
     harga event
         id
-        id_event
+        event_id
         nama
         harga
 
     event
+        kategori_event_id
         nama
         slug
         image
@@ -144,8 +149,7 @@ Tabel DB
         deleted_at
 
     pembelian event
-        id_pembelian_produk
-        id_event
+        event_id
         orders_id
         jumlah_tiket
         jenis_tiket
@@ -165,6 +169,7 @@ CREATE TABLE plans (
     nama VARCHAR(255),
     harga DECIMAL(10,2), -- Harga per bulan/tahun
     durasi ENUM('30', '90', '365'), -- Durasi dalam hari (misal: 30 hari, 90 hari, 365 hari)
+    deskripsi
     fitur TEXT, -- JSON berisi daftar fitur yang tersedia. misal ["akses_video", "tanpa_iklan", "unduh_materi", "peta_interaktif_full"]
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
