@@ -23,6 +23,8 @@ return new class extends Migration
             $table->enum('kategori', ['tradisional', 'modern']);
             $table->text('lirik')->nullable();
             $table->text('sejarah')->nullable();
+            $table->string('lat');
+            $table->string('lng');
             $table->timestamps();
             $table->softDeletes();
         });

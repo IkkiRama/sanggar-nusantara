@@ -21,7 +21,7 @@ class EventFactory extends Factory
             'nama' => $this->faker->sentence,
             'slug' => $this->faker->slug,
             'image' => $this->faker->imageUrl,
-            'status_artikel' => $this->faker->randomElement(['draft', 'publish', 'premium']),
+            'status_event' => $this->faker->randomElement(['draft', 'publish', 'premium']),
             'keyword' => $this->faker->words(5, true),
             'excerpt' => $this->faker->text(100),
             'deskripsi' => $this->faker->paragraphs(3, true),

@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('pembelian_events', function (Blueprint $table) {
             $table->id();
             $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
-            $table->foreignId('orders_id')->constrained('orders')->onDelete('cascade');
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->integer('jumlah_tiket');
             $table->string('jenis_tiket');
             $table->string('nama');
-            $table->decimal('harga', 10, 2);
+            $table->integer('harga');
+            $table->integer('total_harga');
             $table->date('tanggal');
             $table->timestamps();
             $table->softDeletes();

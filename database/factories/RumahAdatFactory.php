@@ -18,12 +18,15 @@ class RumahAdatFactory extends Factory
     public function definition(): array
     {
         return [
-            'nama' => $this->faker->word,
             'user_id' => User::factory(),
+            'nama' => $this->faker->word,
+            'slug' => $this->faker->slug,
             'asal_rumah' => $this->faker->city,
             'image' => $this->faker->imageUrl(),
             'excerpt' => $this->faker->sentence,
             'deskripsi' => $this->faker->text,
+            'lat' => $this->faker->latitude,
+            'lng' => $this->faker->longitude,
         ];
     }
 }

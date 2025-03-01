@@ -11,7 +11,7 @@ class RumahAdat extends Model
     /** @use HasFactory<\Database\Factories\RumahAdatFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['nama', 'user_id', 'asal_rumah', 'image', 'excerpt', 'deskripsi'];
+    protected $fillable = ['nama', 'slug', 'user_id', 'asal_rumah', 'image', 'excerpt', 'deskripsi', 'lat', 'lng'];
 
     public function user()
     {

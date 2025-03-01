@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Alamat;
+use App\Models\Discount;
+use App\Models\DiscountEvent;
+use App\Models\DiscountUser;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -28,5 +31,8 @@ class DatabaseSeeder extends Seeder
         \App\Models\PembelianEvent::factory(30)->create();
         \App\Models\Plan::factory(10)->create();
         \App\Models\Subscription::factory(10)->create();
+        Discount::factory(10)->create();
+        DiscountUser::factory(10)->create();
+        DiscountEvent::factory(10)->create();
     }
 }

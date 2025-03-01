@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->decimal('total_pembelian', 10, 2);
+            $table->foreignId('discount_id')->nullable()->constrained('discounts')->onDelete('set null');
+            $table->integer('total_pembelian');
+            $table->integer('discount_amount')->default(0);
+            $table->integer('total_akhir');
             $table->enum('status_pembelian', ['pending', 'sudah dibayar', 'kadaluarsa', 'gagal', 'dibatalkan', 'dikembalikan'])->default('pending');
             $table->string('order_id')->unique();
             $table->enum('metode_pembayaran', ['midtrans', 'qris', 'ewallet', 'manual_transfer']);

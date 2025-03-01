@@ -17,7 +17,8 @@ return new class extends Migration
             $table->integer('item_id');
             $table->enum('item_type', ['event', 'produk']);
             $table->integer('jumlah')->default(1);
-            $table->decimal('harga', 10, 2);
+            $table->integer('harga');
+            $table->text('deskripsi');
             $table->timestamps();
         });
     }

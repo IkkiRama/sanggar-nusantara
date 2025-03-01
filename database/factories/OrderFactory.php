@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Discount;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,10 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => 1,
+            'discount_id' => Discount::factory(),
             'total_pembelian' => $this->faker->randomFloat(2, 1000, 100000),
+            'discount_amount' => $this->faker->randomFloat(2, 0, 500),
+            'total_akhir' => $this->faker->randomFloat(2, 1000, 100000),
             'status_pembelian' => 'pending',
             'order_id' => $this->faker->uuid,
             'metode_pembayaran' => 'midtrans',

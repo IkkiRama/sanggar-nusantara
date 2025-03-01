@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('video')->nullable();
             $table->text('excerpt')->nullable();
             $table->text('deskripsi')->nullable();
+            $table->string('lat');
+            $table->string('lng');
             $table->timestamps();
             $table->softDeletes();
         });

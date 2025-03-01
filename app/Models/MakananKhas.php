@@ -11,7 +11,7 @@ class MakananKhas extends Model
     /** @use HasFactory<\Database\Factories\MakananKhasFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['nama', 'user_id', 'asal_makanan', 'image', 'bahan_utama', 'deskripsi'];
+    protected $fillable = ['nama', 'slug', 'user_id', 'asal_makanan', 'image', 'bahan_utama', 'deskripsi', 'lat', 'lng'];
 
     public function user()
     {

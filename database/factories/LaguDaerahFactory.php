@@ -27,6 +27,8 @@ class LaguDaerahFactory extends Factory
             'kategori' => $this->faker->randomElement(['tradisional', 'modern']),
             'lirik' => $this->faker->paragraph,
             'sejarah' => $this->faker->text,
+            'lat' => $this->faker->latitude,
+            'lng' => $this->faker->longitude,
         ];
     }
 }

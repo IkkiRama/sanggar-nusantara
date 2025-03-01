@@ -11,5 +11,5 @@ class AlatMusik extends Model
     /** @use HasFactory<\Database\Factories\AlatMusikFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['nama', 'asal', 'image', 'cara_main', 'audio', 'video', 'excerpt', 'deskripsi'];
+    protected $fillable = ['nama', 'asal', 'image', 'cara_main', 'audio', 'video', 'excerpt', 'deskripsi', 'lat', 'lng'];
 }

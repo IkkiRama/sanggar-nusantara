@@ -12,7 +12,7 @@ class Artikel extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['title', 'slug', 'views', 'user_id', 'kategori_id', 'image', 'excerpt', 'keyword', 'content', 'status_artikel', 'published_at'];
-
+ 
     public function kategori()
     {
         return $this->belongsTo(KategoriArtikel::class, 'kategori_id');

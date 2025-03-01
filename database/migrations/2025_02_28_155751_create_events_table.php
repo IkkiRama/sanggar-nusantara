@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('slug')->unique();
             $table->string('image')->nullable();
-            $table->enum('status_artikel', ['draft', 'publish', 'premium'])->default('draft');
+            $table->enum('status_event', ['draft', 'publish', 'premium']);
             $table->string('keyword');
             $table->text('excerpt');
             $table->longText('deskripsi');

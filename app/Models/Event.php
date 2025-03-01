@@ -11,7 +11,7 @@ class Event extends Model
     /** @use HasFactory<\Database\Factories\EventFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['kategori_event_id', 'nama', 'slug', 'image', 'status_artikel', 'keyword', 'excerpt', 'deskripsi', 'tempat', 'tanggal', 'link_gmap'];
+    protected $fillable = ['kategori_event_id', 'nama', 'slug', 'image', 'status_event', 'keyword', 'excerpt', 'deskripsi', 'tempat', 'tanggal', 'link_gmap'];
 
     public function kategori()
     {
@@ -21,5 +21,10 @@ class Event extends Model
     public function harga()
     {
         return $this->hasMany(HargaEvent::class);
+    }
+
+    public function discount()
+    {
+        return $this->hasMany(DiscountEvent::class);
     }
 }

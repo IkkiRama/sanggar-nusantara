@@ -25,6 +25,8 @@ class AlatMusikFactory extends Factory
             'video' => $this->faker->url,
             'excerpt' => $this->faker->sentence,
             'deskripsi' => $this->faker->text,
+            'lat' => $this->faker->latitude,
+            'lng' => $this->faker->longitude,
         ];
     }
 }

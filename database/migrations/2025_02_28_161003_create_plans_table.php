@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->decimal('harga', 10, 2);
+            $table->integer('harga');
             $table->enum('durasi', ['30', '90', '365']);
             $table->text('deskripsi');
             $table->text('fitur'); // JSON berisi daftar fitur

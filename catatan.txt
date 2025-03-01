@@ -1,4 +1,19 @@
+DISKONNN
+
+
+UPDATE ORDER
+
+BIKIN INFO DETAIL DI PEMBELIAN, Midtrans Log DAN Subscription
+
+php artisan make:model Plan -mfc
+
+php artisan db:seed
+
 php artisan migrate:refresh --seed
+
+php artisan make:filament-user
+
+
 
 php artisan shield:setup
 
@@ -12,6 +27,13 @@ php artisan make:filament-resource categoryNilai --generate
 
 php artisan make:filament-resource categoryNilai --generate --soft-deletes
 
+php artisan make:filament-relation-manager CategoryResource posts title
+
+CategoryResource is the name of the resource class for the parent model.
+
+posts is the name of the relationship you want to manage.
+
+title is the name of the attribute that will be used to identify posts.
 
 CATATAN : SETIAP TABEL HARUS ADA (
     created at
@@ -54,10 +76,14 @@ CREATE TABLE carts (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+
 CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
-    total_pembelian DECIMAL(10,2),
+    total_pembelian DECIMAL(10,2), -- Total sebelum diskon
+    discount_id BIGINT UNSIGNED NULL, -- ID Diskon yang digunakan
+    discount_amount DECIMAL(10,2) DEFAULT 0.00, -- Jumlah diskon yang diterapkan
+    total_akhir DECIMAL(10,2) GENERATED ALWAYS AS (total_pembelian - discount_amount) STORED, -- Total setelah diskon
     status_pembelian ENUM(
             'pending',
             'sudah dibayar',
@@ -65,7 +91,7 @@ CREATE TABLE orders (
             'gagal',
             'dibatalkan',
             'dikembalikan'
-        ) DEFAULT 'pending',,
+        ) DEFAULT 'pending',
     order_id VARCHAR(255) UNIQUE, -- ID dari Midtrans
     metode_pembayaran ENUM('midtrans', 'qris', 'ewallet', 'manual_transfer'),
     transaction_id VARCHAR(255) UNIQUE NULL, -- ID transaksi dari Midtrans
@@ -73,8 +99,55 @@ CREATE TABLE orders (
     midtrans_response TEXT NULL, -- Simpan response JSON dari Midtrans untuk tracking
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (discount_id) REFERENCES discounts(id) ON DELETE SET NULL -- Jika diskon dihapus, tetap bisa track ordernya
+);
+
+
+
+
+Tabel ini menyimpan informasi utama tentang diskon.
+CREATE TABLE discounts (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL, -- Nama diskon
+    type ENUM('percentage', 'fixed', 'voucher') NOT NULL, -- Jenis diskon
+    amount DECIMAL(10,2) NOT NULL, -- Nilai diskon (persentase atau nominal)
+    code VARCHAR(50) UNIQUE NULL, -- Kode voucher (jika ada)
+    min_purchase DECIMAL(10,2) DEFAULT NULL, -- Minimal pembelian agar diskon berlaku
+    max_discount DECIMAL(10,2) DEFAULT NULL, -- Batas maksimum diskon untuk diskon persentase
+    start_date DATETIME NOT NULL, -- Mulai berlaku
+    end_date DATETIME NOT NULL, -- Batas waktu diskon
+    usage_limit INT DEFAULT NULL, -- Batas pemakaian (NULL = tidak terbatas)
+    usage_count INT DEFAULT 0, -- Jumlah penggunaan
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+
+
+Tabel ini menyimpan siapa saja yang sudah menggunakan diskon tertentu.
+CREATE TABLE discount_user (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    discount_id BIGINT UNSIGNED NOT NULL,
+    user_id BIGINT UNSIGNED NOT NULL,
+    used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (discount_id) REFERENCES discounts(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+
+
+
+Jika diskon hanya berlaku untuk produk tertentu, bisa menggunakan tabel ini.
+CREATE TABLE discount_event (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    discount_id BIGINT UNSIGNED NOT NULL,
+    event_id BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (discount_id) REFERENCES discounts(id) ON DELETE CASCADE,
+    FOREIGN KEY (event_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
 
 CREATE TABLE midtrans_logs (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -210,16 +283,9 @@ Tabel DB
         email
         pesan
 
-Group Ragam Indonesia
-    Peta Interaktif
-        judul
-        tipe => [lagu,alat musik, rumah adat, makanan khas]
-        asal
-        image
-        lat
-        lng
+Group Ragam Indonesia (PETA INTERAKTIF AMBIL NAMA, GAMBAR, ASAL, LAT, LNG)
 
-    Lagu Daerah
+    Lagu Daerah (Modal)
         nama
         pencipta
         tahun_diciptakan
@@ -230,8 +296,10 @@ Group Ragam Indonesia
         kategori ENUM('tradisional', 'modern')
         lirik
         sejarah
+        lat
+        lng
 
-    Alat Musik
+    Alat Musik (Modal)
         nama
         asal
         image
@@ -240,23 +308,29 @@ Group Ragam Indonesia
         video
         excerpt
         deskripsi
+        lat
+        lng
 
 
-    Rumah Adat
+    Rumah Adat (Detail)
         nama: string;
         user_id
         asal_rumah: string;
         image: string;
         excerpt
         deskripsi
+        lat
+        lng
 
-    Makanan Khas
+    Makanan Khas (Detail)
         nama: string;
         user_id
         asal_makanan: string;
         image: string;
         bahan_utama
         deskripsi
+        lat
+        lng
 
 
 

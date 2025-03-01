@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
             $table->string('nama');
-            $table->decimal('harga', 10, 2);
+            $table->decimal('harga', 10);
             $table->timestamps();
             $table->softDeletes();
         });

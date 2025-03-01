@@ -15,7 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, HasApiTokens;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes, HasApiTokens;
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -28,7 +28,7 @@ class User extends Authenticatable implements FilamentUser
      * @var list<string>
      */
 
-    protected $fillable = ['nama', 'email', 'password', 'image', 'email_verified_at', 'deskripsi', 'remember_token'];
+    protected $fillable = ['name', 'email', 'password', 'image', 'email_verified_at', 'deskripsi', 'remember_token'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -83,5 +83,10 @@ class User extends Authenticatable implements FilamentUser
     public function makanan_khas()
     {
         return $this->hasMany(MakananKhas::class);
+    }
+
+    public function discounts()
+    {
+        return $this->hasMany(DiscountUser::class);
     }
 }
