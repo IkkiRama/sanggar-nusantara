@@ -1,7 +1,8 @@
+ADD ROLE IN USER TABEL
+
+HARGA EVENT RELATION MANAGER
+
 DISKONNN
-
-
-UPDATE ORDER
 
 BIKIN INFO DETAIL DI PEMBELIAN, Midtrans Log DAN Subscription
 
@@ -334,3 +335,55 @@ Group Ragam Indonesia (PETA INTERAKTIF AMBIL NAMA, GAMBAR, ASAL, LAT, LNG)
 
 
 
+
+
+
+
+
+
+
+public function show($slug)
+    {
+        $headers = [
+            'Content-Type' => 'application/json',
+            'X-Powered-By' => 'Rifki Romadhan',
+            'X-Content-Language' => 'id',
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ];
+
+        try {
+
+            $artikel = Artikel::where([
+                ["slug", $slug],
+                ["status_artikel", '!=', "draft"]
+            ])
+            ->withoutTrashed()
+            ->with("komentar", "kategori:id,nama", "user:id,name")->firstOrFail();
+
+            if (empty($artikel)) {
+                throw new \Exception("Artikel tidak ditemukan.");
+            }
+
+            $newViews = $artikel->views + 1;
+            $artikel->update([
+                "views" => $newViews
+            ]);
+
+            return response()->json([
+                "success" => true,
+                "data" => $artikel,
+                "message" => "Artikel ".$slug." Berhasil di Tampilkan"
+            ], 200, $headers);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "success" => false,
+                "data" => null,
+                "message" => "Error: " . $e->getMessage()
+            ], 500, $headers);
+
+        }
+
+    }

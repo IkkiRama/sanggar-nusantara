@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -88,5 +89,10 @@ class User extends Authenticatable implements FilamentUser
     public function discounts()
     {
         return $this->hasMany(DiscountUser::class);
+    }
+    
+    public function komentar(): HasMany
+    {
+        return $this->hasMany(Komentar::class, 'artikel_id');
     }
 }
