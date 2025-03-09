@@ -5,10 +5,13 @@ use App\Http\Controllers\FrontController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontController::class, 'index']);
-Route::get('/event', [FrontController::class, 'event']);
-Route::get('/event/{slug}', [FrontController::class, 'showEvent']);
 Route::get('/subscription', [FrontController::class, 'subscription']);
 Route::get('/peta-interaktif', [FrontController::class, 'petaInteraktif']);
+Route::post('/kontak/{slug}', [FrontController::class, 'kontak']);
+
+Route::get('/event', [FrontController::class, 'event']);
+Route::get('/event/{slug}', [FrontController::class, 'showEvent']);
+
 Route::get('/artikel', [FrontController::class, 'artikel']);
 Route::get('/artikel/{slug}', [FrontController::class, 'showArtikel']);
 
@@ -19,8 +22,10 @@ Route::get('/profile/subscription', [FrontController::class, 'profileSubscriptio
 Route::get('/profile/transaksi', [FrontController::class, 'transaksi']);
 
 Route::get('/ragam-indonesia', [FrontController::class, 'ragamIndonesia']);
+Route::get('/ragam-indonesia/bahasa-daerah', [FrontController::class, 'alatMusik']);
 Route::get('/ragam-indonesia/alat-musik', [FrontController::class, 'alatMusik']);
 Route::get('/ragam-indonesia/rumah-adat', [FrontController::class, 'rumahAdat']);
+Route::get('/ragam-indonesia/seni-tari', [FrontController::class, 'laguDaerah']);
 Route::get('/ragam-indonesia/lagu-daerah', [FrontController::class, 'laguDaerah']);
 Route::get('/ragam-indonesia/rumah-adat/{slug}', [FrontController::class, 'showRumahAdat']);
 Route::get('/ragam-indonesia/makanan-khas', [FrontController::class, 'makananKhas']);

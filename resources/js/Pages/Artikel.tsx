@@ -7,11 +7,10 @@ import {
   FaMapMarkedAlt,
 } from "react-icons/fa";
 import { Link } from '@inertiajs/react';
-import DarkNavbar from "../layouts/darkNavbar";
 import LightNavbar from "../layouts/lightNavbar";
 import MainLayout from "../Layouts/mainLayout";
 
-export default function News() {
+export default function Artikel() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -102,10 +101,10 @@ export default function News() {
                   <FaFire />
                   <h2>TRENDING</h2>
                 </span>
-                <span className="flex items-center gap-2 text-sm hover:underline dark:text-gray-200">
+                {/* <span className="flex items-center gap-2 text-sm hover:underline dark:text-gray-200">
                   <a href="#">View More</a>
                   <FaArrowRight size={13} />
-                </span>
+                </span> */}
               </div>
               <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-10">
                 <div>
@@ -146,7 +145,7 @@ export default function News() {
                 </div>
               </div>
             </div>
-            <div className="border p-7 relative dark:border-gray-800 md:block hidden">
+            <div className="border border-gray-300 rounded-md p-7 relative dark:border-gray-800 md:block hidden">
               <div className="bg-red-500 w-[50px] h-[50px] text-white flex items-center justify-center absolute top-0 left-[20px] lg:-translate-y-1/2">
                 <FaEnvelope size={20} />
               </div>
@@ -155,7 +154,7 @@ export default function News() {
               </h3>
               <input
                 type="text"
-                className="border w-full py-3 px-3 dark:bg-gray-800 dark:border-gray-900 dark:text-gray-200"
+                className="border border-gray-300 rounded-md w-full py-3 px-3 dark:bg-gray-800 dark:border-gray-900 dark:text-gray-200"
                 placeholder="Email Address"
               />
               <Link href={"/subscription"}>
@@ -166,7 +165,7 @@ export default function News() {
             </div>
           </div>
         </section>
-        <hr className="my-10 dark:border-gray-800" />
+        <hr className="my-10 border-gray-300" />
         <section className="grid lg:grid-cols-4 gap-20 mt-10">
           <div className="lg:col-span-3 md:w-auto w-[95%]">
             <div className="md:grid md:grid-cols-5 items-center lg:gap-10 md:gap-5 md:mb-5 mb-16">
@@ -274,56 +273,6 @@ export default function News() {
               </div>
             </div>
 
-            <div className="flex gap-1 justify-center mt-10">
-              <a
-                href="#"
-                className="text-black py-1 md:px-4 px-3 md:text-base text-sm rounded hover:text-white hover:bg-red-400 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-red-400"
-              >
-                &laquo;
-              </a>
-              <a
-                href="#"
-                className="text-white bg-red-500 py-1 md:px-4 px-3 md:text-base text-sm rounded"
-              >
-                1
-              </a>
-              <a
-                href="#"
-                className="text-black py-1 md:px-4 px-3 md:text-base text-sm rounded hover:text-white hover:bg-red-400 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-red-400"
-              >
-                2
-              </a>
-              <a
-                href="#"
-                className="text-black py-1 md:px-4 px-3 md:text-base text-sm rounded hover:text-white hover:bg-red-400 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-red-400"
-              >
-                3
-              </a>
-              <a
-                href="#"
-                className="text-black py-1 md:px-4 px-3 md:text-base text-sm rounded hover:text-white hover:bg-red-400 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-red-400"
-              >
-                4
-              </a>
-              <a
-                href="#"
-                className="text-black py-1 md:px-4 px-3 md:text-base text-sm rounded hover:text-white hover:bg-red-400 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-red-400"
-              >
-                5
-              </a>
-              <a
-                href="#"
-                className="text-black py-1 md:px-4 px-3 md:text-base text-sm rounded hover:text-white hover:bg-red-400 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-red-400"
-              >
-                6
-              </a>
-              <a
-                href="#"
-                className="text-black py-1 md:px-4 px-3 md:text-base text-sm rounded hover:text-white hover:bg-red-400 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-red-400"
-              >
-                &raquo;
-              </a>
-            </div>
           </div>
           <div className="lg:block hidden">
             <img

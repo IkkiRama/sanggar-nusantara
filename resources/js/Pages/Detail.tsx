@@ -95,7 +95,7 @@ export default function Detail() {
             </h1>
             <p className="text-sm mt-2 text-gray-700 dark:text-gray-400">
               Rifki Romadhan merupakan penulis aktif mengenai kebudayaan
-              indonesia pada website Warisan Nusantara.
+              indonesia pada website Sanggar Nusantara.
             </p>
             <div className="mt-12">
               <span className="bg-red-500/20 text-red-500 font-semibold px-2 py-1 rounded text-[12px] mx-1 mb-2 inline-block">

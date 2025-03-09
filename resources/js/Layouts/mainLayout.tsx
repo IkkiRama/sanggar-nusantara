@@ -7,7 +7,7 @@ import RagamIndonesia from './../Pages/RagamIndonesia';
 import RagamMakanan from './../Pages/RagamMakanan';
 import DetailRagamMakanan from './../Pages/DetailRagamMakanan';
 import DetailRagamTarian from './../Pages/DetailRagamTarian';
-import News from './../Pages/News';
+import News from '../Pages/Artikel';
 import Subscription from './../Pages/Subscription';
 import Map from './../Pages/Map';
 import Event from './../Pages/Event';

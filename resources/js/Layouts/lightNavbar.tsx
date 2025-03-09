@@ -56,7 +56,7 @@ const MobileMenuItem = memo(({ href, icon: Icon, label, isDark, onClick, isActiv
         href={href}
         className={`flex items-center space-x-3 p-3 rounded-xl ${
             isActive
-                ? 'bg-blue-600 text-white'
+                ? 'bg-red-600 text-white'
                 : isDark
                     ? 'text-gray-300 hover:bg-gray-800/60'
                     : 'text-gray-700 hover:bg-gray-100'
@@ -65,7 +65,7 @@ const MobileMenuItem = memo(({ href, icon: Icon, label, isDark, onClick, isActiv
     >
         <div className={`size-9 rounded-xl flex items-center justify-center ${
             isActive
-                ? 'bg-blue-500'
+                ? 'bg-red-500'
                 : isDark ? 'bg-gray-800/80' : 'bg-gray-100'
         }`}>
             <Icon className="w-5 h-5" />
@@ -133,7 +133,7 @@ const DesktopNavItem = memo(({ item, isActive, isDark, activeDropdown, onDropdow
     return (
         <Link
             href={item.path}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center ${
                 isActive
                     ? 'text-red-500'
                     : isDark

@@ -117,13 +117,13 @@ export default function Footer() {
                 <div className="flex flex-wrap">
                     <a href="/"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Beranda</a>
-                    <a href="/news"
+                    <a href="/event"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Event</a>
-                    <a href="#experience" className="text-white mb-4 w-full hover:text-red-500 hover:underline
+                    <a href="/artikel" className="text-white mb-4 w-full hover:text-red-500 hover:underline
                         md:text-lg">Berita</a>
                     <a href="/subscription"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Subscription</a>
-                    <a href="/map"
+                    <a href="/peta-interaktif"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Peta Interaktif</a>
                     <a href="/ragam-indonesia"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Ragam Indonesia</a>

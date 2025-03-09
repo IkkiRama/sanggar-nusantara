@@ -266,22 +266,22 @@ export default function RagamIndonesia() {
           <div className="grid grid-cols-1 gap-5 animate-scroll-to-t">
             <div className="row-span-2 h-[500px] rounded-md overflow-hidden">
               <img
-                src="https://warisannusantara.vercel.app/images/header/1.jpg"
-                alt=""
+                src="./images/ragam-indonesia/1.jpg"
+                alt="image header 1"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="row-span-2 h-[500px] rounded-md overflow-hidden">
               <img
-                src="https://i.pinimg.com/736x/b9/78/07/b978077a8ca10c45603baf9bd7581379.jpg"
-                alt=""
+                src="./images/ragam-indonesia/2.jpg"
+                alt="image header 2"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="row-span-2 h-[500px] rounded-md overflow-hidden">
               <img
-                src="https://i.pinimg.com/564x/8f/47/ab/8f47abdb931c3b44f411c6bdf38dde00.jpg"
-                alt=""
+                src="./images/ragam-indonesia/3.jpg"
+                alt="image header 3"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -290,29 +290,29 @@ export default function RagamIndonesia() {
           <div className="animate-scroll-to-b">
             <div className="h-[240px] -mt-52 rounded-md overflow-hidden">
               <img
-                src="https://i.pinimg.com/564x/48/a3/c3/48a3c30b3d068b7ef86c32f19d5ead3b.jpg"
-                alt=""
+                src="./images/ragam-indonesia/4.jpg"
+                alt="image header 4"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="h-[240px] mt-5 rounded-md overflow-hidden">
               <img
-                src="https://i.pinimg.com/564x/fc/ce/06/fcce0689b975e499e970557f4596df58.jpg"
-                alt=""
+                src="./images/ragam-indonesia/5.jpg"
+                alt="image header 5"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="h-[240px] mt-5 rounded-md overflow-hidden">
               <img
-                src="https://i.pinimg.com/564x/32/d6/4e/32d64e9f4ab70f413914976e48f8ae81.jpg"
-                alt=""
+                src="./images/ragam-indonesia/6.jpg"
+                alt="image header 6"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="h-[240px] mt-5 rounded-md overflow-hidden">
               <img
-                src="https://i.pinimg.com/736x/45/1c/3a/451c3a2537616f5d5d06750972b5458e.jpg"
-                alt=""
+                src="./images/ragam-indonesia/7.jpg"
+                alt="image header 7"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -336,31 +336,31 @@ export default function RagamIndonesia() {
           </div>
           <div>
             <div className="grid md:grid-cols-3 grid-cols-2 gap-7">
-              <div className="shadow py-4 px-2 text-center rounded border-b-4 border-red-500 hover:bg-red-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
+              <Link href="/ragam-indonesia/bahasa-daerah" className="shadow py-4 px-2 text-center rounded border-b-4 border-red-500 hover:bg-red-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <FaLanguage className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">BAHASA</h6>
-              </div>
-              <div className="shadow py-4 px-2 text-center rounded border-b-4 border-indigo-500 hover:bg-indigo-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
+              </Link>
+              <Link href="/ragam-indonesia/alat-musik" className="shadow py-4 px-2 text-center rounded border-b-4 border-indigo-500 hover:bg-indigo-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <MdOutlinePiano className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">ALAT MUSIK</h6>
-              </div>
-              <div className="shadow py-4 px-2 text-center rounded border-b-4 border-emerald-500 hover:bg-emerald-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
+              </Link>
+              <Link href="/ragam-indonesia/rumah-adat" className="shadow py-4 px-2 text-center rounded border-b-4 border-emerald-500 hover:bg-emerald-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <FaHome className="mx-auto" size={30} />
 
                 <h6 className="mt-3 md:text-base text-sm">RUMAH ADAT</h6>
-              </div>
-              <div className="shadow py-4 px-2 text-center rounded border-b-4 border-yellow-500 hover:bg-yellow-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
+              </Link>
+              <Link href="/ragam-indonesia/seni-tari" className="shadow py-4 px-2 text-center rounded border-b-4 border-yellow-500 hover:bg-yellow-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <GiHeartInside className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">SENI TARI</h6>
-              </div>
-              <div className="shadow py-4 px-2 text-center rounded border-b-4 border-purple-500 hover:bg-purple-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
+              </Link>
+              <Link href="/ragam-indonesia/lagu-daerah" className="shadow py-4 px-2 text-center rounded border-b-4 border-purple-500 hover:bg-purple-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <GiMusicalScore className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">LAGU DAERAH</h6>
-              </div>
-              <div className="shadow py-4 px-2 text-center rounded border-b-4 border-orange-500 hover:bg-orange-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
+              </Link>
+              <Link href="/ragam-indonesia/makanan-khas" className="shadow py-4 px-2 text-center rounded border-b-4 border-orange-500 hover:bg-orange-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <FaBowlFood className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">MAKANAN KHAS</h6>
-              </div>
+              </Link>
             </div>
           </div>
         </section>
@@ -386,9 +386,9 @@ export default function RagamIndonesia() {
               </div>
             </div>
             <div className="lg:block hidden">
-              <a href="/map" className="px-5 text-sm py-2 rounded border text-purple-500 border-purple-500 hover:bg-purple-500 hover:text-white">
+              <Link href="/ragam-indonesia/lagu-daerah" className="px-5 text-sm py-2 rounded border text-purple-500 border-purple-500 hover:bg-purple-500 hover:text-white">
                 Lihat Lebih Lengkap
-              </a>
+              </Link>
             </div>
           </div>
           <hr className="dark:border-purple-900" />
@@ -534,17 +534,16 @@ export default function RagamIndonesia() {
                     ALAT MUSIK TRADISIONAL INDONESIA
                   </h2>
                   <p className="xl:w-[700px] md:w-[500px] w-full dark:text-gray-300 text-gray-700 md:text-sm text-[12px]">
-                    Indonesia kaya budaya dengan 439 lagu tradisional,
-                    masing-masing sebagai simbol keanekaragaman seni dan warisan
-                    bangsa.
+                    Indonesia kaya budaya dengan 250 alat musik tradisional yang mencerminkan kekayaan budaya setiap daerah.
+                    Setiap instrumen memiliki karakter unik yang memperkaya warisan seni musik Nusantara.
                   </p>
                 </div>
               </div>
             </div>
             <div className="lg:block hidden">
-              <a href="/map" className="px-5 text-sm py-2 rounded border text-indigo-500 border-indigo-500 hover:bg-indigo-500 hover:text-white">
+              <Link href="/ragam-indonesia/alat-musik" className="px-5 text-sm py-2 rounded border text-indigo-500 border-indigo-500 hover:bg-indigo-500 hover:text-white">
                 Lihat Lebih Lengkap
-              </a>
+              </Link>
             </div>
           </div>
           <hr className="mb-5 dark:border-indigo-900" />
@@ -619,9 +618,9 @@ export default function RagamIndonesia() {
               </div>
             </div>
             <div className="lg:block hidden">
-              <a href="/map" className="px-5 text-sm py-2 rounded border text-emerald-500 border-emerald-500 hover:bg-emerald-500 hover:text-white">
+              <Link href="/ragam-indonesia/rumah-adat" className="px-5 text-sm py-2 rounded border text-emerald-500 border-emerald-500 hover:bg-emerald-500 hover:text-white">
                 Lihat Lebih Lengkap
-              </a>
+              </Link>
             </div>
           </div>
           <hr className="dark:border-emerald-900" />
@@ -677,9 +676,8 @@ export default function RagamIndonesia() {
               </div>
             </div>
             <div className="lg:block hidden">
-              <Link
+              <Link href="/ragam-indonesia/makanan-khas"
                 className="px-5 text-sm py-2 rounded border text-orange-500 border-orange-500 hover:bg-orange-500 hover:text-white"
-                href={"/ragam-indonesia/makanan"}
               >
                 Lihat Lebih Lengkap
               </Link>
@@ -940,7 +938,7 @@ export default function RagamIndonesia() {
                 />
               </div>
               <Link
-                href={"/ragam-indonesia/makanan"}
+                href="/ragam-indonesia/makanan-khas"
                 className="block w-full border-2 border-orange-500 hover:bg-orange-500 text-orange-500 hover:text-white text-center py-2 px-4 mt-4 rounded"
               >
                 Lihat Lainnya

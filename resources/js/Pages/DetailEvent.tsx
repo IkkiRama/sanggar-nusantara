@@ -137,7 +137,7 @@ export default function DetailEvent() {
                         <div className="h-[350px] w-full rounded-md overflow-hidden lg:col-span-2">
                             <img
                             src="/images/events/FGS.jpeg"
-                            alt=""
+                            alt="image event"
                             className="object-cover h-full w-full"
                             data-aos-once="true"
                             data-aos="fade-left"
@@ -180,7 +180,7 @@ export default function DetailEvent() {
                         <div className="h-[350px] w-full rounded-md overflow-hidden lg:col-span-2">
                             <img
                             src="/images/events/KKS.jpg"
-                            alt=""
+                            alt="image event"
                             className="object-cover h-full w-full"
                             data-aos-once="true"
                             data-aos="fade-left"

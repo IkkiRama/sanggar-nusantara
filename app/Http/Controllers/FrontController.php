@@ -89,67 +89,81 @@ class FrontController extends Controller
 
 
     public function event(Request $request)
-{
-    $perPage = 10; // Banyaknya event per halaman
-    $page = $request->query('page', 1);
-    $skip = ($page - 1) * $perPage;
+    {
+        $perPage = 10; // Banyaknya event per halaman
+        $page = $request->query('page', 1);
+        $skip = ($page - 1) * $perPage;
 
-    // Ambil tanggal hari ini
-    $today = now()->format('Y-m-d');
+        // Ambil tanggal hari ini
+        $today = now()->format('Y-m-d');
 
-    // Ambil filter dan search query dari request
-    $selectedFilter = $request->query('selectedFilter', null);
-    $searchQuery = $request->query('searchQuery', null);
+        // Ambil filter dan search query dari request
+        $selectedFilter = $request->query('selectedFilter', null);
+        $searchQuery = $request->query('searchQuery', null);
 
-    // Query dasar
-    $query = Event::select("kategori_event_id", "nama", "slug", "image", "status_event", "excerpt", "tempat", "tanggal")
-        ->where('status_event', '!=', 'draft');
+        // Query dasar
+        $query = Event::select("kategori_event_id", "nama", "slug", "image", "status_event", "excerpt", "tempat", "tanggal")
+            ->where('status_event', '!=', 'draft');
 
-    // Filter berdasarkan status event (Sudah Berakhir / Masih Dibuka)
-    // if ($selectedFilter === "Sudah Berakhir") {
-    //     $query->whereDate('tanggal', '<', $today);
-    // } elseif ($selectedFilter === "Pendaftaran Masih Dibuka") {
-    //     $query->whereDate('tanggal', '>=', $today);
-    // }
+        // Filter berdasarkan status event (Sudah Berakhir / Masih Dibuka)
+        // if ($selectedFilter === "Sudah Berakhir") {
+        //     $query->whereDate('tanggal', '<', $today);
+        // } elseif ($selectedFilter === "Pendaftaran Masih Dibuka") {
+        //     $query->whereDate('tanggal', '>=', $today);
+        // }
 
-    // Penerapan pencarian berdasarkan nama event
-    if (!empty($searchQuery)) {
-        $query->where('nama', 'like', '%' . $searchQuery . '%');
-    }
+        // Penerapan pencarian berdasarkan nama event
+        if (!empty($searchQuery)) {
+            $query->where('nama', 'like', '%' . $searchQuery . '%');
+        }
 
-    // Hitung total event setelah filter diterapkan
-    $totalEvents = $query->count();
-    $totalPages = ceil($totalEvents / $perPage);
+        // Hitung total event setelah filter diterapkan
+        $totalEvents = $query->count();
+        $totalPages = ceil($totalEvents / $perPage);
 
-    // Ambil data event dengan pagination
-    $events = $query->orderBy('tanggal', 'asc')
-        ->skip($skip)
-        ->take($perPage)
-        ->withoutTrashed()
-        ->get()
-        ->map(function ($event) use ($today) {
-            $event->status = ($event->tanggal < $today) ? "Event Sudah Berakhir" : "Pendaftaran Masih Dibuka";
-            return $event;
-        });
+        // Ambil data event dengan pagination
+        $events = $query->orderBy('tanggal', 'asc')
+            ->skip($skip)
+            ->take($perPage)
+            ->withoutTrashed()
+            ->get()
+            ->map(function ($event) use ($today) {
+                $event->status = ($event->tanggal < $today) ? "Event Sudah Berakhir" : "Pendaftaran Masih Dibuka";
+                return $event;
+            });
 
-    // Jika request AJAX, kembalikan JSON
-    if ($request->wantsJson()) {
-        return response()->json([
+        // Jika request AJAX, kembalikan JSON
+        if ($request->wantsJson()) {
+            return response()->json([
+                'events' => $events,
+                'totalPages' => $totalPages,
+            ]);
+        }
+
+        // Jika request biasa, gunakan Inertia
+        return Inertia::render('Event', [
             'events' => $events,
             'totalPages' => $totalPages,
         ]);
     }
 
-    // Jika request biasa, gunakan Inertia
-    return Inertia::render('Event', [
-        'events' => $events,
-        'totalPages' => $totalPages,
-    ]);
-}
 
 
 
+    function artikel() {
+        $artikels = Artikel::select('title','views', "slug", "image", "excerpt", "published_at", "user_id", "kategori_id", "status_artikel")
+            ->withoutTrashed()
+            ->where('status_artikel', '!=', 'draft')
+            ->with(["kategori:id,nama", "user:id,name"])
+            ->where("status_artikel", '!=', "draft")
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
+        return Inertia::render('Artikel', [
+            'artikels' => $artikels,
+        ]);
+    }
+    
     function subscription() {
         return Inertia::render('Subscription', [
             // 'events' => $events,

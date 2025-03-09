@@ -165,19 +165,27 @@ export default function Event() {
                 <motion.div {...fadeInUpAnimation} className="text-center mb-8">
                     <h1 className={`text-2xl sm:text-3xl font-bold text-gray-900`}>Semua Event Sanggar Nusantara</h1>
                     <div className="mt-5 md:mt-10 flex flex-col md:items-center">
-                        {/* Search Bar */}
-                        <div className="flex items-center md:w-[50%] w-full mb-7 rounded-lg p-2 bg-white shadow-sm border-2 border-gray-400 focus-within:outline-2 focus-within:outline-blue-500">
-                            <Search className="w-5 h-5 text-gray-500" />
-                            <input
-                                type="text"
-                                ref={searchInputRef}
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Cari event..."
-                                className="ml-2 w-full outline-none"
-                            />
-                            <div className="px-2 py-1 bg-gray-400 rounded-md">
-                                <span className="text-white text-sm font-semibold whitespace-nowrap hidden md:flex">Ctrl + K</span>
+                        <div className="flex items-center gap-2 mb-7 md:w-[50%]">
+                            <button
+                                onClick={() => setShowFilter(true)}
+                                className="bg-gray-200 px-4 py-2 rounded-md font-semibold hover:bg-gray-300 outline-1 outline-gray-300 flex md:hidden items-center cursor-pointer"
+                            >
+                                <SlidersHorizontal className="w-4 h-4 mr-2" /> Filter
+                            </button>
+                            {/* Search Bar */}
+                            <div className="flex items-center md:w-full w-[70%] rounded-lg p-2 shadow-sm border-2 border-gray-400 focus-within:outline-2 focus-within:outline-blue-500">
+                                <Search className="w-5 h-5 text-gray-500" />
+                                <input
+                                    type="text"
+                                    ref={searchInputRef}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Cari event..."
+                                    className="ml-2 w-full outline-none"
+                                />
+                                <div className="hidden md:flex px-2 py-1 bg-gray-400 rounded-md">
+                                    <span className="text-white text-sm font-semibold whitespace-nowrap">Ctrl + K</span>
+                                </div>
                             </div>
                         </div>
 
@@ -194,7 +202,7 @@ export default function Event() {
                             ))}
                         </div>
 
-                        <div className="flex justify-start md:justify-center mb-4">
+                        <div className="hidden md:flex justify-start md:justify-center mb-4">
                             <button
                                 onClick={() => setShowFilter(true)}
                                 className="md:mr-4 bg-gray-200 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 outline-1 outline-gray-300 flex items-center cursor-pointer"
@@ -206,7 +214,7 @@ export default function Event() {
                                 <button
                                     key={tab}
                                     onClick={() => setTabActive(tab)}
-                                    className={` hidden md:flex cursor-pointer px-4 py-2 mx-2 rounded-lg ${tabActive === tab ? "bg-blue-600 text-white" : "active:bg-gray-300 bg-gray-200 hover:bg-gray-300"}`}
+                                    className={`cursor-pointer px-4 py-2 mx-2 rounded-lg ${tabActive === tab ? "bg-red-600 text-white" : "active:bg-gray-300 bg-gray-200 hover:bg-gray-300"}`}
                                 >
                                     <span className="font-semibold">{tab}</span>
                                 </button>
@@ -296,7 +304,7 @@ export default function Event() {
                             <div className="mt-10 text-center">
                                 <button
                                     onClick={loadMoreEvents}
-                                    className="cursor-pointer px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+                                    className="cursor-pointer px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 disabled:bg-gray-400"
                                     disabled={loading}
                                 >
                                     {loading ? "Memuat..." : "Muat Lebih Banyak"}

@@ -92,7 +92,7 @@ export default function Subscription() {
           <div className="h-full w-[40%] -translate-y-10">
             <img
               src="/images/explore/2.jpg"
-              alt=""
+              alt="image section explore 1"
               className="h-full w-full object-cover"
               data-aos="fade-up"
               data-aos-once="true"
@@ -101,7 +101,7 @@ export default function Subscription() {
           <div className="h-full w-[40%] translate-y-10">
             <img
               src="/images/explore/1.jpg"
-              alt=""
+              alt="image section explore 2"
               className="h-full w-full object-cover"
               data-aos="fade-down"
               data-aos-once="true"
@@ -117,7 +117,7 @@ export default function Subscription() {
           </h2>
           <p className="text-sm text-gray-800 dark:text-gray-300 mb-10">
             Jika ada pertanyaan lainnya, silahkan hubungi <br /> tim kami di
-            support@warisannusantara.com
+            support@sanggarnusantara.com
           </p>
           <button className="text-sm border-2 z-10 after:transition-all text-gray-50  px-5 py-3 border-red-500 after:content-[''] after:absolute relative after:inset-0 after:bg-red-500 after:-translate-x-1 after:-translate-y-1 after:-z-10 hover:after:translate-x-0 hover:after:translate-y-0">
             Lihat semua FAQ

@@ -128,7 +128,7 @@ const Home = () => {
     );
 
   return (
-    <MainLayout title="Beranda | Sanggar Nusantara">
+    <MainLayout title="Sanggar Nusantara | Eksplorasi Budaya & Kekayaan Alam Indonesia">
       <LightNavbar />
 
       <section className="grid bg-white dark:bg-black min-h-[100vh] lg:grid-cols-2 relative z-10 overflow-hidden">
@@ -248,7 +248,7 @@ const Home = () => {
 
         <img
           src="/images/plane.png"
-          alt=""
+          alt="plane"
           className="absolute w-[200px] lg:-top-[100px] -top-[150px]"
         />
 
@@ -267,7 +267,7 @@ const Home = () => {
             </span>
           </h2>
           <p
-            className="md:text-sm text-[12px] text-gray-800 dark:text-gray-300 mb-10"
+            className="md:text-sm text-base text-gray-800 dark:text-gray-300 mb-10"
             data-aos="fade-right"
             data-aos-once="true"
             data-aos-delay="200"
@@ -292,7 +292,7 @@ const Home = () => {
           <div className="h-full w-[40%] -translate-y-10">
             <img
               src="/images/explore/2.jpg"
-              alt=""
+              alt="image explore section 1"
               className="h-full w-full object-cover"
               data-aos="fade-up"
               data-aos-once="true"
@@ -301,7 +301,7 @@ const Home = () => {
           <div className="h-full w-[40%] translate-y-10">
             <img
               src="/images/explore/1.jpg"
-              alt=""
+              alt="image explore section 2"
               className="h-full w-full object-cover"
               data-aos="fade-down"
               data-aos-once="true"
@@ -329,7 +329,7 @@ const Home = () => {
             <span className="text-red-500"> INDONESIA</span>
           </h3>
           <p
-            className="text-gray-800 dark:text-gray-300 lg:w-2/3 md:w-3/4 w-full md:mx-0 mx-auto md:text-left text-center md:text-sm text-[12px] mt-5"
+            className="text-gray-800 dark:text-gray-300 lg:w-2/3 md:w-3/4 w-full md:mx-0 mx-auto md:text-left text-center md:text-sm text-[13px] mt-5"
             data-aos="fade-right"
             data-aos-delay="300"
             data-aos-once="true"
@@ -604,7 +604,7 @@ const Home = () => {
           {"GALERI KERAGAMAN INDONESIA"}
         </h3>
         <p
-          className="lg:w-[900px] w-[90%] text-center mx-auto md:text-base text-[13px] mt-5 mb-10 dark:text-gray-300 text-gray-700"
+          className="lg:w-[900px] w-[90%] text-center mx-auto md:text-lg mt-5 mb-10 dark:text-gray-300 text-gray-700"
           data-aos-once="true"
           data-aos="fade-up"
         >
@@ -621,56 +621,56 @@ const Home = () => {
               <img
                 src="/images/gallery/1.jpg"
                 className="md:w-[500px] w-[200px] md:h-[300px] h-[150px] object-cover rounded-lg"
-                alt=""
+                alt="image galeri 1"
               />
             </div>
             <div className="md:w-[500px] w-[200px] slide">
               <img
                 src="/images/gallery/8.jpg"
                 className="md:w-[500px] w-[200px] md:h-[300px] h-[150px] object-cover rounded-lg"
-                alt=""
+                alt="image galeri 2"
               />
             </div>
             <div className="md:w-[500px] w-[200px] slide">
               <img
                 src="/images/gallery/3.jpg"
                 className="md:w-[500px] w-[200px] md:h-[300px] h-[150px] object-cover rounded-lg"
-                alt=""
+                alt="image galeri 3"
               />
             </div>
             <div className="md:w-[500px] w-[200px] slide">
               <img
                 src="/images/gallery/4.jpg"
                 className="md:w-[500px] w-[200px] md:h-[300px] h-[150px] object-cover rounded-lg"
-                alt=""
+                alt="image galeri 4"
               />
             </div>
             <div className="md:w-[500px] w-[200px] slide">
               <img
                 src="/images/gallery/5.jpg"
                 className="md:w-[500px] w-[200px] md:h-[300px] h-[150px] object-cover rounded-lg"
-                alt=""
+                alt="image galeri 5"
               />
             </div>
             <div className="md:w-[500px] w-[200px] slide">
               <img
                 src="/images/gallery/10.jpg"
                 className="md:w-[500px] w-[200px] md:h-[300px] h-[150px] object-cover rounded-lg"
-                alt=""
+                alt="image galeri 6"
               />
             </div>
             <div className="md:w-[500px] w-[200px] slide">
               <img
                 src="/images/gallery/6.jpg"
                 className="md:w-[500px] w-[200px] md:h-[300px] h-[150px] object-cover rounded-lg"
-                alt=""
+                alt="image galeri 7"
               />
             </div>
             <div className="md:w-[500px] w-[200px] slide">
               <img
                 src="/images/gallery/7.jpg"
                 className="md:w-[500px] w-[200px] md:h-[300px] h-[150px] object-cover rounded-lg"
-                alt=""
+                alt="image galeri 8"
               />
             </div>
           </div>
@@ -692,8 +692,7 @@ const Home = () => {
         </div>
       </section>
 
-
-      <div className="lg:px-4 mt-10">
+      <section className="lg:px-4 mt-10">
         <div className="mx-auto flex max-w-[1350px] space-x-[1px] lg:justify-center lg:space-x-6">
 
           <button
@@ -721,7 +720,7 @@ const Home = () => {
           </button>
 
         </div>
-      </div>
+      </section>
 
 
       <section className="mb-20 bg-red-500">
@@ -731,7 +730,7 @@ const Home = () => {
                 <div className="h-[200px] md:h-[350px] w-full rounded-md overflow-hidden lg:col-span-2">
                     <img
                     src={artikelPertama.image}
-                    alt=""
+                    alt={`image artikel ${artikelPertama.nama}`}
                     className="object-cover h-full w-full"
                     data-aos-once="true"
                     data-aos="fade-left"
@@ -883,12 +882,44 @@ const Home = () => {
         )}
         </section>
 
+        <section id="map" className="bg-[linear-gradient(180deg,#FFF,#F4F6F6_100.03%)] px-4">
+            <div className="max-w-[1350px] mx-auto pt-12 lg:pt-16">
+                <img src="/images/indonesian-map.gif" className="w-full" />
+                <div className="text-center max-w-5xl mx-auto mt-5">
+                    <h2 className="text-gray-1000 !leading-tight text-3xl lg:text-4xl font-bold tracking-tight">
+                        Sanggar Nusantara Telah Menjangkau Hampir ke Seluruh Indonesia
+                    </h2>
+                    <p className="text-gray-800 md:text-lg mt-4">
+                        Sanggar Nusantara berkomitmen untuk melestarikan dan memperkenalkan kekayaan budaya serta alam Indonesia. Mari bersama-sama, kita lestarikan warisan Nusantara dan wujudkan impian akan Indonesia yang kaya akan seni, tradisi, dan keindahan alamnya.
+                    </p>
+                </div>
+                
+                <div className="grid grid-cols-2 lg:grid-cols-4 py-12 lg:pb-16 gap-5 w-full max-w-[1350px]">
+                    <div className="bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
+                        <h5 className="font-bold text-red-500 text-3xl lg:text-5xl mb-2">34+</h5>
+                        <span className="text-gray-700 lg:text-lg">Provinsi Terjangkau</span>
+                    </div>
+                    <div className="bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
+                        <h5 className="font-bold text-red-500 text-3xl lg:text-5xl mb-2">995+</h5>
+                        <span className="text-gray-700 lg:text-lg">Sanggar & Komunitas Budaya Berpartisipasi</span>
+                    </div>
+                    <div className="bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
+                        <h5 className="font-bold text-red-500 text-3xl lg:text-5xl mb-2">1200+</h5>
+                        <span className="text-gray-700 lg:text-lg">Sekolah & Perguruan Tinggi Terlibat</span>
+                    </div>
+                    <div className="bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
+                        <h5 className="font-bold text-red-500 text-3xl lg:text-5xl mb-2">190+</h5>
+                        <span className="text-gray-700 lg:text-lg">Mitra & Lembaga Pendukung</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
       <div className="mx-auto my-12 max-w-[1350px] space-y-16 px-4">
         <div className="py-8">
           <div>
             <h2 className="text-red-500 text-center text-3xl font-bold">Apa Kata Nusantarawan Tentang Sanggar Nusantara?</h2>
-            <p className="mx-auto mt-4 text-center lg:max-w-[50%] dark:text-white">Total
+            <p className="mx-auto mt-4 md:text-lg text-center lg:max-w-[50%] dark:text-white">Total
               <span className="font-semibold "> 136K+ Cendekiawan Digital Nusantara</span>, Simak keseruan dan manfaat yang dirasakan para Cendekiawan Nusantara. Apakah kamu yang selanjutnya mewarisi semangat dan inovasi budaya kita?
             </p>
           </div>
