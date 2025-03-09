@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Angklung",
+    "from": "Jawa Barat",
+    "image": "angklung.jpg",
+    "sound": "angklung.mp3"
+  },
+  {
+    "name": "Bonang",
+    "from": "Jawa Timur",
+    "image": "bonang.jpeg",
+    "sound": "bonang.mp3"
+  },
+  {
+    "name": "Kolintang",
+    "from": "Sulawesi Utara",
+    "image": "kolintang.png",
+    "sound": "kolintang.mp3"
+  },
+  {
+    "name": "Suling",
+    "from": "Jawa Barat",
+    "image": "suling.webp",
+    "sound": "suling.mp3"
+  },
+  {
+    "name": "Serunai",
+    "from": "Sumatra Barat",
+    "image": "serunai.jpg",
+    "sound": "serunai.mp3"
+  },
+  {
+    "name": "Kecrek",
+    "from": "Betawi",
+    "image": "kecrek.jpg",
+    "sound": "kecrek.mp3"
+  },
+  {
+    "name": "Cangor",
+    "from": "Jambi",
+    "image": "cangor.png",
+    "sound": "cangor.mp3"
+  },
+  {
+    "name": "Gamelan",
+    "from": "Jawa Tengah",
+    "image": "gamelan.jpg",
+    "sound": "gamelan.mp3"
+  },
+  {
+    "name": "Talindo",
+    "from": "Sulawesi Tengah",
+    "image": "talindo.jpg",
+    "sound": "angklung.mp3"
+  }
+]

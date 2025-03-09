@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 class HargaEvent extends Model
 {
-    /** @use HasFactory<\Database\Factories\HargaEventFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['event_id', 'nama', 'harga'];
+    protected $fillable = ['event_id', 'nama', 'harga', "kuota"];
 
     public function event()
     {

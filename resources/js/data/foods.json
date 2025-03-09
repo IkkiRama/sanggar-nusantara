@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Gudeg",
+    "from": "DIY Yogyakarta",
+    "image": "gudeg.jpeg"
+  },
+  {
+    "name": "Karedok",
+    "from": "Jawa Barat",
+    "image": "karedok.jpeg"
+  },
+  {
+    "name": "Kerak Telor",
+    "from": "DKI Jakarta",
+    "image": "keraktelor.jpg"
+  },
+  {
+    "name": "Mie Aceh",
+    "from": "Aceh Darussalam",
+    "image": "mieaceh.jpg"
+  },
+  {
+    "name": "Papeda",
+    "from": "papua",
+    "image": "papeda.jpg"
+  },
+  {
+    "name": "Pempek",
+    "from": "Palembang",
+    "image": "pempek.jpg"
+  },
+  {
+    "name": "Rendang",
+    "from": "Sumatra Barat",
+    "image": "rendang.jpg"
+  }
+]
