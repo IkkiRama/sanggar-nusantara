@@ -36,7 +36,7 @@ export default function MainLayout({ children, title = 'Home' }: MainLayoutProps
   }, []);
 
   return (
-    <div className="w-full overflow-x-hidden">
+    <div className="w-full">
         <Head title={title}>
         </Head>
         {/* Content */}

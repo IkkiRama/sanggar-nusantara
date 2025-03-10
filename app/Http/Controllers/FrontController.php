@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Artikel;
 use App\Models\Event;
+use App\Models\Komentar;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class FrontController extends Controller
 {
@@ -43,49 +46,9 @@ class FrontController extends Controller
         return Inertia::render('Home', [
             'events' => $events,
             'artikels' => $artikels,
+            'user' => Auth::user(),
         ]);
     }
-
-    // public function event(Request $request)
-    // {
-    //     $perPage = 3; // Banyaknya event per halaman
-    //     $page = $request->query('page', 1);
-    //     $skip = ($page - 1) * $perPage;
-
-    //     // Ambil tanggal hari ini
-    //     $today = now()->format('Y-m-d');
-
-    //     $events = Event::select("kategori_event_id", "nama", "slug", "image", "status_event", "excerpt", "tempat", "tanggal")
-    //         ->where('status_event', '!=', 'draft')
-    //         ->orderBy('tanggal', 'asc')
-    //         ->skip($skip)
-    //         ->take($perPage)
-    //         ->withoutTrashed()
-    //         ->get()
-    //         ->map(function ($event) use ($today) {
-    //             // Tambahkan status event berdasarkan tanggal
-    //             $event->status_event = ($event->tanggal < $today) ? "Event Sudah Berakhir" : "Pendaftaran Masih Dibuka";
-    //             return $event;
-    //         });
-
-    //     // Hitung total halaman
-    //     $totalEvents = Event::where('status_event', '!=', 'draft')->count();
-    //     $totalPages = ceil($totalEvents / $perPage);
-
-    //     // Jika request AJAX, kembalikan JSON
-    //     if ($request->wantsJson()) {
-    //         return response()->json([
-    //             'events' => $events,
-    //             'totalPages' => $totalPages,
-    //         ]);
-    //     }
-
-    //     // Jika request biasa, gunakan Inertia
-    //     return Inertia::render('Event', [
-    //         'events' => $events,
-    //         'totalPages' => $totalPages,
-    //     ]);
-    // }
 
 
     public function event(Request $request)
@@ -137,6 +100,7 @@ class FrontController extends Controller
             return response()->json([
                 'events' => $events,
                 'totalPages' => $totalPages,
+                'user' => Auth::user(),
             ]);
         }
 
@@ -144,28 +108,112 @@ class FrontController extends Controller
         return Inertia::render('Event', [
             'events' => $events,
             'totalPages' => $totalPages,
+            'user' => Auth::user(),
         ]);
     }
-
-
 
 
     function artikel() {
-        $artikels = Artikel::select('title','views', "slug", "image", "excerpt", "published_at", "user_id", "kategori_id", "status_artikel")
-            ->withoutTrashed()
+
+        // Hitung tanggal satu bulan ke belakang
+        $oneMonthAgo = Carbon::now()->subMonth();
+
+        // Query untuk artikel trending dalam 1 bulan terakhir berdasarkan views tertinggi
+        $trendingArtikel = Artikel::select('title', 'slug', 'image', 'status_artikel')
             ->where('status_artikel', '!=', 'draft')
-            ->with(["kategori:id,nama", "user:id,name"])
-            ->where("status_artikel", '!=', "draft")
+            ->where('published_at', '>=', $oneMonthAgo)
+            ->orderBy('views', 'desc')
+            ->limit(10)
+            ->get();
+
+        // Query untuk artikel umum
+        $dataArtikel = Artikel::select('title', 'views', 'slug', 'image', 'excerpt', 'published_at', 'user_id', 'kategori_id', 'status_artikel')
+            ->where('status_artikel', '!=', 'draft')
+            ->with(['kategori:id,nama', 'user:id,name'])
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->get();
+
+        $artikelRekomendasi = Artikel::select('title', "slug", "image", "status_artikel")
+            ->where('status_artikel', '!=', 'draft')
+            ->withoutTrashed()
+            ->inRandomOrder()
+            ->limit(5)
+            ->get();
 
         return Inertia::render('Artikel', [
-            'artikels' => $artikels,
+            'artikelTerbaru' => $dataArtikel->first(), // 1 artikel terbaru
+            'artikelBerikutnya' => $dataArtikel->slice(1, 2)->values(), // 2 artikel berikutnya
+            'artikels' => $dataArtikel->slice(3)->values(), // Sisa artikel dipaginasi
+            'trendingArtikel' => $trendingArtikel, // Tambahkan trending artikel
+            'artikelRekomendasi' => $artikelRekomendasi, // Tambahkan trending artikel
+            'user' => Auth::user(),
         ]);
     }
-    
+
+    function showArtikel($slug) {
+        $artikel = Artikel::where([
+            ["slug", $slug],
+            ["status_artikel", "!=", "draft"]
+        ])
+        ->withoutTrashed()
+        ->with(["kategori:id,nama", "user:id,name,image,deskripsi", "komentar:id,artikel_id,nama,email,komentar"])
+        ->firstOrFail();
+
+        $rekomendasiArtikel = Artikel::
+            select('title','views', "slug", "image", "excerpt", "published_at", "user_id", "kategori_id")
+            ->withoutTrashed()
+            ->where('status_artikel', '!=', 'draft')
+            ->inRandomOrder()
+            ->with("kategori:id,nama", "user:id,name")
+            ->limit(3) // Batasi jumlah artikel
+            ->get();
+
+        $newViews = $artikel->views + 1;
+        $artikel->update([
+            "views" => $newViews
+        ]);
+
+        return Inertia::render('Detail', [
+            'artikel' => $artikel,
+            'rekomendasiArtikel' => $rekomendasiArtikel,
+            'user' => Auth::user(),
+        ]);
+    }
+
+    public function storeKomen(Request $request)
+    {
+        $headers = [
+            'Content-Type' => 'application/json',
+            'X-Powered-By' => 'Rifki Romadhan',
+            'X-Content-Language' => 'id',
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ];
+
+        $validated = $request->validate([
+            'artikel_id'  => 'required',
+            'nama'  => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'komentar' => 'required|string',
+        ]);
+
+        // Simpan data ke dalam database
+        $contact = Komentar::create($validated);
+
+        // Kembalikan response
+        return response()->json([
+            'success' => true,
+            'message' => 'Komentar berhasil disimpan.',
+            'data'    => $contact,
+        ], 201, $headers);
+    }
+
+
+
+
     function subscription() {
         return Inertia::render('Subscription', [
+            'user' => Auth::user(),
             // 'events' => $events,
             // 'artikels' => $artikels,
         ]);
@@ -173,6 +221,7 @@ class FrontController extends Controller
 
     function petaInteraktif() {
         return Inertia::render('Map', [
+            'user' => Auth::user(),
             // 'events' => $events,
             // 'artikels' => $artikels,
         ]);
@@ -180,6 +229,7 @@ class FrontController extends Controller
 
     function ragamIndonesia() {
         return Inertia::render('RagamIndonesia', [
+            'user' => Auth::user(),
             // 'events' => $events,
             // 'artikels' => $artikels,
         ]);

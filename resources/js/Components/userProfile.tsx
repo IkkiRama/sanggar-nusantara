@@ -1,0 +1,60 @@
+import { Link } from '@inertiajs/react';
+import { ArrowUpRightFromSquare, KeySquare, LayoutDashboard, LogOut, Pen, PenBox, Wallet2 } from 'lucide-react';
+import React from 'react'
+
+const UserProfile = ({isActive, user}) => {
+  return (
+    <div className="w-full lg:sticky top-36 p-5 bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl lg:w-[25%] h-full relative">
+        <Link href="/profile/edit" className="absolute top-[10px] right-[10px] px-3 py-2 rounded-md border-2 border-[#e4e4e7]">
+            <PenBox className="w-5 h-5"  />
+        </Link>
+
+      <img
+        src={user.image ? user.image : "/images/rifki.jpg"}
+        alt="Profile"
+        className="w-[150px] h-[150px] border-[5px] border-white rounded-full mx-auto object-cover -mt-14"
+      />
+      <h2 className="text-center text-xl font-semibold mt-5">{user.name}</h2>
+      <p className="text-center text-blue-500">{user.email}</p>
+
+        <div className="mt-5">
+            <h3 className="font-semibold text-slate-800 text-lg">Tentang Saya</h3>
+            <p className="text-gray-700 mt-1">
+            {user.deskripsi}
+            </p>
+        </div>
+
+      <ul className="mt-5">
+
+        <Link href="/profile">
+            <li className={`p-3 rounded-lg cursor-pointer flex flex-row gap-3 mb-2
+                ${isActive === "dashboard" ? "bg-blue-500 text-white font-semibold" : "font-medium hover:bg-gray-300"}
+            `}><LayoutDashboard className="w-5 h-5" /> Dashboard</li>
+        </Link>
+
+        <Link href="/profile/transaksi">
+            <li className={`p-3 rounded-lg cursor-pointer flex flex-row gap-3 mb-2
+                ${isActive === "transaksi" ? "bg-blue-500 text-white font-semibold" : "font-medium hover:bg-gray-300"}
+            `}><Wallet2 className="w-5 h-5" /> Transaksi</li>
+        </Link>
+
+        <Link href="/profile/ubah-password">
+            <li className={`p-3 rounded-lg cursor-pointer flex flex-row gap-3 mb-2
+                ${isActive === "ubahPasword" ? "bg-blue-500 text-white font-semibold" : "font-medium hover:bg-gray-300"}
+            `}><KeySquare className="w-5 h-5" /> Ubah Password</li>
+        </Link>
+
+        <Link href="">
+            <li className="p-3 rounded-lg cursor-pointer flex flex-row gap-3 mb-2 font-medium hover:bg-gray-300"><ArrowUpRightFromSquare className="w-5 h-5" /> Gabung Forum</li>
+        </Link>
+
+        <Link href="/logout">
+            <li className="p-3 rounded-lg cursor-pointer flex flex-row gap-3 mb-2 font-medium hover:bg-gray-300"><LogOut className="w-5 h-5" /> Logout</li>
+        </Link>
+
+      </ul>
+    </div>
+  );
+};
+
+export default UserProfile

@@ -7,8 +7,10 @@ import { Link } from "react-router-dom";
 import DarkNavbar from "../layouts/darkNavbar";
 import MainLayout from "../Layouts/mainLayout";
 import LightNavbar from "../layouts/lightNavbar";
+import { usePage } from "@inertiajs/react";
 
 export default function Subscription() {
+    const { user } = usePage().props;
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -21,7 +23,7 @@ export default function Subscription() {
 
   return (
     <MainLayout title="Berlangganan | Sanggar Nusantara">
-        <LightNavbar />
+        <LightNavbar user={user} />
 
       <header className="grid lg:grid-cols-2 md:gap-10 items-center md:px-20 px-5 lg:h-[800px] h-[700px] relative">
         <span

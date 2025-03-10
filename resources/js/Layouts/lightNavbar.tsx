@@ -14,7 +14,6 @@ import {
 } from 'react-icons/fa';
 
 import { BookOpen } from 'lucide-react';
-import { IconGallery } from '@irsyadadl/paranoid';
 import { FaEarthAsia } from 'react-icons/fa6';
 
 const NAV_ITEMS = [
@@ -148,13 +147,12 @@ const DesktopNavItem = memo(({ item, isActive, isDark, activeDropdown, onDropdow
 });
 
 
-const Navbar = () => {
+const Navbar = ({user}) => {
     const { url } = usePage();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
-    // const { user } = useAuth();
     // const { isDark, toggleTheme } = useTheme();
 
     // Check if current path matches any dropdown item
@@ -254,27 +252,19 @@ const Navbar = () => {
                                 {isDark ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
                             </button> */}
 
-                            {/* {user ? (
+                            {user ? (
                                 <div className="relative">
                                     <div className="flex items-center space-x-4">
-                                        <Link
-                                            href={route('admin.dashboard')}
-                                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center ${
-                                                isDark
-                                                    ? 'bg-gray-800 text-gray-200 hover:bg-gray-700'
-                                                    : 'bg-white/80 text-gray-700 hover:bg-gray-100'
-                                            } shadow-lg`}
+                                        {/* <Link
+                                            href="/profile"
+                                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center bg-white/80 text-gray-700 hover:bg-gray-100 shadow-lg`}
                                         >
                                             <FaTachometerAlt className="mr-2" />
-                                            Dashboard
-                                        </Link>
+                                            Profile
+                                        </Link> */}
                                         <button
                                             onClick={() => setIsProfileOpen(!isProfileOpen)}
-                                            className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium ${
-                                                isDark
-                                                    ? 'bg-gray-800 text-blue-400 hover:bg-gray-700'
-                                                    : 'bg-white/80 text-blue-600 hover:bg-blue-50'
-                                            } shadow-lg`}
+                                            className={`cursor-pointer flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium bg-white/80 text-blue-600 hover:bg-blue-50 shadow-lg`}
                                         >
                                             <FaUserCircle className="w-5 h-5" />
                                             <span>{user.name}</span>
@@ -287,19 +277,11 @@ const Navbar = () => {
                                                 initial={{ opacity: 0, y: -10 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: -10 }}
-                                                className={`absolute right-0 mt-2 w-48 rounded-xl shadow-lg py-2 border ${
-                                                    isDark
-                                                        ? 'bg-gray-800 border-gray-700'
-                                                        : 'bg-white border-gray-100'
-                                                }`}
+                                                className={`absolute right-0 mt-2 w-48 rounded-xl shadow-lg py-2 border bg-white border-gray-100`}
                                             >
                                                 <Link
                                                     href="/profile"
-                                                    className={`block px-4 py-2 text-sm ${
-                                                        isDark
-                                                            ? 'text-gray-300 hover:bg-gray-700'
-                                                            : 'text-gray-700 hover:bg-blue-50'
-                                                    }`}
+                                                    className={`block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50`}
                                                 >
                                                     <FaUser className="inline-block mr-2" />
                                                     Profile
@@ -308,11 +290,7 @@ const Navbar = () => {
                                                     href="/logout"
                                                     method="post"
                                                     as="button"
-                                                    className={`block w-full text-left px-4 py-2 text-sm ${
-                                                        isDark
-                                                            ? 'text-red-400 hover:bg-red-900/30'
-                                                            : 'text-red-600 hover:bg-red-50'
-                                                    }`}
+                                                    className={`block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50`}
                                                 >
                                                     <FaSignOutAlt className="inline-block mr-2" />
                                                     Logout
@@ -322,21 +300,25 @@ const Navbar = () => {
                                     </AnimatePresence>
                                 </div>
                             ) : (
-                                <Link
-                                    href="/login"
-                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                                        isDark
-                                            ? 'bg-gray-800 text-blue-400 hover:bg-gray-700'
-                                            : 'bg-white/80 text-blue-600 hover:bg-blue-50'
-                                    } shadow-lg`}
-                                >
-                                    Login
-                                </Link>
-                            )} */}
+                                <>
+                                    <Link
+                                        href="/daftar"
+                                        className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-white/80 text-red-600 hover:bg-blue-50 shadow-lg`}
+                                    >
+                                        Daftar
+                                    </Link>
+                                    <Link
+                                        href="/masuk"
+                                        className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-white bg-red-500 hover:bg-blue-50 shadow-lg`}
+                                    >
+                                        Masuk
+                                    </Link>
+                                </>
+                            )}
 
 
 
-                            <Link
+                            {/* <Link
                                 href="/daftar"
                                 className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-white/80 text-red-600 hover:bg-blue-50 shadow-lg`}
                             >
@@ -347,7 +329,7 @@ const Navbar = () => {
                                 className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-white bg-red-500 hover:bg-blue-50 shadow-lg`}
                             >
                                 Masuk
-                            </Link>
+                            </Link> */}
                         </div>
 
                         {/* Mobile Menu Button */}

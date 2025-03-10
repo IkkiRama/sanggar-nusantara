@@ -1,23 +1,100 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
-  FaArrowRight,
   FaCalendar,
   FaEnvelope,
   FaFire,
   FaMapMarkedAlt,
+  FaUser,
 } from "react-icons/fa";
-import { Link } from '@inertiajs/react';
 import LightNavbar from "../layouts/lightNavbar";
 import MainLayout from "../Layouts/mainLayout";
+import { Link, usePage } from "@inertiajs/react";
+import axios from "axios";
+import { getRandomColor } from "../Utils/getRandomColor";
+import { changeDate } from "../Utils/changeDate";
+
+// import Swiper JS
+import {Swiper, SwiperSlide} from 'swiper/react';
+// import Swiper styles
+import 'swiper/css';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+interface Kategori {
+  id: number;
+  nama: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+}
+
+interface Artikel {
+  title: string;
+  views: number;
+  slug: string;
+  image: string;
+  excerpt: string;
+  published_at: string;
+  user_id: number;
+  kategori_id: number;
+  status_artikel: string;
+  kategori: Kategori;
+  user: User;
+}
+
+interface trendingArtikel {
+  title: string;
+  slug: string;
+  image: string;
+  status_artikel: string;
+}
+interface artikelRekomendasi {
+  title: string;
+  slug: string;
+  image: string;
+  status_artikel: string;
+}
+
+interface PageProps {
+  artikelTerbaru: Artikel;
+  artikelBerikutnya: Artikel[];
+  artikels: Artikel[];
+  trendingArtikel: trendingArtikel[];
+  artikelRekomendasi: artikelRekomendasi[];
+  [key: string]: any;
+}
+
+
+
 
 export default function Artikel() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    const { artikelTerbaru, artikelBerikutnya = [], artikels = [], trendingArtikel = [], artikelRekomendasi = []} = usePage<PageProps>().props;
+    const { user } = usePage().props;
+
+    const [countTrandingArtikel, setCountTrandingArtikel] = useState(1);
+
+
+    useEffect(() => {
+
+        if (window.innerWidth <= 500) {
+            setCountTrandingArtikel(1)
+        }else if(window.innerWidth > 500 && window.innerWidth <= 700){
+            setCountTrandingArtikel(2)
+        }else if(window.innerWidth > 700 && window.innerWidth <= 1000){
+            setCountTrandingArtikel(3)
+        }else if(window.innerWidth > 700){
+            setCountTrandingArtikel(4)
+        }
+
+    }, []);
 
   return (
     <MainLayout title="Artikel | Sanggar Nusantara">
-        <LightNavbar />
+        <LightNavbar user={user} />
 
       <header className="mt-10 mx-auto grid lg:grid-cols-4 gap-10 pt-20 lg:px-20 md:px-5 px-3">
         <span
@@ -28,67 +105,57 @@ export default function Artikel() {
           }}
         ></span>
 
-        <div
-          className="lg:col-span-3 lg:h-[600px] md:h-[400px] h-[300px] bg-cover relative z-10 flex items-end md:p-10 p-4 after:content-[''] after:absolute after:inset-0 after:bg-black/40 after:-z-10 bg-bottom rounded overflow-hidden"
-          style={{
-            backgroundImage: "url(" + "/images/news/serenTaun.jpg" + ")",
-          }}
-        >
-          <div className="w-[80%]">
-            <h6 className="text-red-500 md:mb-3 mb-1 font-semibold md:text-base text-sm">
-              UPACARA
-            </h6>
-            <Link href={"/news/read"}>
-              <h2 className="lg:text-3xl md:text-2xl font-bold text-white ">
-                UPACARA SEREN TAUN DI CIGUGUR UNTUK MENSYUKURI HASIL PANEN
-              </h2>
+        {artikelTerbaru && (
+            <Link
+            href={`/artikel/${artikelTerbaru.slug}`}
+            className="lg:col-span-3 lg:h-[600px] md:h-[400px] h-[300px] bg-cover relative z-10 flex items-end md:p-10 p-4 after:content-[''] after:absolute after:inset-0 after:bg-black/40 after:-z-10 bg-bottom rounded overflow-hidden"
+            style={{
+                backgroundImage: artikelTerbaru.image !== null ?
+                "url(" + artikelTerbaru.image + ")" :
+                "url(" + "/images/NO IMAGE AVAILABLE.jpg" + ")",
+            }}
+            >
+                {artikelTerbaru.status_artikel === "premium" && (
+                <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                    Premium
+                </span>
+                )}
+                <div className="w-[80%]">
+                    <h6 className={`${getRandomColor("text")} md:mb-3 mb-1 font-semibold md:text-base text-sm`}>
+                        {artikelTerbaru.kategori.nama.toUpperCase()}
+                    </h6>
+                    <h2 className="lg:text-3xl md:text-2xl font-bold text-white">
+                        {artikelTerbaru.title}
+                    </h2>
+                    <p className="text-gray-200 mt-3 text-sm lg:block hidden">
+                        {artikelTerbaru.excerpt}
+                    </p>
+                </div>
             </Link>
-            <p className="text-gray-200 mt-3 text-sm lg:block hidden">
-              Seren Taun adalah upacara adat panen padi masyarakat Sunda yang
-              dilakukan setiap tahun. Upacara ini berlangsung khidmat dan
-              semarak di berbagai desa adat Sunda. Upacara adat sebagai syukuran
-              masyarakat agraris.
-            </p>
-          </div>
-        </div>
+        )}
         <div className="md:grid hidden lg:grid-cols-1 grid-cols-2 lg:gap-0 gap-10">
-          <div>
-            <div className="lg:h-[250px] h-[230px] after:rounded relative after:ontent-[''] after:bg-black/40 after:absolute after:inset-0">
-              <img
-                src="/images/news/borobudur.jpg"
-                className="w-full lg:h-[250px] h-[230px] rounded object-cover"
-              />
-            </div>
-          </div>
-          {/* <br /> */}
-          <div>
-            <div className="lg:my-5 my-3">
-              <small className="text-red-500">UPACARA</small>
-              <Link href={"/news/read"}>
-                <h5 className="font-semibold lg:text-2xl text-base text-gray-800 dark:text-gray-200">
-                  Peringati 32 Tahun Candi Borobudur
-                </h5>
-              </Link>
-            </div>
-            <div className="lg:my-5 my-3">
-              <small className="text-indigo-500">FUN EVENT</small>
-              <Link href={"/news/read"}>
-                <h5 className="font-semibold lg:text-2xl tex-base text-gray-800 dark:text-gray-200">
-                  2.000 Pelari Meriahkan "Borobudur Fun Run"
-                </h5>
-              </Link>
-            </div>
-            <div className="lg:my-5 my-3">
-              <small className="text-yellow-500 uppercase">
-                Indonesia Dimata Dunia
-              </small>
-              <Link href={"/news/read"}>
-                <h5 className="font-semibold lg:text-2xl tex-base text-gray-800 dark:text-gray-200">
-                  Candi Borobudur Situs Warisan Dunia
-                </h5>
-              </Link>
-            </div>
-          </div>
+            {artikelBerikutnya.map((artikel) => (
+                <Link href={`/artikel/${artikel.slug}`} key={artikel.slug}>
+                    <div className="h-[200px] relative">
+                        <img
+                            src={artikel.image ? artikel.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                            className="bg-gray-300 h-full rounded-xl object-cover"
+                        />
+
+                        {artikel.status_artikel === "premium" && (
+                            <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                Premium
+                            </span>
+                        )}
+                    </div>
+                    <small className={`${getRandomColor("text")}`}>
+                        {artikel.kategori.nama.toUpperCase()}
+                    </small>
+                    <h2 className="font-semibold lg:text-2xl text-base text-gray-800 dark:text-gray-200 line-clamp-2">
+                        {artikel.title}
+                    </h2>
+                </Link>
+            ))}
         </div>
       </header>
 
@@ -101,48 +168,42 @@ export default function Artikel() {
                   <FaFire />
                   <h2>TRENDING</h2>
                 </span>
-                {/* <span className="flex items-center gap-2 text-sm hover:underline dark:text-gray-200">
-                  <a href="#">View More</a>
-                  <FaArrowRight size={13} />
-                </span> */}
               </div>
-              <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-10">
-                <div>
-                  <img
-                    src="/images/news/unesco.jpeg"
-                    alt="subheader1"
-                    className="h-[200px] object-cover"
-                  />
-                  <Link href={"/news/read"}>
-                    <h3 className="font-bold mt-2 dark:text-gray-200">
-                      Bahasa Indonesia Menjadi Bahasa Resmi ke-10 di UNIESCO
-                    </h3>
-                  </Link>
-                </div>
-                <div className="md:block hidden">
-                  <img
-                    src="/images/news/pertunjukkan-budaya-indonesia-pukau-warga-turki.jpeg"
-                    alt="subheader2"
-                    className="h-[200px] object-cover"
-                  />
-                  <Link href={"/news/read"}>
-                    <h3 className="font-bold mt-2 dark:text-gray-200">
-                      Pertunjukkan Budaya Indonesia Pukau Warga Turki
-                    </h3>
-                  </Link>
-                </div>
-                <div className="lg:block hidden">
-                  <img
-                    src="/images/news/borobudur.jpg"
-                    alt="subheader3"
-                    className="h-[200px] object-cover"
-                  />
-                  <Link href={"/news/read"}>
-                    <h3 className="font-bold mt-2 dark:text-gray-200">
-                      Candi Borobudur Situs Warisan Dunia
-                    </h3>
-                  </Link>
-                </div>
+              <div className="grid">
+                <Swiper
+                    modules={[Navigation, Pagination]}
+                    spaceBetween={30}
+                    slidesPerView={countTrandingArtikel}
+                    navigation
+                    pagination={{ clickable: true }}
+                    loop={true}
+                    className="w-full"
+                    // className='w-full'
+                >
+                    {trendingArtikel.map((artikel, index) => (
+
+                        <SwiperSlide key={index}>
+                            <Link href={`/artikel/${artikel.slug}`}>
+                                <div className="h-[200px] relative">
+                                    <img
+                                        src={artikel.image ? artikel.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                                        className="bg-gray-300 h-full rounded-xl object-cover"
+                                    />
+
+                                    {artikel.status_artikel === "premium" && (
+                                        <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                            Premium
+                                        </span>
+                                    )}
+                                </div>
+                                <h3 className="font-bold mt-2 dark:text-gray-200 line-clamp-2">{artikel.title}</h3>
+                            </Link>
+
+                        </SwiperSlide>
+                    ))}
+
+                </Swiper>
+
               </div>
             </div>
             <div className="border border-gray-300 rounded-md p-7 relative dark:border-gray-800 md:block hidden">
@@ -168,118 +229,64 @@ export default function Artikel() {
         <hr className="my-10 border-gray-300" />
         <section className="grid lg:grid-cols-4 gap-20 mt-10">
           <div className="lg:col-span-3 md:w-auto w-[95%]">
-            <div className="md:grid md:grid-cols-5 items-center lg:gap-10 md:gap-5 md:mb-5 mb-16">
-              <div className="md:col-span-2">
-                <img
-                  src="/images/news/pertunjukkan-budaya-indonesia-pukau-warga-turki.jpeg"
-                  className="w-full h-[250px] rounded object-cover"
-                />
-              </div>
-              <div className="md:col-span-3">
-                <small className="text-yellow-500 font-semibold">
-                  INDONESIA DI MATA DUNIA
-                </small>
+            {artikels.map((item, index) => (
 
-                <Link href={"/news/read"}>
-                  <h3 className="text-xl font-bold mb-3 dark:text-gray-200">
-                    Pertunjukkan Budaya Indonesia Pukau Warga Turki{" "}
-                  </h3>
+                <Link
+                    href={`/artikel/${item.slug}`}
+                    key={index}
+                    className="md:grid md:grid-cols-5 items-center lg:gap-10 md:gap-5  md:mb-5 mb-16"
+                >
+                    <div className="md:col-span-2">
+                        <img
+                        src={item.image ? item.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                        className="bg-gray-300 w-full h-[250px] rounded object-cover"
+                        alt={item.title}
+                        />
+                    </div>
+                    <div className="md:col-span-3 mb-10 md:mb-0 mt-3 md:mt-0">
+                        <small className={`${getRandomColor("text")} font-semibold`}>
+                        {item.kategori.nama.toUpperCase()}
+                        </small>
+                        <h3 className="text-xl line-clamp-3 font-bold mb-3 dark:text-gray-200">
+                            {item.title}
+                        </h3>
+                        <p className="text-gray-700 line-clamp-4 dark:text-gray-300 lg:text-base md:text-sm text-[12px]">
+                        {item.excerpt}
+                        </p>
+                        <div className="mt-5 md:flex gap-10">
+                        <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
+                            <FaUser />
+                            <span>Penulis : {item.user.name}</span>
+                        </p>
+                        <p className="flex gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
+                            <FaCalendar />
+                            <span>{changeDate(new Date(item.published_at))}</span>
+                        </p>
+                        </div>
+                    </div>
                 </Link>
-                <p className="text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px]">
-                  Acara yang dimulai pada jam 6 sore hingga 10 malam waktu Turki
-                  menyita perhatian ratusan penonton dari berbagai kalangan,
-                  termasuk dosen-dosen dari Sakarya University, mahasiswa Turki,
-                  mahasiswa Indonesia, dan sejumlah tamu undangan.
-                </p>
+            ))}
 
-                <div className="mt-5 md:flex gap-10">
-                  <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                    <FaMapMarkedAlt />
-                    <span>Sakarya University, Turki</span>
-                  </p>
-                  <p className="flex gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                    <FaCalendar />
-                    <span>7 Mei 2024</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="md:grid md:grid-cols-5 items-center lg:gap-10 md:gap-5 md:mb-5 mb-16">
-              <div className="md:col-span-2">
-                <img
-                  src="/images/news/gordang-sambilan.jpeg"
-                  className="w-full h-[250px] rounded object-cover"
-                />
-              </div>
-              <div className="md:col-span-3">
-                <small className="text-emerald-500 font-semibold uppercase">
-                  Musik dan Lagu
-                </small>
-                <Link href={"/news/read"}>
-                  <h3 className="text-xl font-bold mb-3 dark:text-gray-200">
-                    Fungsi Gordang Sambilan Sebelum Masyarakat Mandailing Kenal
-                    Islam
-                  </h3>
-                </Link>
-                <p className="text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px]">
-                  Gordang Sambilan saat itu juga dipergunakan untuk menggelar
-                  upacara mangido udan (meminta hujan) untuk mengatasi
-                  kekeringan yang melanda di daerah tersebut.
-                </p>
-
-                <div className="mt-5 md:flex gap-10">
-                  <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                    <FaMapMarkedAlt />
-                    <span>Mandailing, Sumatra Utara</span>
-                  </p>
-                  <p className="flex gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                    <FaCalendar />
-                    <span>7 Mei 2024</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="md:grid md:grid-cols-5 items-center lg:gap-10 md:gap-5 md:mb-5 mb-16">
-              <div className="md:col-span-2">
-                <img
-                  src="/images/news/batik.jpg"
-                  className="w-full h-[250px] rounded object-cover"
-                />
-              </div>
-              <div className="md:col-span-3">
-                <small className="text-purple-500 font-semibold">PAKAIAN</small>
-                <Link href={"/news/read"}>
-                  <h3 className="text-xl font-bold mb-3 dark:text-gray-200">
-                    Hari Batik Nasional 2 Oktober, Mari Lebih Mengenal Batik
-                  </h3>
-                </Link>
-                <p className="text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px]">
-                  Batik merupakan salah satu jenis karya seni rupa yang
-                  berkembang di Indonesia. Batik sendiri dipercaya sudah ada
-                  sejak zaman Majapahit dan populer pada akhir abad XVIII atau
-                  permulaan abad XIX.
-                </p>
-
-                <div className="mt-5 md:flex gap-10">
-                  <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                    <FaMapMarkedAlt />
-                    <span>Bandung, Jawa Barat</span>
-                  </p>
-                  <p className="flex gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                    <FaCalendar />
-                    <span>7 Mei 2024</span>
-                  </p>
-                </div>
-              </div>
-            </div>
 
           </div>
-          <div className="lg:block hidden">
+          <div className="lg:block hidden sticky top-20 h-max">
             <img
               src="/images/news/kabarBudaya.png"
               alt="kabarBudayaBanner"
               className="rounded"
             />
+            <h2 className='text-red-500 text-xl font-semibold mb-10 mt-5 md:mt-10'>REKOMENDASI</h2>
+            {/* Artikel Rekomendasi */}
+            {artikelRekomendasi.map((item, index) => (
+                <Link href={`/artikel/${item.slug}`} key={index}>
+                    <img
+                    src={item.image ? item.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                    alt={item.title}
+                    className="bg-gray-300 rounded-xl h-[200px] object-cover"
+                    />
+                    <h3 className="font-bold mt-2 line-clamp-2 dark:text-gray-200 mb-10">{item.title}</h3>
+                </Link>
+            ))}
           </div>
         </section>
       </main>

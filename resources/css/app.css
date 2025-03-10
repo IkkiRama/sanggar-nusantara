@@ -363,6 +363,23 @@ html.dark .MuiAccordionDetails-root.css-15v22id-MuiAccordionDetails-root {
     /* border-radius: 5px; */
 }
 
+
+/* Custom scrollbar khusus untuk div tabel */
+.table-scroll::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+    background-color: #dc213e;
+    border-radius: 5px;
+}
+
+
 .animate-scroll-to-t {
     animation: animate-scroll-to-t 20s infinite;
 }

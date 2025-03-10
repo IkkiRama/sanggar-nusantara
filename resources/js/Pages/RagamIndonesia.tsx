@@ -1,7 +1,7 @@
 import HeaderSlider from "../layouts/headerSlider";
 import { useEffect, useRef, useState } from "react";
 
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { styled } from "@mui/material/styles";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 
@@ -36,12 +36,12 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 
 import ReactCardSlider from "react-card-slider-component";
-import DarkNavbar from "../layouts/darkNavbar";
 import React from "react";
 import MainLayout from "../Layouts/mainLayout";
 import LightNavbar from "../layouts/lightNavbar";
 
 export default function RagamIndonesia() {
+    const { user } = usePage().props;
   const [selectedSong, setSelectedSong] = useState({
     name: "Tokecang",
     lyric:
@@ -247,7 +247,7 @@ export default function RagamIndonesia() {
 
   return (
     <MainLayout title="Ragam Indonesia | Sanggar Nusantara">
-        <LightNavbar />
+        <LightNavbar user={user} />
 
       <header className="mt-20 relative grid lg:grid-cols-2 pt-10 lg:px-10 px-5 lg:max-h-[700px] max-h-screen overflow-y-hidden after:absolute after:bg-gradient-to-t dark:after:from-black dark:after:to-black/10 after:from-white after:to-white/10 after:w-full after:h-[130px] after:bottom-0">
         <div className="h-full flex-col justify-center items-center pt-20">

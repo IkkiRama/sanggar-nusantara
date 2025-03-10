@@ -2,16 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from '@inertiajs/react';
 import { usePage } from "@inertiajs/react";
 
-import {
-  IconCalendar,
-  IconEye,
-  IconHeart,
-  IconPaper,
-  IconMessages,
-  IconTicket,
-  IconLocation,
-} from "@irsyadadl/paranoid";
-
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
@@ -44,6 +34,7 @@ import LightNavbar from "../layouts/lightNavbar";
 import React from "react";
 import MainLayout from './../Layouts/mainLayout';
 import { changeDate } from './../Utils/changeDate';
+import { BookOpen, Calendar } from "lucide-react";
 
 interface Event {
     kategori_event_id:string;
@@ -90,6 +81,7 @@ interface PageProps {
 const Home = () => {
   const [open, setOpen] = useState(false);
   const [tabActive, setTabActive] = useState("news");
+  const { user } = usePage().props;
 
   const { events = [], artikels = [] } = usePage<PageProps>().props;  // Ambil data dari Laravel
 
@@ -129,7 +121,7 @@ const Home = () => {
 
   return (
     <MainLayout title="Sanggar Nusantara | Eksplorasi Budaya & Kekayaan Alam Indonesia">
-      <LightNavbar />
+      <LightNavbar user={user} />
 
       <section className="grid bg-white dark:bg-black min-h-[100vh] lg:grid-cols-2 relative z-10 overflow-hidden">
         {/* Background Gradient Circle */}
@@ -702,7 +694,7 @@ const Home = () => {
             }}
           >
             <div className="relative h-6 w-6 lg:h-9 lg:w-9">
-              <IconPaper className="w-[30px] h-[30px]" />
+              <BookOpen className="w-[30px] h-[30px]" />
             </div>
             <span className="ml-3 lg:ml-4 inline">Berita</span>
           </button>
@@ -714,7 +706,7 @@ const Home = () => {
             }}
           >
             <div className="relative h-6 w-6 lg:h-9 lg:w-9">
-              <IconCalendar className="w-[30px] h-[30px]" />
+              <Calendar className="w-[30px] h-[30px]" />
             </div>
             <span className="ml-3 lg:ml-4 inline">Event</span>
           </button>
@@ -890,10 +882,10 @@ const Home = () => {
                         Sanggar Nusantara Telah Menjangkau Hampir ke Seluruh Indonesia
                     </h2>
                     <p className="text-gray-800 md:text-lg mt-4">
-                        Sanggar Nusantara berkomitmen untuk melestarikan dan memperkenalkan kekayaan budaya serta alam Indonesia. Mari bersama-sama, kita lestarikan warisan Nusantara dan wujudkan impian akan Indonesia yang kaya akan seni, tradisi, dan keindahan alamnya.
+                        Sanggar Nusantara berkomitmen untuk melestarikan dan memperkenalkan kekayaan budaya serta alam Indonesia. Mari bersama-sama, kita lestarikan warisan nusantara dan wujudkan impian akan Indonesia yang kaya akan seni, tradisi, dan keindahan alamnya.
                     </p>
                 </div>
-                
+
                 <div className="grid grid-cols-2 lg:grid-cols-4 py-12 lg:pb-16 gap-5 w-full max-w-[1350px]">
                     <div className="bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
                         <h5 className="font-bold text-red-500 text-3xl lg:text-5xl mb-2">34+</h5>

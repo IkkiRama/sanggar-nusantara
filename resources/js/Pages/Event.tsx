@@ -41,6 +41,8 @@ interface PageProps {
 export default function Event() {
     const [error, setError] = useState(null);
     const { events: initialEvents = [], totalPages: initialTotalPages } = usePage<PageProps>().props;
+    const { user } = usePage().props;
+
     const [events, setEvents] = useState<Event[]>(initialEvents);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -159,7 +161,7 @@ export default function Event() {
     );
   if (events.length > 0) return (
     <MainLayout title="Event | Sanggar Nusantara">
-        <LightNavbar />
+        <LightNavbar user={user} />
         <div className="lg:py-0 py-20 px-4 relative min-h-screen lg:pt-28 lg:pb-20">
             <div className="container mx-auto relative z-10">
                 <motion.div {...fadeInUpAnimation} className="text-center mb-8">
@@ -173,7 +175,7 @@ export default function Event() {
                                 <SlidersHorizontal className="w-4 h-4 mr-2" /> Filter
                             </button>
                             {/* Search Bar */}
-                            <div className="flex items-center md:w-full w-[70%] rounded-lg p-2 shadow-sm border-2 border-gray-400 focus-within:outline-2 focus-within:outline-blue-500">
+                            <div className="flex items-center w-full rounded-lg p-2 shadow-sm border-2 border-gray-400 focus-within:outline-2 focus-within:outline-blue-500">
                                 <Search className="w-5 h-5 text-gray-500" />
                                 <input
                                     type="text"
@@ -272,7 +274,7 @@ export default function Event() {
                             {filteredEvents.map((item, index) => (
                             <Link key={index} href={`/event/${item.slug}`} className="bg-white rounded-lg shadow-sm">
                                 <img
-                                src={item.image ? item.image : "./images/NO IMAGE AVAILABLE.jpg"}
+                                src={item.image ? item.image : "/images/NO IMAGE AVAILABLE.jpg"}
                                 alt={item.nama}
                                 className="w-full h-[200px] md:h-[300px] object-cover rounded-lg mb-8"
                                 />

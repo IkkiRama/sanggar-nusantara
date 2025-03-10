@@ -2,14 +2,14 @@ import React, {useState } from 'react'
 
 // component
 import DarkNavbar from "../layouts/darkNavbar";
-import {
-  IconCalendar,
-  IconListBullets,
-  IconLocation,
-  IconMap,
-  IconTicket,
-  IconX,
-} from "@irsyadadl/paranoid";
+// import {
+//   IconCalendar,
+//   IconListBullets,
+//   IconLocation,
+//   IconMap,
+//   IconTicket,
+//   IconX,
+// } from "@irsyadadl/paranoid";
 import LightNavbar from '../layouts/lightNavbar';
 import MainLayout from '../Layouts/mainLayout';
 
