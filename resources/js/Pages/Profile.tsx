@@ -1,118 +1,112 @@
 import { usePage } from '@inertiajs/react';
-import React from 'react'
-import MainLayout from '../Layouts/mainLayout';
+import React, { useEffect, useState } from 'react'
 import LightNavbar from '../layouts/lightNavbar';
 import UserProfile from '../Components/userProfile';
+import { changeDate } from '../Utils/changeDate';
+import { LucideCalendarDays, Ticket } from 'lucide-react';
+import formatTanggal from './../Utils/formatTanggal';
+import toCapitalize from './../Utils/toCapitalize';
+import ProfileLayout from '../Layouts/profileLayout';
 
 
 
+export default function Profile({user, pembelianEvents}) {
+    const [isChecking, setIsChecking] = useState(true);
+    const [activeTab, setActiveTab] = useState("event");
 
+    useEffect(() => {
+        if (!user) {
+            window.location.href = '/login'; // Redirect ke halaman login jika belum login
+        } else {
+            setIsChecking(false);
+        }
+    }, [user]);
 
-const Transactions = () => {
-  const transactions = [
-    { id: 1, date: "Sabtu, 12 November 2004", status: "Sudah Bayar", total: "Rp 150.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-  ];
+    if (isChecking) {
+        return <div className="flex justify-center h-screen items-center text-center text-red-500 text-xl font-semibold">Memeriksa akses...</div>;
+    }
 
   return (
-    <div className="p-5 mt-40 relative overflow-x-auto bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl w-full lg:w-[75%] table-scroll">
-      <h2 className="text-xl font-semibold mb-4">Transaksi</h2>
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="p-3">No</th>
-            <th className="p-3">Waktu</th>
-            <th className="p-3">Status</th>
-            <th className="p-3">Total</th>
-            <th className="p-3">Opsi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((trx, index) => (
-            <tr key={trx.id} className="border-b">
-              <td className="p-3">{index + 1}</td>
-              <td className="p-3">{trx.date}</td>
-              <td className="p-3">{trx.status}</td>
-              <td className="p-3">{trx.total}</td>
-              <td className="p-3 flex gap-2">
-                <button className="bg-blue-500 text-white px-3 py-1 rounded">Nota</button>
-                {trx.status === "Belum Bayar" ? (
-                  <button className="bg-red-500 text-white px-3 py-1 rounded">Kirim Pembayaran</button>
-                ) : (
-                  <button className="bg-green-500 text-white px-3 py-1 rounded">Lihat Pembayaran</button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-export default function Profile() {
-    const { user } = usePage().props;
-  return (
-    <MainLayout>
+    <ProfileLayout title={`Dasboard ${user.name} | Sanggar Nusantara`}>
         <LightNavbar user={user} />
         <div className="bg-blue-500 h-[30vh]"></div>
 
         <div className="flex flex-wrap lg:flex-nowrap lg:-mt-[10vh] -mt-[30vh] gap-5 pb-20 px-4 min-h-screen">
             <UserProfile isActive="dashboard" user={user} />
-            <Transactions />
+            <div className="p-5 md:mt-0 mt-40 relative overflow-x-auto bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl w-full lg:w-[75%] table-scroll">
+                <div className="bg-red-500 text-white p-4 rounded-lg mb-4">
+                    <h2 className="text-lg lg:text-2xl mb-2 font-semibold">Halo, {user.name}!</h2>
+                    <p className="lg:text-md">Jelajahi kekayaan budaya dan warisan Indonesia bersama Sanggar Nusantara. Saatnya menambah wawasan dan keterampilan dalam seni dan tradisi negeri.</p>
+                </div>
+                <div className="flex gap-2 mb-4">
+                    <button
+                    className={`cursor-pointer font-semibold px-4 py-2 rounded-lg ${activeTab === "event" ? "bg-blue-500 text-white" : "bg-gray-300 text-black"}`}
+                    onClick={() => setActiveTab("event")}
+                    >
+                    Event
+                    </button>
+                    <button
+                    className={`cursor-pointer font-semibold px-4 py-2 rounded-lg ${activeTab === "produk" ? "bg-blue-500 text-white" : "bg-gray-300 text-black"}`}
+                    onClick={() => setActiveTab("produk")}
+                    >
+                    Produk
+                    </button>
+                </div>
+                <div>
+                    {activeTab === "event" && (
+                        <div className="space-y-4">
+                            {pembelianEvents.map((event, index) => (
+                            <div key={index} className="bg-white p-4 rounded-lg shadow flex justify-between items-center">
+                                <div className="flex mr-5">
+
+                                    <div className="">
+                                        <div className="flex gap-2 mb-2 lg:mb-4">
+                                            <span className="bg-green-200 text-green-600 px-2 py-1 rounded text-xs md:text-sm">{toCapitalize(event.status_pembelian)}</span>
+                                        </div>
+                                        <h3 className="font-semibold line-clamp-2 text-lg">{event.event_nama}</h3>
+                                        <div className="flex items-center gap-7 mt-2">
+
+                                            <div className="flex items-center gap-3 text-gray-500">
+                                                <LucideCalendarDays className="w-4 h-4" />
+                                                <p className="text-sm line-clamp-2">
+                                                    {changeDate(new Date(event.event_tanggal))}
+                                                </p>
+                                            </div>
+
+                                            <div className="flex text-gray-500 items-center gap-3">
+                                                <Ticket className="w-4 h-4" />
+                                                <p className=" text-sm line-clamp-2">
+                                                    {event.jumlah_tiket} Tiket {event.jenis_tiket}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-slate-700 mt-2 text-sm">Tiket dibeli pada  {formatTanggal(event.created_at)} </p>
+
+                                        <div className="flex items-center gap-5 mt-5">
+                                            <a href={`/etiket/${event.order_id}`} className="px-5 text-white py-2 text-sm bg-red-500 border-2 border-red-500 hover:bg-red-600 rounded-md font-semibold">E-Tiket</a>
+                                            <a href={`/profile/invoice/${event.order_id}`} className="px-5 text-slate-700 py-2 text-sm border-2 border-slate-700 hover:bg-slate-100 rounded-md font-semibold">Invoice</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img
+                                    src={event.image ? event.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                                    alt={`gambar event ${event.event_nama}`}
+                                    className="flex-shrink-0 w-24 lg:w-44 h-20 lg:h-28 rounded-md object-cover bg-gray-400" />
+                            </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {activeTab === "produk" && (
+                        <div className="flex justify-center items-center flex-col mt-7">
+                            <img src="/images/under-construction.png" className="w-[350px] h-[350px]" alt="image comming soon" />
+                            <h2 className="text-2xl lg:text-4xl text-red-500 font-semibold">Coming Soon....</h2>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
-    </MainLayout>
+    </ProfileLayout>
   )
 }

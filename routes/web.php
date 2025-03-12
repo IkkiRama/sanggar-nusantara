@@ -17,6 +17,8 @@ Route::get('/artikel', [FrontController::class, 'artikel']);
 Route::get('/artikel/{slug}', [FrontController::class, 'showArtikel']);
 
 Route::get('/profile', [ProfileController::class, 'index']);
+Route::get('/etiket/{orderId}', [ProfileController::class, 'etiket']);
+Route::get('/profile/invoice/{orderId}', [ProfileController::class, 'invoice']);
 Route::get('/profile/edit', [ProfileController::class, 'profileEdit']);
 Route::get('/profile/transaksi', [ProfileController::class, 'transaksi']);
 

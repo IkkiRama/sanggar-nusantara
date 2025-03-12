@@ -95,7 +95,7 @@ CREATE TABLE orders (
             'dibatalkan',
             'dikembalikan'
         ) DEFAULT 'pending',
-    order_id VARCHAR(255) UNIQUE, -- ID dari Midtrans
+    order_id VARCHAR(255) UNIQUE,
     metode_pembayaran ENUM('midtrans', 'qris', 'ewallet', 'manual_transfer'),
     transaction_id VARCHAR(255) UNIQUE NULL, -- ID transaksi dari Midtrans
     payment_url TEXT NULL, -- URL pembayaran jika menggunakan Midtrans
@@ -498,4 +498,19 @@ public function show($slug)
     }
 }
 
+pembelian_events
+    event_id
+    jumlah_tiket
 
+
+events
+    id
+    nama
+    slug
+    image
+    status_event
+    tempat
+    tanggal
+
+
+invoice dan detail etiket itu harus match dengan user yang login, ngga boleh lian punya orang lain

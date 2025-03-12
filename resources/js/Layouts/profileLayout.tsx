@@ -9,12 +9,12 @@ import "aos/dist/aos.css";
 import { ScrollToTop } from './../Components/ScrollToTop';
 import { Head } from "@inertiajs/react";
 
-interface MainLayoutProps {
+interface ProfileLayoutProps {
     children: React.ReactNode;
     title?: string;
 }
 
-export default function MainLayout({ children, title = 'Home' }: MainLayoutProps) {
+export default function ProfileLayout({ children, title = 'Profile | Sanggar Nusantara' }: ProfileLayoutProps) {
   useEffect(() => {
     AOS.init();
   }, []);
@@ -28,7 +28,6 @@ export default function MainLayout({ children, title = 'Home' }: MainLayoutProps
             <main className="transition-colors duration-300">
                 {children}
             </main>
-            <Footer />
             <ScrollToTop />
         </div>
     </div>
