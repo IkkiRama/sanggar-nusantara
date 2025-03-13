@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 import { FaCalendar, FaMapMarkedAlt } from 'react-icons/fa';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { changeDate } from './../Utils/changeDate';
-import { Filter, Search, SlidersHorizontal, X } from "lucide-react";
+import { Filter, MapPin, Search, SlidersHorizontal, X } from "lucide-react";
 
 const fadeInUpAnimation = {
   initial: { opacity: 0, y: 20 },
@@ -30,6 +30,7 @@ interface Event {
     excerpt:string;
     tempat:string;
     tanggal:string;
+    harga_terendah:number;
 }
 
 interface PageProps {
@@ -224,8 +225,8 @@ export default function Event() {
                         </div>
 
                         {showFilter && (
-                            <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-white/30">
-                                <div className="bg-white p-8 rounded-lg shadow-lg w-96 border border-gray-300">
+                            <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-white/30 z-40">
+                                <div className="bg-white p-8 rounded-lg shadow-lg w-[95%] md:w-[60%] lg:w-[40%] border border-gray-300">
                                     <div className="flex justify-between items-center mb-6 border-b border-gray-300 pb-3">
                                         <div className="flex items-center">
                                             <Filter className="w-5 h-5 mr-2 text-gray-600" />
@@ -282,16 +283,18 @@ export default function Event() {
 
                                 <p className="px-4 text-gray-700 lg:text-base md:text-sm text-[12px] line-clamp-3">{item.excerpt}</p>
 
-                                <h3 className="px-4 text-lg font-bold mt-2 text-red-500 blinker">Harga</h3>
+                                <h3 className="px-4 text-lg font-bold mt-2 text-red-500 blinker z-1">
+                                    {item.harga_terendah ? `Rp ${item.harga_terendah.toLocaleString('id-ID')}` : 'Gratis'}
+                                </h3>
 
                                 <div className="mt-3 md:flex gap-5 px-4 pb-4">
-                                    <p className="w-[70%] flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 items-center">
-                                        <FaMapMarkedAlt className="w-[30px] h-[30px]" />
-                                        <span>{item.tempat}</span>
+                                    <p className="w-[70%] flex md:mb-0 mb-2 gap-2 text-gray-600 items-center">
+                                        <MapPin className="w-[30px] h-[30px]" />
+                                        <span className="line-clamp-2 text-sm">{item.tempat}</span>
                                     </p>
                                     <p className="w-[30%] flex gap-2 text-sm text-gray-600 items-center">
                                         <FaCalendar className="w-[20px] h-[20px]" />
-                                        <span>{changeDate(new Date(item.tanggal))}</span>
+                                        <span className="line-clamp-2 text-sm">{changeDate(new Date(item.tanggal))}</span>
                                     </p>
                                 </div>
                                 <div className={`p-5 rounded-b-lg text-center ${item.status === "Event Sudah Berakhir" ? "bg-red-100 text-red-500" : "bg-green-100 text-green-600"}`}>

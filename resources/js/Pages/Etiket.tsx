@@ -82,59 +82,59 @@ const ETiket = ({orders}) => {
                 />
                 </div>
 
-                <h2 className="text-2xl font-bold mt-7 mb-4 text-slate-800">
+                <h2 className="lg:text-2xl text-lg font-bold mt-7 mb-4 text-slate-800">
                 Informasi Pesanan <span className="text-slate-400">/ Order Information</span>
                 </h2>
 
-                <div className="flex gap-5 items-center">
-                <div className="border-2 border-gray-300 rounded-lg p-5 w-[70%]">
-                    <div className="flex justify-between">
-                    <div>
-                        <div className="mb-5">
-                            <p className="font-medium mb-2 text-slate-400">
-                                Nama <span className="text-slate-400 italic">/ Name</span>
-                            </p>
-                            <p className="font-bold text-lg">{order.name}</p>
-                        </div>
+                <div className="flex gap-5 items-center flex-wrap-reverse justify-center md:flex-nowrap">
+                    <div className="border-2 border-gray-300 rounded-lg p-5 w-full md:w-[70%]">
+                        <div className="flex justify-between">
+                        <div>
+                            <div className="mb-5">
+                                <p className="font-medium mb-2 text-slate-400">
+                                    Nama <span className="text-slate-400 italic">/ Name</span>
+                                </p>
+                                <p className="font-bold text-lg">{order.name}</p>
+                            </div>
 
-                        <div>
-                        <p className="font-medium mb-2 text-slate-400">
-                            Tanggal Pembelian <span className="text-slate-400 italic">/ Order Date</span>
-                        </p>
-                        <p className="font-medium text-lg">{order.tanggal_pembelian}</p>
-                        </div>
-                    </div>
-                    <div>
-                        <div className="mb-5">
-                        <p className="font-medium mb-2 text-slate-400">
-                            Kode Tagihan <span className="text-slate-400 italic">/ Invoice Code</span>
-                        </p>
-                        <p className="font-bold text-lg">{order.kode_tagihan}</p>
+                            <div>
+                            <p className="font-medium mb-2 text-slate-400">
+                                Tanggal Pembelian <span className="text-slate-400 italic">/ Order Date</span>
+                            </p>
+                            <p className="font-medium text-lg">{order.tanggal_pembelian}</p>
+                            </div>
                         </div>
                         <div>
-                        <p className="font-medium mb-2 text-slate-400">
-                            Referensi <span className="text-slate-400 italic">/ Reference</span>
+                            <div className="mb-5">
+                            <p className="font-medium mb-2 text-slate-400">
+                                Kode Tagihan <span className="text-slate-400 italic">/ Invoice Code</span>
+                            </p>
+                            <p className="font-bold text-lg">{order.kode_tagihan}</p>
+                            </div>
+                            <div>
+                            <p className="font-medium mb-2 text-slate-400">
+                                Referensi <span className="text-slate-400 italic">/ Reference</span>
+                            </p>
+                            <p className="font-medium text-lg">Online</p>
+                            </div>
+                        </div>
+                        </div>
+                        <div className="md:py-2 py-1 md:px-4 px-3 bg-gray-200 mt-3 md:mt-7 rounded-md">
+                        <p className="text-sm md:text-base text-slate-700">
+                            Simpan tiket ini dan tunjukkan saat acara berlangsung. Tiket ini adalah
+                            bukti pembelian Anda dan diperlukan untuk masuk ke lokasi acara. Jangan
+                            bagikan tiket ini kepada orang lain untuk menghindari penyalahgunaan.
+                            Selamat menikmati acara!
                         </p>
-                        <p className="font-medium text-lg">Online</p>
                         </div>
                     </div>
+                    <div className="border-2 border-gray-300 rounded-lg p-5 ld:p-14 w-full sm:w-[50%] md:w-[30%]">
+                        <QRCodeCanvas
+                            value={`http://sanggar-nusantara.test/etiket/${order.order_id}`}
+                            size={250}
+                            style={{ width: "100%", height: "100%" }}
+                        />
                     </div>
-                    <div className="md:py-2 py-1 md:px-4 px-3 bg-gray-200 mt-3 md:mt-7 rounded-md">
-                    <p className="text-sm md:text-base text-slate-700">
-                        Simpan tiket ini dan tunjukkan saat acara berlangsung. Tiket ini adalah
-                        bukti pembelian Anda dan diperlukan untuk masuk ke lokasi acara. Jangan
-                        bagikan tiket ini kepada orang lain untuk menghindari penyalahgunaan.
-                        Selamat menikmati acara!
-                    </p>
-                    </div>
-                </div>
-                <div className="border-2 border-gray-300 rounded-lg p-5 ld:p-14 w-[30%]">
-                    <QRCodeCanvas
-                        value={`http://sanggar-nusantara.test/etiket/${order.order_id}`}
-                        size={250}
-                        style={{ width: "100%", height: "100%" }}
-                    />
-                </div>
                 </div>
             </div>
             </div>

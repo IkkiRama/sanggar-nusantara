@@ -419,3 +419,30 @@ html.dark .MuiAccordionDetails-root.css-15v22id-MuiAccordionDetails-root {
 .content-artikel * {
     margin: 25px 0;
 }
+
+
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    20% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.animate-fade-in-out {
+    animation: fadeInOut 5.5s ease-in-out;
+}

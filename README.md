@@ -64,3 +64,19 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+
+Kolom type ENUM('percentage', 'fixed', 'voucher') NOT NULL dalam tabel discounts digunakan untuk menentukan jenis diskon yang akan diberikan. Berikut adalah penjelasan tentang tiga jenis diskon yang bisa dipilih:
+
+percentage
+
+Diskon diberikan dalam bentuk persentase dari total harga pembelian.
+Contohnya: Jika amount = 10.00, maka diskon yang diberikan adalah 10% dari total belanja.
+Biasanya memiliki batas maksimum (max_discount) agar diskon tidak melebihi jumlah tertentu.
+
+fixed
+
+Diskon diberikan dalam bentuk nominal tetap, tanpa bergantung pada total harga pembelian.
+Contohnya: Jika amount = 50.00, maka pelanggan akan mendapatkan potongan harga sebesar Rp50.000.

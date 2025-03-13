@@ -6,4 +6,11 @@ use App\Http\Controllers\FrontController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/komen', [FrontController::class, 'storeKomen']);
+Route::post('/komen', [FrontController::class, 'storeKomenAPI']);
+Route::post('/diskon', [FrontController::class, 'showDiskonAPI']);
+
+Route::post('/bayar', [FrontController::class, 'storeOrderAPI']);
+Route::middleware('auth:sanctum')->group(function () {
+});
+
+Route::post('/midtrans-callback', [FrontController::class, 'updateTransaction']); // Callback Midtrans

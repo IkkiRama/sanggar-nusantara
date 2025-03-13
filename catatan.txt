@@ -67,6 +67,14 @@ Tabel DB
 
 group pembelian
 
+
+Alur Penggunaan Diskon dalam Order
+Cek apakah user menggunakan diskon saat checkout.
+Ambil data diskon dari tabel discounts berdasarkan discount_id.
+Hitung total setelah diskon (total_pembelian - discount_amount).
+Simpan discount_id dan discount_amount dalam order.
+Kurangi jumlah pemakaian (usage_count) dari tabel discounts, jika diskon memiliki batas penggunaan.
+
 CREATE TABLE carts (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -107,6 +115,9 @@ CREATE TABLE orders (
 );
 
 
+discount_id → Menyimpan ID diskon yang digunakan dalam order (jika ada).
+discount_amount → Menyimpan jumlah nominal diskon yang diterapkan ke order.
+total_akhir → Kolom ini dihitung otomatis dengan formula total_pembelian - discount_amount.
 
 
 Tabel ini menyimpan informasi utama tentang diskon.
@@ -340,177 +351,3 @@ Group Ragam Indonesia (PETA INTERAKTIF AMBIL NAMA, GAMBAR, ASAL, LAT, LNG)
 
 
 
-
-"@tailwindcss/vite": "^4.0.0",
-        "@vitejs/plugin-react": "^4.3.4",
-        "axios": "^1.7.4",
-        "concurrently": "^9.0.1",
-        "laravel-vite-plugin": "^1.2.0",
-        "tailwindcss": "^4.0.0",
-        "vite": "^6.0.11",
-
-
-
-
-
-public function show($slug)
-    {
-        $headers = [
-            'Content-Type' => 'application/json',
-            'X-Powered-By' => 'Rifki Romadhan',
-            'X-Content-Language' => 'id',
-            'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
-        ];
-
-        try {
-
-            $artikel = Artikel::where([
-                ["slug", $slug],
-                ["status_artikel", '!=', "draft"]
-            ])
-            ->withoutTrashed()
-            ->with("komentar", "kategori:id,nama", "user:id,name")->firstOrFail();
-
-            if (empty($artikel)) {
-                throw new \Exception("Artikel tidak ditemukan.");
-            }
-
-            $newViews = $artikel->views + 1;
-            $artikel->update([
-                "views" => $newViews
-            ]);
-
-            return response()->json([
-                "success" => true,
-                "data" => $artikel,
-                "message" => "Artikel ".$slug." Berhasil di Tampilkan"
-            ], 200, $headers);
-
-        } catch (\Exception $e) {
-
-            return response()->json([
-                "success" => false,
-                "data" => null,
-                "message" => "Error: " . $e->getMessage()
-            ], 500, $headers);
-
-        }
-
-    }
-
-
-
-
-
-{
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "build": "vite build",
-        "dev": "vite"
-    },
-    "devDependencies": {
-        "@tailwindcss/vite": "^4.0.0",
-        "@vitejs/plugin-react": "^4.3.4",
-        "axios": "^1.7.4",
-        "concurrently": "^9.0.1",
-        "laravel-vite-plugin": "^1.2.0",
-        "tailwindcss": "^4.0.0",
-        "vite": "^6.0.11"
-    },
-    "dependencies": {
-        "@inertiajs/react": "^2.0.3",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0"
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "build": "vite build",
-        "dev": "vite"
-    },
-    "devDependencies": {
-        "@tailwindcss/vite": "^4.0.0",
-        "@vitejs/plugin-react": "^4.3.4",
-        "autoprefixer": "^10.4.16",
-        "axios": "^1.7.4",
-        "concurrently": "^9.0.1",
-        "laravel-vite-plugin": "^1.2.0",
-        "postcss": "^8.4.31",
-        "tailwindcss": "^4.0.0",
-        "vite": "^6.0.11"
-    },
-    "dependencies": {
-        "@emotion/react": "^11.11.1",
-        "@emotion/styled": "^11.11.0",
-        "@inertiajs/react": "^2.0.3",
-        "@mui/material": "^5.14.18",
-        "@react-google-maps/api": "^2.19.2",
-        "@vis.gl/react-google-maps": "^0.4.3",
-        "aos": "^3.0.0-beta.6",
-        "i18next": "^23.15.1",
-        "i18next-browser-languagedetector": "^8.0.0",
-        "react": "^19.0.0",
-        "react-card-slider-component": "^1.0.9",
-        "react-dom": "^19.0.0",
-        "react-i18next": "^15.0.2",
-        "react-icons": "^4.12.0",
-        "react-light-accordion": "^0.1.4",
-        "yet-another-react-lightbox": "^3.15.2"
-    }
-}
-
-pembelian_events
-    event_id
-    jumlah_tiket
-
-
-events
-    id
-    nama
-    slug
-    image
-    status_event
-    tempat
-    tanggal
-
-
-invoice dan detail etiket itu harus match dengan user yang login, ngga boleh lian punya orang lain

@@ -715,7 +715,7 @@ const Home = () => {
       </section>
 
 
-      <section className="mb-20 bg-red-500">
+      <section className="lg:mb-20 mb-10 bg-red-500">
         {tabActive == "news" ? (
             <>
                 <Link href={`/artikel/${artikelPertama.slug}`} className="grid lg:grid-cols-5 gap-10 items-center lg:px-20 md:px-10 px-5 pt-10">
@@ -875,7 +875,7 @@ const Home = () => {
         </section>
 
         <section id="map" className="bg-[linear-gradient(180deg,#FFF,#F4F6F6_100.03%)] px-4">
-            <div className="max-w-[1350px] mx-auto pt-12 lg:pt-16">
+            <div className="max-w-[1350px] mx-auto md:pt-12 lg:pt-16">
                 <img src="/images/indonesian-map.gif" className="w-full" />
                 <div className="text-center max-w-5xl mx-auto mt-5">
                     <h2 className="text-gray-1000 !leading-tight text-3xl lg:text-4xl font-bold tracking-tight">

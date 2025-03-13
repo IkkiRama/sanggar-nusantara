@@ -17,6 +17,8 @@ Route::get('/artikel', [FrontController::class, 'artikel']);
 Route::get('/artikel/{slug}', [FrontController::class, 'showArtikel']);
 
 Route::get('/profile', [ProfileController::class, 'index']);
+Route::get('/profile/invoice/{orderId}', [ProfileController::class, 'invoice']);
+Route::get('/payment-success/{orderId}', [FrontController::class, 'paymentSuccess']);
 Route::get('/etiket/{orderId}', [ProfileController::class, 'etiket']);
 Route::get('/profile/invoice/{orderId}', [ProfileController::class, 'invoice']);
 Route::get('/profile/edit', [ProfileController::class, 'profileEdit']);
@@ -32,8 +34,8 @@ Route::get('/ragam-indonesia/rumah-adat/{slug}', [FrontController::class, 'showR
 Route::get('/ragam-indonesia/makanan-khas', [FrontController::class, 'makananKhas']);
 Route::get('/ragam-indonesia/makanan-khas/{slug}', [FrontController::class, 'showMakananKhas']);
 
-Route::get('masuk', [AuthController::class, 'masuk'])->name('masuk');
-Route::post('masuk', [AuthController::class, 'postMasuk']);
+Route::get('/login', [AuthController::class, 'masuk'])->name('masuk');
+Route::post('/login', [AuthController::class, 'postMasuk']);
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {

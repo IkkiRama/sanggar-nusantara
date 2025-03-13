@@ -43,9 +43,6 @@ class DiscountUserResource extends Resource
                     ->options(User::all()->pluck('name', 'id'))
                     ->required()
                     ->searchable(),
-                Forms\Components\DateTimePicker::make('used_at')
-                    ->required()
-                    ->columnSpanFull(),
             ]);
     }
 

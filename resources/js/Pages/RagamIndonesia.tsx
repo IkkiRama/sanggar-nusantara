@@ -250,17 +250,22 @@ export default function RagamIndonesia() {
         <LightNavbar user={user} />
 
       <header className="mt-20 relative grid lg:grid-cols-2 pt-10 lg:px-10 px-5 lg:max-h-[700px] max-h-screen overflow-y-hidden after:absolute after:bg-gradient-to-t dark:after:from-black dark:after:to-black/10 after:from-white after:to-white/10 after:w-full after:h-[130px] after:bottom-0">
-        <div className="h-full flex-col justify-center items-center pt-20">
+        <div className="h-full flex-col justify-center items-center lg:pt-20">
           <h4 className="text-2xl font-semibold text-red-500 mb-5">
             Indonesia Kaya
           </h4>
-          <h1 className="font-semibold dark:text-white text-[#111] lg:text-5xl text-4xl lg:leading-[60px] mb-16">
+          <h1 className="font-semibold dark:text-white text-[#111] lg:text-5xl text-4xl lg:leading-[60px] mb-10">
             Telusuri Pesona dan <br /> Keberagaman Budaya Indonesia <br /> yang
             Memukau
           </h1>
-          <a href="#jelajahi" className="bg-red-500 px-10 py-5 rounded-full text-white">
-            Jelajahi Sekarang
-          </a>
+          <div className="flex gap-5">
+            <a href="#jelajahi" className="bg-red-500 px-4 py-3 rounded-lg border-2 border-red-500 text-white">
+                Jelajahi Sekarang
+            </a>
+            <a href="/peta-interaktif" className="bg-white px-4 py-3 rounded-lg border-2 border-red-500 text-red-500">
+                Peta Interaktif
+            </a>
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-5 lg:rotate-3 lg:-mt-20 mt-20 overflow-hidden">
           <div className="grid grid-cols-1 gap-5 animate-scroll-to-t">

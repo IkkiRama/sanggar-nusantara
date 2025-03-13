@@ -28,7 +28,13 @@ class HargaEventsRelationManager extends RelationManager
                     ->numeric(),
                 Forms\Components\TextInput::make('kuota')
                     ->required()
-                    ->numeric()
+                    ->numeric(),
+                Forms\Components\Textarea::make('deskripsi')
+                    ->columnSpanFull(),
+                Forms\Components\DateTimePicker::make('tanggal_mulai')
+                    ->required(),
+                Forms\Components\DateTimePicker::make('tanggal_selesai')
+                    ->required(),
             ]);
     }
 
@@ -40,6 +46,8 @@ class HargaEventsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('nama'),
                 Tables\Columns\TextColumn::make('harga'),
                 Tables\Columns\TextColumn::make('kuota'),
+                Tables\Columns\TextColumn::make('tanggal_mulai'),
+                Tables\Columns\TextColumn::make('tanggal_selesai'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make()

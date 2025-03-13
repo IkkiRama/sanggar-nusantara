@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.5",
         "maatwebsite/excel": "^3.1",
+        "midtrans/midtrans-php": "^2.6",
         "mohamedsabil83/filament-forms-tinyeditor": "^2.4"
     },
     "require-dev": {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\PembelianEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,11 +30,23 @@ class ProfileController extends Controller
             )
             ->where('events.status_event', '!=', 'draft')
             ->where('orders.user_id', $userId) // Menggunakan user_id dari tabel order
+            ->orderBy("orders.created_at", "desc")
             ->get();
 
         return Inertia::render('Profile', [
             'user' => Auth::user(),
             "pembelianEvents" => $pembelianEvents
+        ]);
+    }
+
+    function invoice($orderId) {
+        $order = Order::with(['pembelianEvent', 'discount'])
+            ->where('order_id', $orderId)
+            ->firstOrFail();
+
+        return Inertia::render('Invoice', [
+            'user' => Auth::user(),
+            'order' => $order,
         ]);
     }
 
@@ -53,23 +66,18 @@ class ProfileController extends Controller
                 'events.tempat',
                 'pembelian_events.jenis_tiket',
                 'orders.id as order_id',
-                'orders.transaction_id as kode_tagihan',
+                'pembelian_events.jenis_tiket as kode_tagihan',
                 'orders.created_at as tanggal_pembelian',
                 'user_id', // Id user untuk validasi
                 'users.name',
             )
             ->where('orders.user_id', $user->id) // Filter berdasarkan user yang sedang login
+            ->where('orders.order_id', $orderId) // Filter berdasarkan user yang sedang login
             ->get();
 
 
         return Inertia::render('Etiket', [
             'orders' => $orders,
-        ]);
-    }
-
-    function invoice($orderId) {
-        return Inertia::render('EditProfile', [
-            'user' => Auth::user(),
         ]);
     }
 

@@ -9,7 +9,7 @@ class HargaEvent extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['event_id', 'nama', 'harga', "kuota"];
+    protected $fillable = ['event_id', 'nama', 'harga', "kuota", "deskripsi", "tanggal_mulai", "tanggal_selesai"];
 
     public function event()
     {

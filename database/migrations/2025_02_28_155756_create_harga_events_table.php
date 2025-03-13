@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('nama');
             $table->integer('harga');
             $table->integer('kuota');
+            $table->longText('deskripsi');
+            $table->timestamp('tanggal_mulai');
+            $table->timestamp('tanggal_selesai');
             $table->timestamps();
             $table->softDeletes();
         });
