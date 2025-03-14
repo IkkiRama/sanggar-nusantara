@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
 import GoogleMapComponent from "../components/googlemap";
 import { FaMapLocation } from "react-icons/fa6";
-import DarkNavbar from "../layouts/darkNavbar";
 import React from "react";
 import LightNavbar from "../layouts/lightNavbar";
 import MainLayout from "../Layouts/mainLayout";
 
-export default function Map() {
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+export default function Map({user, foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, seniTari}) {
 
   return (
     <MainLayout title="Peta Interaktif | Sanggar Nusantara">
-        <LightNavbar />
+        <LightNavbar user={user} />
 
       <br />
       <br />
@@ -31,7 +26,9 @@ export default function Map() {
 
 
       <br />
-      <GoogleMapComponent />
+      <div className="px-7 ">
+        <GoogleMapComponent foods={foods} alatMusik={alatMusik} rumahAdat={rumahAdat} laguDaerah={laguDaerah} bahasaDaerah={bahasaDaerah} seniTari={seniTari} />
+      </div>
       <br />
       <br />
       <br />

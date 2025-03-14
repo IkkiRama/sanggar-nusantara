@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use Midtrans\Snap;
+use Midtrans\Config;
 
 class ProfileController extends Controller
 {
@@ -40,7 +42,18 @@ class ProfileController extends Controller
     }
 
     function invoice($orderId) {
-        $order = Order::with(['pembelianEvent', 'discount'])
+        // Ambil order dengan filter awal (hanya cek user_id dan status_pembelian)
+        $order = Order::where('order_id', $orderId)
+            ->where('user_id', Auth::id()) // Cek apakah order milik user yang login
+            ->first();
+
+        // Jika order tidak ditemukan, bukan milik user, atau belum dibayar → Tampilkan error 403
+        if (!$order || $order->status_pembelian !== 'sudah dibayar') {
+            return abort(403, 'Anda tidak memiliki akses ke invoice ini.');
+        }
+
+        // Ambil order lengkap dengan relasi jika lolos filter
+        $order = Order::with(['pembelianEvent', 'pembelianEvent.event', 'discount'])
             ->where('order_id', $orderId)
             ->firstOrFail();
 
@@ -49,6 +62,53 @@ class ProfileController extends Controller
             'order' => $order,
         ]);
     }
+
+    public function getSnapToken($order_id)
+    {
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = false;
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        // Cek apakah user sudah login
+        if (Auth::check()) {
+            return response()->json(['error' => 'User belum login'], 401);
+        }
+
+        // Ambil order yang sesuai dengan user yang login
+        $order = Order::where('order_id', $order_id)
+                    // ->where('user_id', Auth::id()) // Pastikan order ini milik user yang login
+                    ->first();
+
+        // Jika order tidak ditemukan, kembalikan response error
+        if (!$order) {
+            return response()->json(['error' => 'Order tidak ditemukan atau bukan milik Anda'], 404);
+        }
+
+        // Buat data transaksi Midtrans
+        $transaction = [
+            'transaction_details' => [
+                'order_id' => $order->order_id, // Jangan tambahkan time() agar tetap sama
+                'gross_amount' => (int) $order->total_akhir,
+            ],
+            'customer_details' => [
+                'first_name' => $order->user->name ?? 'Guest', // Handle jika user null
+                'email' => $order->user->email ?? 'no-email@example.com', // Handle jika email null
+            ],
+            'callbacks' => [
+                'finish' => url("/payment-success/{$order->order_id}"),
+            ],
+        ];
+
+        try {
+            $snapToken = Snap::getSnapToken($transaction);
+            return response()->json(['token' => $snapToken]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Gagal mendapatkan token Midtrans', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+
 
     function etiket($orderId) {
         // Ambil user yang sedang login

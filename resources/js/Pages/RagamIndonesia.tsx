@@ -13,6 +13,7 @@ import {
   FaPlay,
   FaArrowRight,
   FaTimes,
+  FaTheaterMasks,
 } from "react-icons/fa";
 import { FaBowlFood, FaMapLocation } from "react-icons/fa6";
 import { GiHeartInside, GiMusicalScore } from "react-icons/gi";
@@ -355,7 +356,7 @@ export default function RagamIndonesia() {
                 <h6 className="mt-3 md:text-base text-sm">RUMAH ADAT</h6>
               </Link>
               <Link href="/ragam-indonesia/seni-tari" className="shadow py-4 px-2 text-center rounded border-b-4 border-yellow-500 hover:bg-yellow-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
-                <GiHeartInside className="mx-auto" size={30} />
+                <FaTheaterMasks className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">SENI TARI</h6>
               </Link>
               <Link href="/ragam-indonesia/lagu-daerah" className="shadow py-4 px-2 text-center rounded border-b-4 border-purple-500 hover:bg-purple-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">

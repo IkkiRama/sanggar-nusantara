@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AlatMusik;
 use App\Models\Artikel;
+use App\Models\BahasaDaerah;
 use App\Models\Discount;
 use App\Models\DiscountUser;
 use App\Models\Event;
 use App\Models\Komentar;
+use App\Models\LaguDaerah;
+use App\Models\MakananKhas;
 use App\Models\Order;
 use App\Models\PembelianEvent;
+use App\Models\RumahAdat;
+use App\Models\SeniTari;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
@@ -722,27 +728,82 @@ class FrontController extends Controller
     }
 
     function petaInteraktif() {
-        $penggunaanDiskon = DiscountUser::where('user_id', auth()->id())
-            ->where('discount_id', 4)
-            ->exists();
-        if ($penggunaanDiskon) {
-            return $penggunaanDiskon;
-        }else{
-            return "BAI";
-        }
-        // return $penggunaanDiskon;
+        $foods = MakananKhas::latest()->get();
+        $alatMusik = AlatMusik::latest()->get();
+        $rumahAdat = RumahAdat::latest()->get();
+        $laguDaerah = LaguDaerah::latest()->get();
+        $bahasaDaerah = BahasaDaerah::latest()->get();
+        $seniTari = SeniTari::latest()->get();
+
         return Inertia::render('Map', [
             'user' => Auth::user(),
-            // 'events' => $events,
-            // 'artikels' => $artikels,
+            'foods' => $foods,
+            'alatMusik' => $alatMusik,
+            'rumahAdat' => $rumahAdat,
+            'laguDaerah' => $laguDaerah,
+            'bahasaDaerah' => $bahasaDaerah,
+            'seniTari' => $seniTari,
         ]);
     }
 
     function ragamIndonesia() {
         return Inertia::render('RagamIndonesia', [
             'user' => Auth::user(),
-            // 'events' => $events,
-            // 'artikels' => $artikels,
+        ]);
+    }
+
+    function makananKhas() {
+        $foods = MakananKhas::latest()->get();
+
+        return Inertia::render('RagamMakanan', [
+            'user' => Auth::user(),
+            'foods' => $foods,
+        ]);
+    }
+
+    function alatMusik() {
+        $alatMusik = AlatMusik::latest()->get();
+
+        return Inertia::render('RagamAlatMusik', [
+            'user' => Auth::user(),
+            'alatMusik' => $alatMusik,
+        ]);
+    }
+
+    function rumahAdat() {
+        $rumahAdat = RumahAdat::latest()->get();
+
+        return Inertia::render('RagamRumahAdat', [
+            'user' => Auth::user(),
+            'rumahAdat' => $rumahAdat,
+        ]);
+    }
+
+
+    function laguDaerah() {
+        $laguDaerah = LaguDaerah::latest()->get();
+
+        return Inertia::render('RagamLaguDaerah', [
+            'user' => Auth::user(),
+            'laguDaerah' => $laguDaerah,
+        ]);
+    }
+
+    function bahasaDaerah() {
+        $bahasaDaerah = BahasaDaerah::latest()->get();
+
+        return Inertia::render('RagamBahasadaerah', [
+            'user' => Auth::user(),
+            'bahasaDaerah' => $bahasaDaerah,
+        ]);
+    }
+
+    function seniTari() {
+        $seniTari = SeniTari::latest()->get();
+
+        return Inertia::render('RagamSeniTari', [
+            'user' => Auth::user(),
+            'seniTari' => $seniTari,
         ]);
     }
 }

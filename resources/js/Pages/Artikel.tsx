@@ -269,14 +269,14 @@ export default function Artikel() {
 
 
           </div>
-          <div className="lg:block hidden sticky top-20 h-max">
+          <div className="lg:block hidden sticky top-28 h-max">
             <img
               src="/images/news/kabarBudaya.png"
               alt="kabarBudayaBanner"
               className="rounded"
             />
-            <h2 className='text-red-500 text-xl font-semibold mb-10 mt-5 md:mt-10'>REKOMENDASI</h2>
             {/* Artikel Rekomendasi */}
+            {/* <h2 className='text-red-500 text-xl font-semibold mb-10 mt-5 md:mt-10'>REKOMENDASI</h2>
             {artikelRekomendasi.map((item, index) => (
                 <Link href={`/artikel/${item.slug}`} key={index}>
                     <img
@@ -286,7 +286,7 @@ export default function Artikel() {
                     />
                     <h3 className="font-bold mt-2 line-clamp-2 dark:text-gray-200 mb-10">{item.title}</h3>
                 </Link>
-            ))}
+            ))} */}
           </div>
         </section>
       </main>

@@ -1,4 +1,4 @@
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react'
 import LightNavbar from '../layouts/lightNavbar';
 import UserProfile from '../Components/userProfile';
@@ -13,6 +13,8 @@ import ProfileLayout from '../Layouts/profileLayout';
 export default function Profile({user, pembelianEvents}) {
     const [isChecking, setIsChecking] = useState(true);
     const [activeTab, setActiveTab] = useState("event");
+    const [snapToken, setSnapToken] = useState<string | null>(null);
+
 
     useEffect(() => {
         if (!user) {
@@ -26,8 +28,54 @@ export default function Profile({user, pembelianEvents}) {
         return <div className="flex justify-center h-screen items-center text-center text-red-500 text-xl font-semibold">Memeriksa akses...</div>;
     }
 
+    const handleBayar = async (order_id: string) => {
+        try {
+            const token = localStorage.getItem("token"); // Ambil token dari localStorage atau session storage
+
+            const response = await fetch(`http://sanggar-nusantara.test/api/midtrans/token/${order_id}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Accept": "application/json"
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.token) {
+                window.snap.pay(data.token, {
+                    onSuccess: function (result) {
+                        console.log("Pembayaran sukses");
+                        window.location.href = `/payment-success/${order_id}`;
+                    },
+                    onPending: function (result) {
+                        console.log("Pembayaran tertunda");
+                    },
+                    onError: function (error) {
+                        console.log("Pembayaran gagal", error);
+                    },
+                    onClose: function () {
+                        console.log("Popup ditutup tanpa transaksi");
+                    }
+                });
+            } else {
+                console.error("Token Midtrans tidak ditemukan", data);
+            }
+        } catch (error) {
+            console.error("Gagal mendapatkan token Midtrans", error);
+        }
+    };
+
+
+
+
   return (
     <ProfileLayout title={`Dasboard ${user.name} | Sanggar Nusantara`}>
+        <Head>
+            <script type="text/javascript"
+                src="https://app.sandbox.midtrans.com/snap/snap.js"
+            data-client-key="SB-Mid-client-sCSfDCWXJfjySHKn"></script>
+        </Head>
         <LightNavbar user={user} />
         <div className="bg-blue-500 h-[30vh]"></div>
 
@@ -94,12 +142,13 @@ export default function Profile({user, pembelianEvents}) {
 
                                         <div className="flex items-center gap-5 mt-5">
                                             {event.status_pembelian === "pending" ? (
-                                                <a
-                                                href={`/bayar/${event.order_id}`}
-                                                className="px-5 text-white py-2 text-sm bg-yellow-500 border-2 border-yellow-500 hover:bg-yellow-600 rounded-md font-semibold"
+                                                <button
+                                                    onClick={() => handleBayar(event.order_id)}
+                                                    className="px-5 cursor-pointer text-white py-2 text-sm bg-yellow-500 border-2 border-yellow-500 hover:bg-yellow-600 rounded-md font-semibold"
                                                 >
-                                                Bayar
-                                                </a>
+                                                    Bayar
+                                                </button>
+
                                             ) : event.status_pembelian !== "gagal" ? (
                                                 <>
                                                     <a
@@ -116,7 +165,7 @@ export default function Profile({user, pembelianEvents}) {
                                                     </a>
                                                 </>
                                             ) : null}
-                                        </div> 
+                                        </div>
 
                                     </div>
                                 </div>

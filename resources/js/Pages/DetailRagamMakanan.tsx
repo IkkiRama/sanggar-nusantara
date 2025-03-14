@@ -39,7 +39,7 @@ export default function DetailRagamMakanan(language: any) {
         <div className="py-8 lg:col-span-2 relative z-10 lg:order-2 order-1">
           <img
             src="/images/makanan/karedok.jpeg"
-            className="w-full h-[350px] rounded object-cover"
+            className="w-full h-[350px] rounded object-cover bg-gray-300"
             alt="karedok"
           />
         </div>
@@ -94,7 +94,7 @@ export default function DetailRagamMakanan(language: any) {
           <div className="bg-gray-50 dark:bg-gray-950 p-10 rounded">
             <img
               src="/images/avatar.png"
-              className="w-[70px] rounded"
+              className="w-[70px] rounded bg-gray-300"
               alt="avatar"
             />
             <h1 className="font-bold mt-4 text-gray-800 dark:text-gray-300">
@@ -138,7 +138,7 @@ export default function DetailRagamMakanan(language: any) {
           <img
             src="/images/makanan/gudeg.jpeg"
             alt="makanan1"
-            className="h-[250px] object-cover w-full rounded"
+            className="h-[250px] object-cover w-full rounded bg-gray-300 "
           />
           <h3 className="mt-3 text-xl font-bold dark:text-gray-200">Gudeg</h3>
           <p className="text-gray-700 dark:text-gray-300 mt-2 text-sm">
@@ -149,7 +149,7 @@ export default function DetailRagamMakanan(language: any) {
           <img
             src="/images/makanan/pempek.jpg"
             alt="makanan2"
-            className="h-[250px] object-cover w-full rounded"
+            className="h-[250px] object-cover w-full rounded bg-gray-300"
           />
           <h3 className="mt-3 text-xl font-bold dark:text-gray-200">Pempek</h3>
           <p className="text-gray-700 dark:text-gray-300 mt-2 text-sm">
@@ -160,7 +160,7 @@ export default function DetailRagamMakanan(language: any) {
           <img
             src="/images/makanan/mieaceh.jpg"
             alt="makanan2"
-            className="h-[250px] object-cover w-full rounded"
+            className="h-[250px] object-cover w-full rounded bg-gray-300"
           />
           <h3 className="mt-3 text-xl font-bold dark:text-gray-200">
             Mie Aceh
@@ -173,7 +173,7 @@ export default function DetailRagamMakanan(language: any) {
           <img
             src="/images/makanan/papeda.jpg"
             alt="makanan2"
-            className="h-[250px] object-cover w-full rounded"
+            className="h-[250px] object-cover w-full rounded bg-gray-300"
           />
           <h3 className="mt-3 text-xl font-bold dark:text-gray-200">Papeda</h3>
           <p className="text-gray-700 dark:text-gray-300 mt-2 text-sm">
