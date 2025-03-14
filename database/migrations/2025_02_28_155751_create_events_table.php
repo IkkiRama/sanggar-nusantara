@@ -18,12 +18,12 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('image')->nullable();
             $table->enum('status_event', ['draft', 'publish', 'premium']);
-            $table->string('keyword');
+            $table->text('keyword');
             $table->text('excerpt');
             $table->longText('deskripsi');
             $table->string('tempat');
             $table->dateTime('tanggal');
-            $table->string('link_gmap')->nullable();
+            $table->text('link_gmap')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -82,23 +82,23 @@ export default function RagamAlatMusik({user, alatMusik}) {
         {/* Grid Alat Musik */}
         <section className="grid lg:grid-cols-3 md:grid-cols-2 gap-10 pb-20">
           {filteredData.length > 0 ? (
-            filteredData.map((food, index) => (
+            filteredData.map((alat, index) => (
               <div
                 key={index}
                 className="h-[300px] relative rounded overflow-hidden cursor-pointer"
-                onClick={() => openModal(food)} // Klik untuk buka modal
+                onClick={() => openModal(alat)} // Klik untuk buka modal
               >
                 <img
-                  src={food.image ? food.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                  src={alat.image ? `/Storage/${alat.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                   className="absolute inset-0 w-full h-full object-cover bg-gray-300"
-                  alt={food.nama}
+                  alt={alat.nama}
                 />
                 <div className="absolute z-10 w-[90%] left-1/2 -translate-x-1/2 dark:bg-gray-900 bg-white p-5 rounded bottom-[10px] text-center">
                   <span className="bg-indigo-500 absolute left-1/2 -translate-x-1/2 -top-[10px] text-white px-5 rounded py-1 text-sm">
-                    {food.asal}
+                    {alat.asal}
                   </span>
-                  <h3 className="mt-3 font-bold dark:text-gray-200">{food.nama}</h3>
-                  <small className="text-gray-700 dark:text-gray-400">{food.deskripsi}</small>
+                  <h3 className="mt-3 font-bold dark:text-gray-200">{alat.nama}</h3>
+                  <small className="text-gray-700 dark:text-gray-400">{alat.deskripsi}</small>
                 </div>
               </div>
             ))
@@ -127,7 +127,7 @@ export default function RagamAlatMusik({user, alatMusik}) {
             <div>
               {/* Gambar */}
               <img
-                src={selectedAlatMusik.image}
+                src={`/Storage/${selectedAlatMusik.image}`}
                 className="rounded h-[200px] object-cover w-full bg-gray-300"
                 alt={selectedAlatMusik.nama}
               />
@@ -147,7 +147,7 @@ export default function RagamAlatMusik({user, alatMusik}) {
                 <div className="mt-3">
                   <p className="text-sm font-semibold my-3 dark:text-gray-300">Dengar Suara:</p>
                   <audio controls className="w-full">
-                    <source src={selectedAlatMusik.audio} type="audio/mpeg" />
+                    <source src={`/Storage/${selectedAlatMusik.audio}`} type="audio/mpeg" />
                     Browser Anda tidak mendukung tag audio.
                   </audio>
                 </div>

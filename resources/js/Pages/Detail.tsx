@@ -171,7 +171,7 @@ export default function Detail() {
         </div>
         <div className="py-8 lg:col-span-2 relative z-10 lg:order-2 order-1">
           <img
-            src={artikel.image !== null ? artikel.image : "/images/NO IMAGE AVAILABLE.jpg"}
+            src={artikel.image !== null ? `/Storage/${artikel.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
             className="w-full h-[350px] rounded object-cover"
             alt={`Image artikel ${artikel.title}`}
           />
@@ -191,7 +191,7 @@ export default function Detail() {
                 <img
                 src={
                     //@ts-ignore
-                    artikel.user.image ? artikel.user.image : "../images/NO IMAGE AVAILABLE.jpg"}
+                    artikel.user.image ? `/Storage/${artikel.user.image}` : "../images/NO IMAGE AVAILABLE.jpg"}
                 className="w-[70px] rounded"
                 alt="avatar"
                 />
@@ -315,7 +315,7 @@ export default function Detail() {
         {rekomendasiArtikel.map((item, index) => (
             <Link href={`/artikel/${item.slug}`} key={index} className="mb-5 lg:mb-0">
                 <img
-                    src={item.thumbnail ? `https://data.genbipurwokerto.com/storage/${item.thumbnail}` : "../images/NO IMAGE AVAILABLE.jpg"}
+                    src={item.image ? `/Storage/${item.image}` : "../images/NO IMAGE AVAILABLE.jpg"}
                     alt={item.title}
                     className="h-[250px] object-cover w-full rounded"
                 />

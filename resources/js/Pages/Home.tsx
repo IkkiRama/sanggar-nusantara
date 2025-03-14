@@ -721,7 +721,7 @@ const Home = () => {
                 <Link href={`/artikel/${artikelPertama.slug}`} className="grid lg:grid-cols-5 gap-10 items-center lg:px-20 md:px-10 px-5 pt-10">
                 <div className="h-[200px] md:h-[350px] w-full rounded-md overflow-hidden lg:col-span-2">
                     <img
-                    src={artikelPertama.image}
+                    src={`/Storage/${artikelPertama.image}`}
                     alt={`image artikel ${artikelPertama.nama}`}
                     className="object-cover h-full w-full"
                     data-aos-once="true"
@@ -775,7 +775,7 @@ const Home = () => {
                     {dataArtikel.length > 0 && dataArtikel.map((artikel) => (
                         <Link key={artikel.slug} href={`/news/read/${artikel.slug}`} className="mt-5">
                             <img
-                            src={artikel.image} // Menggunakan gambar dari API
+                            src={`/Storage/${artikel.image}`} // Menggunakan gambar dari API
                             alt={artikel.title}
                             className="h-[200px] sm:h-[250px] object-cover w-full rounded"
                             />
@@ -807,7 +807,7 @@ const Home = () => {
 
                     <div className="flex flex-wrap justify-center text-center pb-10 ">
                     <button
-                        className="w-full sm:w-[unset] mx-3 sm:mx-0 bg-white border-2 border-white hover:bg-slate-200 hover:border-red-400 text-red-500 text-sm sm:px-5 py-2 mt-10 rounded-full inline-flex items-center justify-center sm:gap-2 "
+                        className="w-full sm:w-[unset] mx-3 sm:mx-0 bg-white border-2 border-white hover:bg-slate-200 hover:border-red-400 text-red-500 text-sm sm:px-5 py-2 mt-10 rounded-full inline-flex items-center justify-center sm:gap-2 cursor-pointer "
                         onClick={() => {
                         setMoreNews(false);
                         }}
@@ -827,7 +827,7 @@ const Home = () => {
                 ) : (
                 <div className="text-center pb-10 lg:block">
                     <button
-                    className="bg-white hover:bg-red-400 text-red-500 mx-auto text-sm px-5 py-2 mt-10 rounded-full inline-flex items-center gap-2"
+                    className="bg-white hover:bg-red-400 text-red-500 mx-auto text-sm px-5 py-2 mt-10 rounded-full cursor-pointer inline-flex items-center gap-2"
                     onClick={() => {
                         setMoreNews(true);
                     }}
@@ -843,7 +843,7 @@ const Home = () => {
                 {events.length > 0 && events.map((event, index) => (
                     <Link key={index} href={`/event/${event.slug}`} className="bg-white rounded-lg shadow-sm mb-5 md:mb-0">
                         <img
-                        src={event.image ? event.image : "./images/NO IMAGE AVAILABLE.jpg"}
+                        src={event.image ? `/Storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
                         alt={event.nama}
                         className="w-full h-[200px] md:h-[270px] object-cover rounded-lg mb-8"
                         />
@@ -863,10 +863,13 @@ const Home = () => {
                         </div>
 
                         <div
-                        className={`p-5 rounded-b-lg text-center
-                            ${event.status_event === "Event Sudah Berakhir" ? "bg-red-100 text-red-500" : "bg-green-100 text-green-600"}
-                        `}>
-                            <p className={`dark:text-gray-300 lg:text-base md:text-sm text-[12px] font-semibold`}>{event.status_event}</p>
+                            className={`p-5 rounded-b-lg text-center
+                                ${new Date(event.tanggal) >= new Date() ? "bg-green-100 text-green-600" : "bg-red-100 text-red-500"}
+                            `}
+                        >
+                            <p className="dark:text-gray-300 lg:text-base md:text-sm text-[12px] font-semibold">
+                                {new Date(event.tanggal) >= new Date() ? "Pendaftaran Masih Dibuka" : "Event Sudah Berakhir"}
+                            </p>
                         </div>
                     </Link>
                 ))}

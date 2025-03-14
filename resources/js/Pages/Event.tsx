@@ -146,20 +146,6 @@ export default function Event() {
         fetchEvents();
     }, [searchQuery]);
 
-
-    if (events.length <= 0) return(
-        <div className='flex justify-center items-center flex-col fixed z-[999] right-[50%] top-[50%] translate-x-[50%] -translate-y-[50%] w-screen h-screen bg-white gap-3'>
-            <img
-                src='./images/logo.png'
-                className="lg:w-1/4 w-[80%] h-[40%]"
-                alt='icon-splash'
-            />
-            <div className="flex items-center justify-center">
-                <img src="./images/Loader.svg" alt="loader image" className='w-10 mr-5' />
-                <p>Sedang Memuat Data</p>
-            </div>
-        </div>
-    );
   if (events.length > 0) return (
     <MainLayout title="Event | Sanggar Nusantara">
         <LightNavbar user={user} />
@@ -169,12 +155,13 @@ export default function Event() {
                     <h1 className={`text-2xl sm:text-3xl font-bold text-gray-900`}>Semua Event Sanggar Nusantara</h1>
                     <div className="mt-5 md:mt-10 flex flex-col md:items-center">
                         <div className="flex items-center gap-2 mb-7 md:w-[50%]">
-                            <button
+                            {/* <button
                                 onClick={() => setShowFilter(true)}
                                 className="bg-gray-200 px-4 py-2 rounded-md font-semibold hover:bg-gray-300 outline-1 outline-gray-300 flex md:hidden items-center cursor-pointer"
                             >
                                 <SlidersHorizontal className="w-4 h-4 mr-2" /> Filter
-                            </button>
+                            </button> */}
+
                             {/* Search Bar */}
                             <div className="flex items-center w-full rounded-lg p-2 shadow-sm border-2 border-gray-400 focus-within:outline-2 focus-within:outline-blue-500">
                                 <Search className="w-5 h-5 text-gray-500" />
@@ -275,7 +262,7 @@ export default function Event() {
                             {filteredEvents.map((item, index) => (
                             <Link key={index} href={`/event/${item.slug}`} className="bg-white rounded-lg shadow-sm">
                                 <img
-                                src={item.image ? item.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                                src={item.image ? `/Storage/${item.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                                 alt={item.nama}
                                 className="w-full h-[200px] md:h-[300px] object-cover rounded-lg mb-8"
                                 />

@@ -18,10 +18,11 @@ return new class extends Migration
             $table->integer('jumlah_penutur');
             $table->enum('kategori', ['tradisional', 'modern']);
             $table->text('deskripsi')->nullable();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('lat', 50);
             $table->string('lng', 50);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

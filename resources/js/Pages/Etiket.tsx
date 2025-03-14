@@ -49,7 +49,7 @@ const ETiket = ({orders}) => {
                 <div className="flex flex-wrap md:flex-nowrap gap-5">
                     <div className="w-full md:w-[45%]">
                     <img
-                        src={order.image ? order.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                        src={order.image ? `/Storage/${order.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                         alt="image event"
                         className="w-[100%] h-48 rounded-lg object-cover shrink-0 bg-gray-500"
                     />

@@ -82,15 +82,16 @@ export default function RagamRumahAdat({ user, rumahAdat }) {
                 onClick={() => openModal(rumah)} // Klik untuk buka modal
               >
                 <img
-                  src={rumah.image ? rumah.image : "/images/NO_IMAGE_AVAILABLE.jpg"}
-                  className="absolute inset-0 w-full bg-gray-300 h-full object-cover"
+                  src={rumah.image ? `/Storage/${rumah.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                  className="absolute inset-0 w-full h-full object-cover bg-gray-300"
                   alt={rumah.nama}
                 />
                 <div className="absolute z-10 w-[90%] left-1/2 -translate-x-1/2 dark:bg-gray-900 bg-white p-5 rounded bottom-[10px] text-center">
-                  <span className="bg-emerald-500 absolute left-1/2 -translate-x-1/2 -top-[10px] text-white px-5 rounded py-1 text-sm">
+                  <span className="bg-orange-500 absolute left-1/2 -translate-x-1/2 -top-[10px] text-white px-5 rounded py-1 text-sm">
                     {rumah.asal_rumah}
                   </span>
                   <h3 className="mt-3 font-bold dark:text-gray-200">{rumah.nama}</h3>
+                  <small className="text-gray-700 dark:text-gray-400">{rumah.deskripsi}</small>
                 </div>
               </div>
             ))
@@ -119,8 +120,8 @@ export default function RagamRumahAdat({ user, rumahAdat }) {
             <div>
               {/* Gambar */}
               <img
-                src={selectedRumahAdat.image}
-                className="rounded h-[200px] object-cover w-full bg-gray-300"
+                src={`/Storage/${selectedRumahAdat.image}`}
+                className="rounded h-[200px] lg:h-[400px] object-cover w-full bg-gray-300"
                 alt={selectedRumahAdat.nama}
               />
 

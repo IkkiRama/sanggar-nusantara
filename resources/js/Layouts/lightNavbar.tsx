@@ -286,33 +286,31 @@ const Navbar = ({user}) => {
                                                     <FaUser className="inline-block mr-2" />
                                                     Profile
                                                 </Link>
-                                                <Link
+                                                <a
                                                     href="/logout"
-                                                    method="post"
-                                                    as="button"
                                                     className={`block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50`}
                                                 >
                                                     <FaSignOutAlt className="inline-block mr-2" />
                                                     Logout
-                                                </Link>
+                                                </a>
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
                                 </div>
                             ) : (
                                 <>
-                                    <Link
+                                    {/* <Link
                                         href="/daftar"
                                         className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-white/80 text-red-600 hover:bg-blue-50 shadow-lg`}
                                     >
                                         Daftar
-                                    </Link>
-                                    <Link
-                                        href="/masuk"
-                                        className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-white bg-red-500 hover:bg-blue-50 shadow-lg`}
+                                    </Link> */}
+                                    <a
+                                        href="/login"
+                                        className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-white bg-red-500 hover:bg-red-400 shadow-lg`}
                                     >
                                         Masuk
-                                    </Link>
+                                    </a>
                                 </>
                             )}
 
@@ -440,65 +438,49 @@ const Navbar = ({user}) => {
 
                                     {/* Mobile Auth Section */}
                                     <div className={`pt-4 border-t border-gray-200`}>
-                                        {/* {user ? (
+                                        {user ? (
                                             <div className="space-y-2">
-                                                <MobileMenuItem
+                                                {/* <MobileMenuItem
                                                 //@ts-ignore
                                                     href="/dashboard"
                                                     icon={FaTachometerAlt}
                                                     label="Dashboard"
-                                                    isDark={isDark}
                                                     onClick={handleItemClick}
                                                     isActive={url === '/dashboard'}
-                                                />
+                                                /> */}
                                                 <MobileMenuItem
                                                 //@ts-ignore
                                                     href="/profile"
                                                     icon={FaUser}
                                                     label="Profile"
-                                                    isDark={isDark}
                                                     onClick={handleItemClick}
                                                     isActive={url === '/profile'}
                                                 />
-                                                <Link
+                                                <a
                                                     href="/logout"
-                                                    method="post"
-                                                    as="button"
                                                     onClick={handleItemClick}
-                                                    className={`w-full flex items-center space-x-3 p-3 rounded-xl ${
-                                                        isDark
-                                                            ? 'text-red-400 hover:bg-red-900/20'
-                                                            : 'text-red-600 hover:bg-red-50'
-                                                    } transition-all duration-200`}
+                                                    className={`w-full flex items-center space-x-3 p-3 rounded-xl text-red-600 hover:bg-red-50 transition-all duration-200`}
                                                 >
-                                                    <div className={`size-9 rounded-xl flex items-center justify-center ${
-                                                        isDark ? 'bg-red-900/30' : 'bg-red-50'
-                                                    }`}>
+                                                    <div className={`size-9 rounded-xl flex items-center justify-center bg-red-50`}>
                                                         <FaSignOutAlt className="w-5 h-5" />
                                                     </div>
                                                     <span className="font-medium">Logout</span>
-                                                </Link>
+                                                </a>
                                             </div>
                                         ) : (
-                                            <Link
+                                            <a
                                                 href="/login"
-                                                className={`flex items-center space-x-3 p-3 rounded-xl ${
-                                                    isDark
-                                                        ? 'text-blue-400 hover:bg-blue-900/20'
-                                                        : 'text-blue-600 hover:bg-blue-50'
-                                                } transition-all duration-200`}
+                                                className={`flex items-center space-x-3 p-3 rounded-xl text-blue-600 hover:bg-blue-50 transition-all duration-200`}
                                                 onClick={handleItemClick}
                                             >
-                                                <div className={`size-9 rounded-xl flex items-center justify-center ${
-                                                    isDark ? 'bg-blue-900/30' : 'bg-blue-50'
-                                                }`}>
+                                                <div className={`size-9 rounded-xl flex items-center justify-center bg-blue-50`}>
                                                     <FaUser className="w-5 h-5" />
                                                 </div>
                                                 <span className="font-medium">Login</span>
-                                            </Link>
-                                        )} */}
+                                            </a>
+                                        )}
 
-                                        <Link
+                                        {/* <Link
                                             href="/login"
                                             className={`flex items-center space-x-3 p-3 rounded-xl text-blue-600 hover:bg-blue-50 transition-all duration-200`}
                                             onClick={handleItemClick}
@@ -507,7 +489,7 @@ const Navbar = ({user}) => {
                                                 <FaUser className="w-5 h-5" />
                                             </div>
                                             <span className="font-medium">Login</span>
-                                        </Link>
+                                        </Link> */}
                                     </div>
                                 </div>
                             </div>

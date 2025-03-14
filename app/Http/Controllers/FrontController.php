@@ -24,6 +24,8 @@ use Illuminate\Support\Str;
 use Midtrans\Snap;
 use Midtrans\Config;
 use Midtrans\Transaction;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 Config::$serverKey = config('services.midtrans.server_key');
 Config::$isProduction = config('services.midtrans.is_production');
@@ -122,6 +124,22 @@ class FrontController extends Controller
     function showEvent($slug) {
         $event = Event::where('slug', $slug)->firstOrFail();
 
+        // Ambil event yang masih akan datang
+        $events = Event::where('tanggal', '>=', now())
+            ->inRandomOrder()
+            ->take(3)
+            ->withoutTrashed()
+            ->get();
+
+        // Jika tidak ada event yang akan datang, ambil secara acak dari semua event
+        if ($events->isEmpty()) {
+            $events = Event::inRandomOrder()
+                ->take(3)
+                ->withoutTrashed()
+                ->get();
+        }
+
+
         // Ambil daftar harga event yang bersangkutan
         $hargaTiket = DB::table('harga_events')
             ->where('event_id', $event->id)
@@ -131,6 +149,7 @@ class FrontController extends Controller
         return Inertia::render('DetailEvent', [
             'event' => $event,
             'hargaTiket' => $hargaTiket,
+            'events' => $events,
             'user' => Auth::user(),
         ]);
     }
@@ -353,6 +372,16 @@ class FrontController extends Controller
             ]);
 
             foreach ($request->tickets as $ticket) {
+                // Kurangi kuota tiket di harga_events
+                $hargaEvent = DB::table('harga_events')->lockForUpdate()->where('event_id', $ticket['event_id'])->first();
+                if ($hargaEvent && $hargaEvent->kuota >= $ticket['jumlah_tiket']) {
+                    DB::table('harga_events')
+                        ->where('event_id', $ticket['event_id'])
+                        ->update(['kuota' => $hargaEvent->kuota - $ticket['jumlah_tiket']]);
+                } else {
+                    return response()->json(['message' => 'Kuota tiket tidak mencukupi'], 400);
+                }
+
                 PembelianEvent::create([
                     'event_id' => $ticket['event_id'],
                     'order_id' => $order->id,
@@ -368,14 +397,14 @@ class FrontController extends Controller
             $itemDetails = array_map(function ($ticket) {
                 return [
                     'id' => $ticket['event_id'],
-                    'price' => (float) $ticket['harga'], // Pastikan tipe datanya float
+                    'price' => (float) $ticket['harga'],
                     'quantity' => $ticket['jumlah_tiket'],
                     'name' => $ticket['nama'],
                 ];
             }, $request->tickets);
 
             // Tambahkan pajak dan biaya layanan
-            $pajak = 11/100 * $request->total_pembelian; // Pajak 10%
+            $pajak = 11/100 * $request->total_pembelian;
             $biayaLayanan = 15000;
             $diskon = $request->discount_amount ?? 0;
 
@@ -403,7 +432,6 @@ class FrontController extends Controller
             // Pastikan totalnya sesuai dengan total_akhir
             $totalAkhirDihitung = array_sum(array_column($itemDetails, 'price'));
 
-
             $payload = [
                 'transaction_details' => [
                     'order_id' => $order->order_id,
@@ -429,6 +457,7 @@ class FrontController extends Controller
             }
         });
     }
+
 
     public function updateTransaction(Request $request)
     {
@@ -806,4 +835,27 @@ class FrontController extends Controller
             'seniTari' => $seniTari,
         ]);
     }
+
+    public function updatePasswordAPI(Request $request)
+    {
+        $request->validate([
+            'new_password' => 'required|string|min:8',
+            'confirm_password' => 'required|string|same:new_password',
+        ]);
+
+        $user = Auth::user();
+
+        if (Hash::check($request->new_password, $user->password)) {
+            return response()->json(['message' => 'New password cannot be the same as the old password.'], 400);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        Auth::logout();
+
+        return response()->json(['message' => 'Password berhasil diperbarui'], 200);
+    }
+
+
 }

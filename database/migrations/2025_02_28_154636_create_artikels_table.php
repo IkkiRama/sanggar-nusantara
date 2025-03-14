@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('kategori_id')->constrained('kategori_artikels')->onDelete('cascade');
             $table->string('image')->nullable();
             $table->text('excerpt');
-            $table->string('keyword');
+            $table->text('keyword');
             $table->longText('content');
             $table->enum('status_artikel', ['draft', 'publish', 'premium'])->default('draft');
             $table->timestamp('published_at')->nullable();

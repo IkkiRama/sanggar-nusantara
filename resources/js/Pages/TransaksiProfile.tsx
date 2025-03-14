@@ -1,110 +1,52 @@
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react'
 import MainLayout from '../Layouts/mainLayout';
 import LightNavbar from '../layouts/lightNavbar';
 import UserProfile from '../Components/userProfile';
+import ProfileLayout from '../Layouts/profileLayout';
 
 
-
-
-
-const Transactions = () => {
-  const transactions = [
-    { id: 1, date: "Sabtu, 12 November 2004", status: "Sudah Bayar", total: "Rp 150.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-    { id: 2, date: "Minggu, 12 November 2004", status: "Belum Bayar", total: "Rp 170.000" },
-  ];
-
-  return (
-    <div className="p-5 mt-40 md:mt-0 relative overflow-x-auto bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl w-full lg:w-[75%] table-scroll">
-      <h2 className="text-xl font-semibold mb-4">Transaksi</h2>
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="p-3">No</th>
-            <th className="p-3">Waktu</th>
-            <th className="p-3">Status</th>
-            <th className="p-3">Total</th>
-            <th className="p-3">Opsi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((trx, index) => (
-            <tr key={trx.id} className="border-b">
-              <td className="p-3">{index + 1}</td>
-              <td className="p-3">{trx.date}</td>
-              <td className="p-3">{trx.status}</td>
-              <td className="p-3">{trx.total}</td>
-              <td className="p-3 flex gap-2">
-                <button className="bg-blue-500 text-white px-3 py-1 rounded">Nota</button>
-                {trx.status === "Belum Bayar" ? (
-                  <button className="bg-red-500 text-white px-3 py-1 rounded">Kirim Pembayaran</button>
-                ) : (
-                  <button className="bg-green-500 text-white px-3 py-1 rounded">Lihat Pembayaran</button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-export default function Transaksi() {
-    const { user } = usePage().props;
+export default function Transaksi({user, transaksi}) {
     const [isChecking, setIsChecking] = useState(true);
+    const [snapToken, setSnapToken] = useState<string | null>(null);
+
+    const handleBayar = async (order_id: string) => {
+        try {
+            const token = localStorage.getItem("token"); // Ambil token dari localStorage atau session storage
+
+            const response = await fetch(`/api/midtrans/token/${order_id}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Accept": "application/json"
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.token) {
+                window.snap.pay(data.token, {
+                    onSuccess: function (result) {
+                        console.log("Pembayaran sukses");
+                        window.location.href = `/payment-success/${order_id}`;
+                    },
+                    onPending: function (result) {
+                        console.log("Pembayaran tertunda");
+                    },
+                    onError: function (error) {
+                        console.log("Pembayaran gagal", error);
+                    },
+                    onClose: function () {
+                        console.log("Popup ditutup tanpa transaksi");
+                    }
+                });
+            } else {
+                console.error("Token Midtrans tidak ditemukan", data);
+            }
+        } catch (error) {
+            console.error("Gagal mendapatkan token Midtrans", error);
+        }
+    };
 
     useEffect(() => {
         if (!user) {
@@ -119,14 +61,69 @@ export default function Transaksi() {
     }
 
   return (
-    <MainLayout>
+    <ProfileLayout>
+        <Head>
+            <script type="text/javascript"
+                src="https://app.sandbox.midtrans.com/snap/snap.js"
+            data-client-key="SB-Mid-client-sCSfDCWXJfjySHKn"></script>
+        </Head>
+
         <LightNavbar user={user} />
         <div className="bg-blue-500 h-[30vh]"></div>
 
         <div className="flex flex-wrap lg:flex-nowrap lg:-mt-[10vh] -mt-[30vh] gap-5 pb-20 px-4 min-h-screen">
             <UserProfile isActive="transaksi" user={user} />
-            <Transactions />
+            <div className="p-5 mt-40 md:mt-0 relative bg-white shadow-lg rounded-xl w-full lg:w-[75%]">
+                <h2 className="text-xl font-semibold mb-4">Transaksi</h2>
+                <div className="table-scroll overflow-x-auto">
+                    <table className=" w-full border-collapse">
+                        <thead>
+                        <tr className="bg-gray-100 text-left">
+                            <th className="p-3">No</th>
+                            <th className="p-3">Waktu</th>
+                            <th className="p-3">Status</th>
+                            <th className="p-3">Total</th>
+                            <th className="p-3">Opsi</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {transaksi.length > 0 ? (
+                            transaksi.map((trx, index) => (
+                            <tr key={trx.id} className="border-b">
+                                <td className="p-3">{index + 1}</td>
+                                <td className="p-3">{new Date(trx.created_at).toLocaleDateString()}</td>
+                                <td className="p-3">{trx.status_pembelian}</td>
+                                <td className="p-3">Rp {trx.total_akhir.toLocaleString()}</td>
+                                <td className="p-3 flex gap-2">
+                                {/* <button className="bg-blue-500 text-white px-3 py-1 rounded">Invoice</button> */}
+                                {trx.status_pembelian === "sudah dibayar" && (
+                                    <a href={`/profile/invoice/${trx.order_id}`} className="bg-blue-500 text-white px-3 py-2 rounded">
+                                    Invoice
+                                    </a>
+                                )}
+
+                                {trx.status_pembelian === "pending" && (
+                                    <button
+                                        onClick={() => handleBayar(trx.order_id)}
+                                        className="px-5 cursor-pointer text-white py-2 text-sm bg-yellow-500 border-2 border-yellow-500 hover:bg-yellow-600 rounded-md font-semibold"
+                                    >
+                                        Bayar
+                                    </button>
+                                )}
+                                </td>
+                            </tr>
+                            ))
+                        ) : (
+                            <tr>
+                            <td colSpan={5} className="text-center p-5">Tidak ada transaksi</td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </MainLayout>
+    </ProfileLayout>
   )
 }

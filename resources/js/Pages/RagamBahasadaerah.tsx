@@ -62,19 +62,24 @@ export default function RagamBahasaDaerah({ user, bahasaDaerah}) {
         {/* Grid Bahasa Daerah */}
         <section className="grid lg:grid-cols-3 md:grid-cols-2 gap-10 pb-20">
           {filteredData.length > 0 ? (
-            filteredData.map((bahasa) => (
+            filteredData.map((bahasa, index) => (
               <div
-                key={bahasa.nama} // Menggunakan nama sebagai key
-                className="h-[250px] relative rounded overflow-hidden cursor-pointer bg-gray-200 dark:bg-gray-800 p-5 flex flex-col justify-center items-center text-center"
+                key={index}
+                className="h-[300px] relative rounded overflow-hidden cursor-pointer"
                 onClick={() => openModal(bahasa)} // Klik untuk buka modal
               >
-                <h3 className="mt-3 font-bold dark:text-gray-200 text-xl">{bahasa.nama}</h3>
-                <span className="bg-red-500 text-white px-5 rounded py-1 text-sm mt-2">
-                  {bahasa.daerah_asal}
-                </span>
-                <p className="mt-2 text-gray-700 dark:text-gray-300 text-sm">
-                  <b>Jumlah Penutur:</b> {bahasa.jumlah_penutur}
-                </p>
+                <img
+                  src={bahasa.image ? `/Storage/${bahasa.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                  className="absolute inset-0 w-full h-full object-cover bg-gray-300"
+                  alt={bahasa.nama}
+                />
+                <div className="absolute z-10 w-[90%] left-1/2 -translate-x-1/2 dark:bg-gray-900 bg-white p-5 rounded bottom-[10px] text-center">
+                  <span className="bg-orange-500 absolute left-1/2 -translate-x-1/2 -top-[10px] text-white px-5 rounded py-1 text-sm">
+                    {bahasa.daerah_asal}
+                  </span>
+                  <h3 className="mt-3 font-bold dark:text-gray-200">{bahasa.nama}</h3>
+                  <small className="text-gray-700 dark:text-gray-400">{bahasa.deskripsi}</small>
+                </div>
               </div>
             ))
           ) : (
@@ -102,8 +107,8 @@ export default function RagamBahasaDaerah({ user, bahasaDaerah}) {
             <hr className="my-3 border-gray-400" />
 
             <img
-                src={selectedBahasa.image}
-                className="rounded h-[200px] object-cover w-full bg-gray-300"
+                src={selectedBahasa.image ? `/Storage/${selectedBahasa.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                className="rounded h-[200px] lg:h-[400px] object-cover w-full bg-gray-300"
                 alt={selectedBahasa.nama}
             />
 
@@ -117,7 +122,7 @@ export default function RagamBahasaDaerah({ user, bahasaDaerah}) {
               </p>
 
               <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
-                <b>Jumlah Penutur:</b> {selectedBahasa.jumlah_penutur}
+                <b>Jumlah Penutur:</b> {selectedBahasa.jumlah_penutur.toLocaleString("id-ID")}
               </p>
 
               <hr className="my-5 border-gray-400" />

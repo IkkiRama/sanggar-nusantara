@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\MidtransLogResource\Pages;
+namespace App\Filament\Resources\SeniTariResource\Pages;
 
-use App\Filament\Resources\MidtransLogResource;
+use App\Filament\Resources\SeniTariResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditMidtransLog extends EditRecord
+class EditSeniTari extends EditRecord
 {
-    protected static string $resource = MidtransLogResource::class;
+    protected static string $resource = SeniTariResource::class;
 
     protected function getHeaderActions(): array
     {

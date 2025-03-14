@@ -148,7 +148,16 @@ class ProfileController extends Controller
     }
 
     function transaksi() {
+        // Ambil transaksi berdasarkan user yang sedang login
+        $transaksi = Order::where('user_id', Auth::id())->latest()->get();
         return Inertia::render('TransaksiProfile', [
+            'user' => Auth::user(),
+            'transaksi' => $transaksi,
+        ]);
+    }
+
+    function ubahPassword() {
+        return Inertia::render('UbahPassword', [
             'user' => Auth::user(),
         ]);
     }

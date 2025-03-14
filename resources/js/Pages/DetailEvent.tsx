@@ -1,5 +1,5 @@
 import React, {useEffect, useState } from 'react'
-import { ShoppingCart, Calendar, Clock, MapPin, Ticket, ChevronDown, ChevronUp, X, InfoIcon } from "lucide-react";
+import { ShoppingCart, Calendar, Clock, MapPin, Ticket, ChevronDown, ChevronUp, X, InfoIcon, Link } from "lucide-react";
 
 // component
 
@@ -17,7 +17,7 @@ interface Ticket {
     kuota: number;
 }
 
-export default function DetailEvent({user, event, hargaTiket}) {
+export default function DetailEvent({user, event, hargaTiket, events}) {
     const [isOpen, setIsOpen] = useState(false);
 
     const [snapToken, setSnapToken] = useState(null);
@@ -62,6 +62,17 @@ export default function DetailEvent({user, event, hargaTiket}) {
     const minPrice = availableTickets.length > 0
         ? Math.min(...availableTickets.map(ticket => parseInt(ticket.harga, 10)))
         : null;
+
+
+    const EventContent = ({ content }) => {
+        return (
+            <div
+            dangerouslySetInnerHTML={{ __html: content }}
+            style={{ lineHeight: "1.6", fontSize: "16px" }}
+            className="content-artikel"
+            />
+        );
+    };
 
 
     useEffect(() => {
@@ -354,7 +365,7 @@ export default function DetailEvent({user, event, hargaTiket}) {
                         <img
                             src={
                                 //@ts-ignore
-                                event.image ? event.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                                event.image ? `/Storage/${event.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                             className="w-full h-[200px] md:h-[350px] rounded object-cover bg-gray-300"
                             alt={//@ts-ignore
                             event.nama}
@@ -402,7 +413,7 @@ export default function DetailEvent({user, event, hargaTiket}) {
                                             ></iframe>
                                         </div>
                                     )}
-                                    <p className="text-gray-700 dark:text-gray-300">{event.deskripsi}</p>
+                                    <EventContent content={event.deskripsi}></EventContent>
                                 </div>
                             )}
                             {activeTab === "tiket" && (
@@ -522,96 +533,6 @@ export default function DetailEvent({user, event, hargaTiket}) {
                 </div>
 
 
-                <div className="container mx-auto mt-10 pb-10 px-6">
-                    <h3 className="text-xl sm:text-2xl font-semibold sm:mb-4">Rekomendasi Event</h3>
-                    <a href="/detail-event" className="grid lg:grid-cols-5 gap-10 items-center mt-10">
-                        <div className="h-[350px] w-full rounded-md overflow-hidden lg:col-span-2">
-                            <img
-                            src="/images/events/FGS.jpeg"
-                            alt="image event"
-                            className="object-cover h-full w-full"
-                            data-aos-once="true"
-                            data-aos="fade-left"
-                            />
-                        </div>
-                        <div
-                            className="lg:col-span-3"
-                            data-aos-once="true"
-                            data-aos="fade-right"
-                        >
-                            <h5 className="text-red-500 font-semibold md:mb-5 mb-3 md:text-base text-sm">
-                            RAGAM EVENT
-                            </h5>
-                            <span>
-                            <h2 className="font-bold md:text-3xl text-gray-800 text-xl dark:text-white">
-                                {"FESTIVAL GUNUNG SLAMET"}
-                            </h2>
-                            </span>
-                            <p className="text-gray-800 mt-5 md:text-base text-[12px] dark:text-white">
-                            Acara ini akan menjadi salah satu festival budaya terbesar di Jawa Tengah, menghadirkan berbagai kegiatan seperti pentas seni, pameran kerajinan lokal, dan kuliner tradisional. Setiap pengunjung akan mendapatkan pengalaman unik dan mendalam tentang kebudayaan masyarakat sekitar Gunung Slamet. Ayo, jangan lewatkan kesempatan ini untuk merasakan kekayaan budaya Nusantara dan menjadi bagian dari sejarah!
-                            </p>
-                            <div className="flex gap-5 mt-10 text-gray-600 md:text-base text-sm dark:text-slate-200">
-                            <span className="flex gap-2 items-center">
-                                {/* <IconTicket /> */}
-                                <small>Rp 5.000</small>
-                            </span>
-                            <span className="flex gap-2 items-center">
-                                {/* <IconCalendar /> */}
-                                <small>12-14 Juli Des 2024</small>
-                            </span>
-                            <span className="flex gap-2 items-center">
-                                {/* <IconLocation /> */}
-                                <small>Purbalingga</small>
-                            </span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="/detail-event" className="grid lg:grid-cols-5 gap-10 items-center mt-10 ">
-                        <div className="h-[350px] w-full rounded-md overflow-hidden lg:col-span-2">
-                            <img
-                            src="/images/events/KKS.jpg"
-                            alt="image event"
-                            className="object-cover h-full w-full"
-                            data-aos-once="true"
-                            data-aos="fade-left"
-                            />
-                        </div>
-                        <div
-                            className="lg:col-span-3"
-                            data-aos-once="true"
-                            data-aos="fade-right"
-                        >
-                            <h5 className="text-red-500 font-semibold md:mb-5 mb-3 md:text-base text-sm">
-                            RAGAM EVENT
-                            </h5>
-                            <span>
-                            <h2 className="font-bold md:text-3xl text-gray-800 text-xl dark:text-white">
-                                {"KARYA KREATIVE SERAYU 2024"}
-                            </h2>
-                            </span>
-                            <p className="text-gray-800 mt-5 md:text-base text-[12px] dark:text-white">
-                            Karya Kreative Serayu 2024 akan menampilkan berbagai hasil karya kreatif dari seniman lokal dan nasional. Acara ini bertujuan untuk memperkenalkan seni dan budaya yang berkembang di sekitar wilayah Serayu, memberikan wadah bagi generasi muda untuk mengekspresikan kreativitas mereka. Jadilah bagian dari perayaan seni dan budaya ini, dengan berbagai kegiatan menarik seperti pameran seni, workshop, dan pertunjukan musik yang akan memanjakan para pengunjung.
-                            </p>
-                            <div className="flex gap-5 mt-10 text-gray-600 md:text-base text-sm dark:text-slate-200">
-                            <span className="flex gap-2 items-center">
-                                {/* <IconTicket /> */}
-                                <small>Gratis</small>
-                            </span>
-                            <span className="flex gap-2 items-center">
-                                {/* <IconCalendar /> */}
-                                <small>20-21 Juli 2024</small>
-                            </span>
-                            <span className="flex gap-2 items-center">
-                                {/* <IconLocation /> */}
-                                <small>Kompleks Menara Pandang Teratai Purwokerto</small>
-                            </span>
-                            </div>
-                        </div>
-                    </a>
-
-
-                </div>
             </div>
 
             {/* Modal */}

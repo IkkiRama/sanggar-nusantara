@@ -32,7 +32,7 @@ export default function Profile({user, pembelianEvents}) {
         try {
             const token = localStorage.getItem("token"); // Ambil token dari localStorage atau session storage
 
-            const response = await fetch(`http://sanggar-nusantara.test/api/midtrans/token/${order_id}`, {
+            const response = await fetch(`/api/midtrans/token/${order_id}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -157,12 +157,12 @@ export default function Profile({user, pembelianEvents}) {
                                                     >
                                                         E-Tiket
                                                     </a>
-                                                    <a
+                                                    {/* <a
                                                         href={`/profile/invoice/${event.order_id}`}
                                                         className="px-5 text-slate-700 py-2 text-sm border-2 border-slate-700 hover:bg-slate-100 rounded-md font-semibold"
                                                     >
                                                         Invoice
-                                                    </a>
+                                                    </a> */}
                                                 </>
                                             ) : null}
                                         </div>
@@ -170,11 +170,17 @@ export default function Profile({user, pembelianEvents}) {
                                     </div>
                                 </div>
                                 <img
-                                    src={event.image ? event.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                                    src={event.image ? `/Storage/${event.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                                     alt={`gambar event ${event.event_nama}`}
                                     className="flex-shrink-0 w-24 lg:w-44 h-20 lg:h-28 rounded-md object-cover bg-gray-400" />
                             </div>
                             ))}
+                            {pembelianEvents.length === 0 && (
+                                <div className="mt-16 flex justify-center items-center flex-col">
+                                    <img src="./images/kosong.svg" className="lg:w-[10%] w-[25%] h-[30%]" alt="icon-splash" />
+                                    <h1 className="text-2xl lg:text-3xl text-center font-semibold mt-5 lg:mt-8 text-red-500">Belum Ada Event</h1>
+                                </div>
+                            )}
                         </div>
                     )}
 

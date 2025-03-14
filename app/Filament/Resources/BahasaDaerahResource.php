@@ -2,61 +2,60 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\User;
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-
+use App\Filament\Resources\BahasaDaerahResource\Pages;
+use App\Filament\Resources\BahasaDaerahResource\RelationManagers;
+use App\Models\BahasaDaerah;
 use Filament\Forms;
-use Filament\Tables;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Illuminate\Support\Facades\Hash;
+use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Support\Colors\Color;
 
-class UserResource extends Resource
+class BahasaDaerahResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = BahasaDaerah::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
+    protected static ?string $navigationGroup = 'Ragam Indonesia';
+
+    protected static ?int $navigationSort = 6;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('nama')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
+                Forms\Components\TextInput::make('daerah_asal')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('jumlah_penutur')
+                    ->required()
+                    ->numeric(),
+               Forms\Components\Select::make('kategori')
+                    ->options([
+                        "tradisional" => "Tradisional",
+                        "modern" => "Modern",
+                    ])
+                    ->preload()
+                    ->required(),
                 Forms\Components\Textarea::make('deskripsi')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image')
-                    ->disk('public')
-                    ->columnSpanFull()
                     ->image()
-                    ->directory('user'),
-                Forms\Components\DateTimePicker::make('email_verified_at')
-                    ->default(now()) // Set the default value to the current datetime
-                    ->columnSpanFull()
-                    ->format('Y-m-d H:i:s'),
-                Forms\Components\Select::make('roles')
-                    ->relationship('roles', 'name')
-                    ->multiple()
-                    ->preload()
+                    ->directory('Ragam Indonesia/Bahasa Daerah')
+                    ->columnSpanFull(),
+                Forms\Components\TextInput::make('lat')
                     ->required()
-                    ->searchable(),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->revealable()
-                    ->required(fn (string $context):bool => $context === "create")
-                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                    ->dehydrated(fn ($state) => filled($state))
-                    ->maxLength(255),
+                    ->maxLength(50),
+                Forms\Components\TextInput::make('lng')
+                    ->required()
+                    ->maxLength(50),
             ]);
     }
 
@@ -64,23 +63,22 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('foto'),
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                Tables\Columns\TextColumn::make('kategori')
+                    ->badge()
+                    ->color(Color::Blue),
+                Tables\Columns\TextColumn::make('daerah_asal')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
+                Tables\Columns\TextColumn::make('jumlah_penutur')
+                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -112,9 +110,7 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListBahasaDaerahs::route('/'),
         ];
     }
 

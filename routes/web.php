@@ -23,6 +23,7 @@ Route::get('/etiket/{orderId}', [ProfileController::class, 'etiket']);
 Route::get('/profile/invoice/{orderId}', [ProfileController::class, 'invoice']);
 Route::get('/profile/edit', [ProfileController::class, 'profileEdit']);
 Route::get('/profile/transaksi', [ProfileController::class, 'transaksi']);
+Route::get('/profile/ubah-password', [ProfileController::class, 'ubahPassword']);
 
 Route::get('/ragam-indonesia', [FrontController::class, 'ragamIndonesia']);
 Route::get('/ragam-indonesia/bahasa-daerah', [FrontController::class, 'bahasaDaerah']);
@@ -32,11 +33,11 @@ Route::get('/ragam-indonesia/seni-tari', [FrontController::class, 'seniTari']);
 Route::get('/ragam-indonesia/lagu-daerah', [FrontController::class, 'laguDaerah']);
 Route::get('/ragam-indonesia/makanan-khas', [FrontController::class, 'makananKhas']);
 
-Route::get('/login', [AuthController::class, 'masuk'])->name('masuk');
-Route::post('/login', [AuthController::class, 'postMasuk']);
+Route::get('/login', function () {
+    return redirect('/admin/login');
+})->name('masuk');
 
-// Authentication Routes
-Route::middleware('guest')->group(function () {
-    Route::get('daftar', [AuthController::class, 'register'])->name('register');
-    Route::post('daftar', [AuthController::class, 'postRegister']);
+// Route untuk user yang sudah login (auth)
+Route::middleware('auth')->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });

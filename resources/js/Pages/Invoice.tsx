@@ -22,10 +22,10 @@ const Invoice = ({ order, user }) => {
     return (
         <MainLayout title="Invoice | Sanggar Nusantara" >
             <LightNavbar user={user}  />
-            <div className="lg:py-0 py-20 px-4 lg:px-14 relative min-h-screen lg:pt-28 lg:pb-20">
+            <div className="lg:py-0 py-20 px-2 lg:px-14 relative min-h-screen lg:pt-28 lg:pb-20">
                 <div className="p-6 ">
                     <h2 className="text-3xl font-semibold mb-4 text-slate-600">Invoice</h2>
-                    <div className="flex justify-between items-center mb-10">
+                    <div className="flex flex-wrap-reverse md:flex-nowrap justify-between items-center mb-10">
                         <div className="flex flex-col gap-3">
                             <p className="font-medium text-gray-600">No. Invoice :
                                 <span className="font-semibold text-red-500"> {order.order_id}</span>
@@ -39,24 +39,24 @@ const Invoice = ({ order, user }) => {
                                 <span className="font-semibold text-green-500 capitalize"> {order.status_pembelian}</span>
                             </p>
                         </div>
-                        <div className="flex flex-col items-end">
+                        <div className="flex flex-col md:items-end mb-5 sm:mb-0">
                             <p className="text-[20px] font-semibold text-left">{user.name}</p>
                             <p className="text-[16px] text-gray-600">{user.email}</p>
                         </div>
                     </div>
 
-                    <div className="border-2 bg-white border-gray-200 shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-lg p-4 mb:p-6 mb-4">
+                    <div className="border-2 bg-white border-gray-200 shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-lg p-4  mb:p-6 mb-4">
                         <h3 className="text-xl font-semibold mb-4 text-slate-600">Daftar Produk</h3>
                         {order.pembelian_event && order.pembelian_event.length > 0 ? (
                             <>
                                 {order.pembelian_event.map((event, index) => (
                                     <div key={index} className="flex items-center gap-4 border-b border-gray-300 py-4 px-4">
-                                        <div className="flex w-1/2 lg:border-r-2 border-gray-200">
+                                        <div className="flex lg:w-1/2 w-full lg:border-r-2 border-gray-200">
                                             <img
-                                            src={event.event.image ? event.event.image :
+                                            src={event.event.image ? `/Storage/${event.event.image}` :
                                                 "/images/NO IMAGE AVAILABLE.jpg"}
                                             alt="Event"
-                                            className="bg-gray-600 w-16 object-cover h-16 rounded-lg mr-4" />
+                                            className="bg-gray-600 w-20 object-cover h-20 rounded-lg mr-4" />
 
                                             <div className="">
                                                 <p className="font-semibold text-lg text-slate-700">{event.nama}</p>

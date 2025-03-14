@@ -111,7 +111,7 @@ export default function Artikel() {
             className="lg:col-span-3 lg:h-[600px] md:h-[400px] h-[300px] bg-cover relative z-10 flex items-end md:p-10 p-4 after:content-[''] after:absolute after:inset-0 after:bg-black/40 after:-z-10 bg-bottom rounded overflow-hidden"
             style={{
                 backgroundImage: artikelTerbaru.image !== null ?
-                "url(" + artikelTerbaru.image + ")" :
+                "url(/Storage/" + artikelTerbaru.image + ")" :
                 "url(" + "/images/NO IMAGE AVAILABLE.jpg" + ")",
             }}
             >
@@ -138,7 +138,7 @@ export default function Artikel() {
                 <Link href={`/artikel/${artikel.slug}`} key={artikel.slug}>
                     <div className="h-[200px] relative">
                         <img
-                            src={artikel.image ? artikel.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                            src={artikel.image ? `/Storage/${artikel.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                             className="bg-gray-300 h-full rounded-xl object-cover"
                         />
 
@@ -186,7 +186,7 @@ export default function Artikel() {
                             <Link href={`/artikel/${artikel.slug}`}>
                                 <div className="h-[200px] relative">
                                     <img
-                                        src={artikel.image ? artikel.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                                        src={artikel.image ? `/Storage/${artikel.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                                         className="bg-gray-300 h-full rounded-xl object-cover"
                                     />
 
@@ -238,7 +238,7 @@ export default function Artikel() {
                 >
                     <div className="md:col-span-2">
                         <img
-                        src={item.image ? item.image : "/images/NO IMAGE AVAILABLE.jpg"}
+                        src={item.image ? `/Storage/${item.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                         className="bg-gray-300 w-full h-[250px] rounded object-cover"
                         alt={item.title}
                         />

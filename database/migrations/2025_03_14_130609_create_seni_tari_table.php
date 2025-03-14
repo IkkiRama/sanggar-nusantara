@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('seni_taris', function (Blueprint $table) {
+        Schema::create('seni_tari', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->string('pencipta')->nullable();
-            $table->int('tahun_diciptakan', 4)->nullable();
+            $table->integer('tahun_diciptakan')->nullable();
             $table->string('asal_tari');
             $table->string('image')->nullable();
             $table->string('video')->nullable();
@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('lat', 50);
             $table->string('lng', 50);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('seni_tari');
     }
 };
