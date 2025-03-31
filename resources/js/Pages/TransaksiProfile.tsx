@@ -14,7 +14,7 @@ export default function Transaksi({user, transaksi}) {
         try {
             const token = localStorage.getItem("token"); // Ambil token dari localStorage atau session storage
 
-            const response = await fetch(`/api/midtrans/token/${order_id}`, {
+            const response = await fetch(`https://sanggar-nusantara.genbipurwokerto.com/api/midtrans/token/${order_id}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -64,8 +64,8 @@ export default function Transaksi({user, transaksi}) {
     <ProfileLayout>
         <Head>
             <script type="text/javascript"
-                src="https://app.sandbox.midtrans.com/snap/snap.js"
-            data-client-key="SB-Mid-client-sCSfDCWXJfjySHKn"></script>
+                src="https://app.midtrans.com/snap/snap.js"
+            data-client-key="Mid-client-GzxsTb_k48i8R7c9"></script>
         </Head>
 
         <LightNavbar user={user} />

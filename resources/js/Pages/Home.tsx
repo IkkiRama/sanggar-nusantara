@@ -721,7 +721,7 @@ const Home = () => {
                 <Link href={`/artikel/${artikelPertama.slug}`} className="grid lg:grid-cols-5 gap-10 items-center lg:px-20 md:px-10 px-5 pt-10">
                 <div className="h-[200px] md:h-[350px] w-full rounded-md overflow-hidden lg:col-span-2">
                     <img
-                    src={`/Storage/${artikelPertama.image}`}
+                    src={`./storage/${artikelPertama.image}`}
                     alt={`image artikel ${artikelPertama.nama}`}
                     className="object-cover h-full w-full"
                     data-aos-once="true"
@@ -775,7 +775,7 @@ const Home = () => {
                     {dataArtikel.length > 0 && dataArtikel.map((artikel) => (
                         <Link key={artikel.slug} href={`/news/read/${artikel.slug}`} className="mt-5">
                             <img
-                            src={`/Storage/${artikel.image}`} // Menggunakan gambar dari API
+                            src={`./storage/${artikel.image}`} // Menggunakan gambar dari API
                             alt={artikel.title}
                             className="h-[200px] sm:h-[250px] object-cover w-full rounded"
                             />
@@ -843,7 +843,7 @@ const Home = () => {
                 {events.length > 0 && events.map((event, index) => (
                     <Link key={index} href={`/event/${event.slug}`} className="bg-white rounded-lg shadow-sm mb-5 md:mb-0">
                         <img
-                        src={event.image ? `/Storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
+                        src={event.image ? `./storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
                         alt={event.nama}
                         className="w-full h-[200px] md:h-[270px] object-cover rounded-lg mb-8"
                         />

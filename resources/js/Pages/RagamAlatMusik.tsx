@@ -89,7 +89,7 @@ export default function RagamAlatMusik({user, alatMusik}) {
                 onClick={() => openModal(alat)} // Klik untuk buka modal
               >
                 <img
-                  src={alat.image ? `/Storage/${alat.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                  src={alat.image ? `../storage/${alat.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                   className="absolute inset-0 w-full h-full object-cover bg-gray-300"
                   alt={alat.nama}
                 />
@@ -127,7 +127,7 @@ export default function RagamAlatMusik({user, alatMusik}) {
             <div>
               {/* Gambar */}
               <img
-                src={`/Storage/${selectedAlatMusik.image}`}
+                src={`../storage/${selectedAlatMusik.image}`}
                 className="rounded h-[200px] object-cover w-full bg-gray-300"
                 alt={selectedAlatMusik.nama}
               />
@@ -147,7 +147,7 @@ export default function RagamAlatMusik({user, alatMusik}) {
                 <div className="mt-3">
                   <p className="text-sm font-semibold my-3 dark:text-gray-300">Dengar Suara:</p>
                   <audio controls className="w-full">
-                    <source src={`/Storage/${selectedAlatMusik.audio}`} type="audio/mpeg" />
+                    <source src={`../storage/${selectedAlatMusik.audio}`} type="audio/mpeg" />
                     Browser Anda tidak mendukung tag audio.
                   </audio>
                 </div>

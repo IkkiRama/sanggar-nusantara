@@ -27,10 +27,10 @@ use Midtrans\Transaction;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-Config::$serverKey = config('services.midtrans.server_key');
-Config::$isProduction = config('services.midtrans.is_production');
-Config::$isSanitized = true;
-Config::$is3ds = true;
+// Config::$serverKey = config('services.midtrans.server_key');
+// Config::$isProduction = config('services.midtrans.is_production');
+// Config::$isSanitized = true;
+// Config::$is3ds = true;
 class FrontController extends Controller
 {
     public function index()
@@ -340,7 +340,7 @@ class FrontController extends Controller
         ]);
 
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        Config::$isProduction = false;
+        Config::$isProduction = true;
         Config::$isSanitized = true;
         Config::$is3ds = true;
 

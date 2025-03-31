@@ -53,7 +53,7 @@ const Invoice = ({ order, user }) => {
                                     <div key={index} className="flex items-center gap-4 border-b border-gray-300 py-4 px-4">
                                         <div className="flex lg:w-1/2 w-full lg:border-r-2 border-gray-200">
                                             <img
-                                            src={event.event.image ? `/Storage/${event.event.image}` :
+                                            src={event.event.image ? `./storage/${event.event.image}` :
                                                 "/images/NO IMAGE AVAILABLE.jpg"}
                                             alt="Event"
                                             className="bg-gray-600 w-20 object-cover h-20 rounded-lg mr-4" />

@@ -69,7 +69,7 @@ export default function RagamBahasaDaerah({ user, bahasaDaerah}) {
                 onClick={() => openModal(bahasa)} // Klik untuk buka modal
               >
                 <img
-                  src={bahasa.image ? `/Storage/${bahasa.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                  src={bahasa.image ? `../storage/${bahasa.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                   className="absolute inset-0 w-full h-full object-cover bg-gray-300"
                   alt={bahasa.nama}
                 />
@@ -107,7 +107,7 @@ export default function RagamBahasaDaerah({ user, bahasaDaerah}) {
             <hr className="my-3 border-gray-400" />
 
             <img
-                src={selectedBahasa.image ? `/Storage/${selectedBahasa.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                src={selectedBahasa.image ? `../storage/${selectedBahasa.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                 className="rounded h-[200px] lg:h-[400px] object-cover w-full bg-gray-300"
                 alt={selectedBahasa.nama}
             />

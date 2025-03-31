@@ -82,7 +82,7 @@ export default function RagamRumahAdat({ user, rumahAdat }) {
                 onClick={() => openModal(rumah)} // Klik untuk buka modal
               >
                 <img
-                  src={rumah.image ? `/Storage/${rumah.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                  src={rumah.image ? `./storage/${rumah.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                   className="absolute inset-0 w-full h-full object-cover bg-gray-300"
                   alt={rumah.nama}
                 />
@@ -120,7 +120,7 @@ export default function RagamRumahAdat({ user, rumahAdat }) {
             <div>
               {/* Gambar */}
               <img
-                src={`/Storage/${selectedRumahAdat.image}`}
+                src={`../storage/${selectedRumahAdat.image}`}
                 className="rounded h-[200px] lg:h-[400px] object-cover w-full bg-gray-300"
                 alt={selectedRumahAdat.nama}
               />

@@ -100,7 +100,7 @@ function MyComponent({foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, sen
                   setSelectedMarker(marker);
                 }}
                 icon={{
-                  url: marker.image ? `/Storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
+                  url: marker.image ? `./storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
                 //   url: `./images/mapMarker/${marker.image}`,
                   scaledSize: new window.google.maps.Size(40, 40),
                   origin: new window.google.maps.Point(0, 0),
@@ -123,7 +123,7 @@ function MyComponent({foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, sen
                   setSelectedMarker(marker);
                 }}
                 icon={{
-                  url: marker.image ? `/Storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
+                  url: marker.image ? `./storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
                 //   url: `./images/mapMarker/${marker.image}`,
                   scaledSize: new window.google.maps.Size(40, 40),
                   origin: new window.google.maps.Point(0, 0),
@@ -146,7 +146,7 @@ function MyComponent({foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, sen
                   setSelectedMarker(marker);
                 }}
                 icon={{
-                  url: marker.image ? `/Storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
+                  url: marker.image ? `./storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
                 //   url: `./images/mapMarker/${marker.image}`,
                   scaledSize: new window.google.maps.Size(40, 40),
                   origin: new window.google.maps.Point(0, 0),
@@ -169,7 +169,7 @@ function MyComponent({foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, sen
                   setSelectedMarker(marker);
                 }}
                 icon={{
-                  url: marker.image ? `/Storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
+                  url: marker.image ? `./storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
                 //   url: `./images/mapMarker/${marker.image}`,
                   scaledSize: new window.google.maps.Size(40, 40),
                   origin: new window.google.maps.Point(0, 0),
@@ -192,7 +192,7 @@ function MyComponent({foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, sen
                   setSelectedMarker(marker);
                 }}
                 icon={{
-                  url: marker.image ? `/Storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
+                  url: marker.image ? `./storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
                 //   url: `./images/mapMarker/${marker.image}`,
                   scaledSize: new window.google.maps.Size(40, 40),
                   origin: new window.google.maps.Point(0, 0),
@@ -215,7 +215,7 @@ function MyComponent({foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, sen
                   setSelectedMarker(marker);
                 }}
                 icon={{
-                  url: marker.image ? `/Storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
+                  url: marker.image ? `./storage/${marker.image}` : "/images/NO IMAGE AVAILABLE.jpg",
                   scaledSize: new window.google.maps.Size(40, 40),
                   origin: new window.google.maps.Point(0, 0),
                   anchor: new window.google.maps.Point(20, 20),

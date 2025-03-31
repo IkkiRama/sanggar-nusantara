@@ -63,7 +63,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                // RedirectIfAuthenticated::class,
+                RedirectIfAuthenticated::class,
             ])
             ->favicon(asset("favicon.png"));
     }

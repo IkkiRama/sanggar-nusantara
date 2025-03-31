@@ -16,7 +16,7 @@ const UbahPassword = ({ user }) => {
         setSuccess('');
 
         try {
-            const response = await axios.post('/api/updatePassword', {
+            const response = await axios.post('https://sanggar-nusantara.genbipurwokerto.com/api/updatePassword', {
                 new_password: newPassword,
                 confirm_password: confirmPassword,
             });

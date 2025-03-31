@@ -17,7 +17,7 @@ const UserProfile = ({isActive, user}) => {
         </Link> */}
 
       <img
-        src={user.image ? `/Storage/${user.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+        src={user.image ? `./storage/${user.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
         alt="Profile"
         className="w-[150px] h-[150px] border-[5px] border-white rounded-full mx-auto object-cover -mt-14"
       />

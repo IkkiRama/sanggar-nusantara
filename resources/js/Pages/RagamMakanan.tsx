@@ -75,7 +75,7 @@ export default function RagamMakanan({user, foods}) {
                 onClick={() => openModal(food)} // Klik untuk buka modal
               >
                 <img
-                  src={food.image ? `/Storage/${food.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                  src={food.image ? `./storage/${food.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                   className="absolute inset-0 w-full h-full object-cover bg-gray-300"
                   alt={food.nama}
                 />
@@ -111,7 +111,7 @@ export default function RagamMakanan({user, foods}) {
             <hr className="my-3 dark:border-gray-700" />
             <div>
               <img
-                src={`/Storage/${selectedFood.image}`}
+                src={`../storage/${selectedFood.image}`}
                 className="rounded h-[200px] object-cover w-full bg-gray-300"
                 alt={selectedFood.nama}
               />

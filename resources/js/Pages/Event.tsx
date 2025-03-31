@@ -262,7 +262,7 @@ export default function Event() {
                             {filteredEvents.map((item, index) => (
                             <Link key={index} href={`/event/${item.slug}`} className="bg-white rounded-lg shadow-sm">
                                 <img
-                                src={item.image ? `/Storage/${item.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                                src={item.image ? `./storage/${item.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                                 alt={item.nama}
                                 className="w-full h-[200px] md:h-[300px] object-cover rounded-lg mb-8"
                                 />

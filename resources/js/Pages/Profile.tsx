@@ -32,7 +32,7 @@ export default function Profile({user, pembelianEvents}) {
         try {
             const token = localStorage.getItem("token"); // Ambil token dari localStorage atau session storage
 
-            const response = await fetch(`/api/midtrans/token/${order_id}`, {
+            const response = await fetch(`https://sanggar-nusantara.genbipurwokerto.com/api/midtrans/token/${order_id}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -73,9 +73,9 @@ export default function Profile({user, pembelianEvents}) {
     <ProfileLayout title={`Dasboard ${user.name} | Sanggar Nusantara`}>
         <Head>
             <script type="text/javascript"
-                src="https://app.sandbox.midtrans.com/snap/snap.js"
-            data-client-key="SB-Mid-client-sCSfDCWXJfjySHKn"></script>
-        </Head>
+                src="https://app.midtrans.com/snap/snap.js"
+            data-client-key="Mid-client-GzxsTb_k48i8R7c9"></script>
+    </Head>
         <LightNavbar user={user} />
         <div className="bg-blue-500 h-[30vh]"></div>
 
@@ -170,7 +170,7 @@ export default function Profile({user, pembelianEvents}) {
                                     </div>
                                 </div>
                                 <img
-                                    src={event.image ? `/Storage/${event.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                                    src={event.image ? `./storage/${event.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                                     alt={`gambar event ${event.event_nama}`}
                                     className="flex-shrink-0 w-24 lg:w-44 h-20 lg:h-28 rounded-md object-cover bg-gray-400" />
                             </div>

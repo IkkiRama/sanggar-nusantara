@@ -66,7 +66,7 @@ class ProfileController extends Controller
     public function getSnapToken($order_id)
     {
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        Config::$isProduction = false;
+        Config::$isProduction = true;
         Config::$isSanitized = true;
         Config::$is3ds = true;
 

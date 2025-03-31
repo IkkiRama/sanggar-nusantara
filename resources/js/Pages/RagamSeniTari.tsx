@@ -84,7 +84,7 @@ export default function RagamSeniTari({ user, seniTari }) {
                 onClick={() => openModal(tari)} // Klik untuk buka modal
               >
                 <img
-                  src={tari.image ? `/Storage/${tari.image}` : "/images/NO_IMAGE_AVAILABLE.jpg"}
+                  src={tari.image ? `./storage/${tari.image}` : "/images/NO_IMAGE_AVAILABLE.jpg"}
                   className="absolute inset-0 w-full bg-gray-300 h-full object-cover"
                   alt={tari.nama}
                 />
@@ -122,7 +122,7 @@ export default function RagamSeniTari({ user, seniTari }) {
             <div>
               {/* Gambar */}
               <img
-                src={`/Storage/${selectedTari.image}`}
+                src={`../storage/${selectedTari.image}`}
                 className="rounded h-[200px] lg:h-[400px] object-cover w-full bg-gray-300"
                 alt={selectedTari.nama}
               />

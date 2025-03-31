@@ -77,8 +77,8 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
 
     useEffect(() => {
         const script = document.createElement("script");
-        script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
-        script.setAttribute("data-client-key", "SB-Mid-client-sCSfDCWXJfjySHKn");
+        script.src = "https://app.midtrans.com/snap/snap.js";
+        script.setAttribute("data-client-key", "Mid-client-GzxsTb_k48i8R7c9");
         document.body.appendChild(script);
     }, []);
 
@@ -115,11 +115,11 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
         });
 
         try {
-            const response = await fetch("http://sanggar-nusantara.test/api/diskon", {
+            const response = await fetch("https://sanggar-nusantara.genbipurwokerto.com/api/diskon", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${localstorage.getItem("token")}`,
                 },
                 body: JSON.stringify({
                     totalBiaya: totalBiaya,
@@ -187,11 +187,11 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
         setLoading({ diskon: false, bayar: true });
 
         try {
-        const response = await fetch("http://sanggar-nusantara.test/api/bayar", {
+        const response = await fetch("https://sanggar-nusantara.genbipurwokerto.com/api/bayar", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localstorage.getItem("token")}`,
             },
             body: JSON.stringify({
             user_id: user.id,
@@ -365,7 +365,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                         <img
                             src={
                                 //@ts-ignore
-                                event.image ? `/Storage/${event.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                                event.image ? `./../storage/${event.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                             className="w-full h-[200px] md:h-[350px] rounded object-cover bg-gray-300"
                             alt={//@ts-ignore
                             event.nama}

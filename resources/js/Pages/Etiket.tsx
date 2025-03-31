@@ -49,7 +49,7 @@ const ETiket = ({orders}) => {
                 <div className="flex flex-wrap md:flex-nowrap gap-5">
                     <div className="w-full md:w-[45%]">
                     <img
-                        src={order.image ? `/Storage/${order.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                        src={order.image ? `../storage/${order.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                         alt="image event"
                         className="w-[100%] h-48 rounded-lg object-cover shrink-0 bg-gray-500"
                     />
@@ -130,7 +130,7 @@ const ETiket = ({orders}) => {
                     </div>
                     <div className="border-2 border-gray-300 rounded-lg p-5 ld:p-14 w-full sm:w-[50%] md:w-[30%]">
                         <QRCodeCanvas
-                            value={`http://sanggar-nusantara.test/etiket/${order.order_id}`}
+                            value={`/etiket/${order.order_id}`}
                             size={250}
                             style={{ width: "100%", height: "100%" }}
                         />
