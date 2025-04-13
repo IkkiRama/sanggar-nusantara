@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bahasa_daerah', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('daerah_asal');
+            $table->string('asal');
             $table->integer('jumlah_penutur');
             $table->enum('kategori', ['tradisional', 'modern']);
             $table->text('deskripsi')->nullable();

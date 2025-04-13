@@ -21,7 +21,7 @@ class MakananKhasFactory extends Factory
             'user_id' => User::factory(),
             'nama' => $this->faker->word,
             'slug' => $this->faker->slug,
-            'asal_makanan' => $this->faker->city,
+            'asal' => $this->faker->city,
             'image' => $this->faker->imageUrl(),
             'bahan_utama' => $this->faker->words(3, true),
             'deskripsi' => $this->faker->text,

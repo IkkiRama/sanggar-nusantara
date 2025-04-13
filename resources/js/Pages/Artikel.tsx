@@ -96,13 +96,13 @@ export default function Artikel() {
     <MainLayout title="Artikel | Sanggar Nusantara">
         <LightNavbar user={user} />
 
-      <header className="mt-10 mx-auto grid lg:grid-cols-4 gap-10 pt-20 lg:px-20 md:px-5 px-3">
+      <header className="mx-auto grid lg:grid-cols-4 gap-10 pt-30 lg:px-20 md:px-5 px-3">
         <span
           className="w-[1000px] h-[1000px] rounded-full absolute -left-[500px] -top-[500px] -rotate-[60deg]"
           style={{
             backgroundImage:
               "radial-gradient(169.40% 89.55% at 94.76% 6.29%, rgba(239, 68, 68, 0.70) 0%, rgba(239, 68, 68, 0.0) 100%)",
-          }}
+          }} 
         ></span>
 
         {artikelTerbaru && (

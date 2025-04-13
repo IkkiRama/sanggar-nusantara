@@ -110,7 +110,7 @@ export default function RagamAlatMusik({user, alatMusik}) {
 
       {/* Modal Detail Alat Musik */}
       {modalOpen && selectedAlatMusik && (
-        <section className="fixed inset-0 bg-black/40 z-9999999999 flex items-center justify-center lg:py-[10%]">
+        <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-9999999999 flex items-center justify-center lg:py-[10%]">
           <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
             {/* Tombol Tutup Modal */}
             <button

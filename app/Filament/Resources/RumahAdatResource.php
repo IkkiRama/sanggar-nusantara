@@ -44,7 +44,7 @@ class RumahAdatResource extends Resource
                     ->readOnly()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('asal_rumah')
+                Forms\Components\TextInput::make('asal')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
@@ -74,7 +74,7 @@ class RumahAdatResource extends Resource
                 Tables\Columns\ImageColumn::make('image'),
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('asal_rumah')
+                Tables\Columns\TextColumn::make('asal')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('nama');
             $table->string('slug')->unique();
-            $table->string('asal_rumah');
+            $table->string('asal');
             $table->string('image');
             $table->text('excerpt')->nullable();
             $table->text('deskripsi')->nullable();

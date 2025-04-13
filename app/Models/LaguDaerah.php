@@ -11,5 +11,5 @@ class LaguDaerah extends Model
     /** @use HasFactory<\Database\Factories\LaguDaerahFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['nama', 'pencipta', 'tahun_diciptakan', 'asal_lagu', 'image', 'audio', 'video', 'kategori', 'lirik', 'sejarah', 'lat', 'lng'];
+    protected $fillable = ['nama', 'pencipta', 'tahun_diciptakan', 'asal', 'image', 'audio', 'video', 'kategori', 'lirik', 'sejarah', 'lat', 'lng'];
 }

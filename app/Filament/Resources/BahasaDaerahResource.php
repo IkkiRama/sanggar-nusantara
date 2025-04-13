@@ -31,7 +31,7 @@ class BahasaDaerahResource extends Resource
                 Forms\Components\TextInput::make('nama')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('daerah_asal')
+                Forms\Components\TextInput::make('asal')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('jumlah_penutur')
@@ -69,7 +69,7 @@ class BahasaDaerahResource extends Resource
                 Tables\Columns\TextColumn::make('kategori')
                     ->badge()
                     ->color(Color::Blue),
-                Tables\Columns\TextColumn::make('daerah_asal')
+                Tables\Columns\TextColumn::make('asal')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('jumlah_penutur')
                     ->numeric()

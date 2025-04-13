@@ -43,7 +43,7 @@ class MakananKhasResource extends Resource
                     ->readOnly()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('asal_makanan')
+                Forms\Components\TextInput::make('asal')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
@@ -61,7 +61,7 @@ class MakananKhasResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('deskripsi')
                     ->columnSpanFull(),
-            ]); 
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -71,7 +71,7 @@ class MakananKhasResource extends Resource
                 Tables\Columns\ImageColumn::make('image'),
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('asal_makanan')
+                Tables\Columns\TextColumn::make('asal')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

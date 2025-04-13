@@ -24,7 +24,7 @@ export default function ProfileLayout({ children, title = 'Profile | Sanggar Nus
         <Head title={title}>
         </Head>
         {/* Content */}
-        <div className="relative z-10">
+        <div className="relative z-10 dark:bg-gray-950">
             <main className="transition-colors duration-300">
                 {children}
             </main>

@@ -13,7 +13,7 @@ import LightNavbar from "../layouts/lightNavbar";
 
 interface FoodItem {
   nama: string;
-  asal_makanan: string;
+  asal: string;
   image: string;
   bahan_utama: string;
   deskripsi: string;
@@ -81,7 +81,7 @@ export default function RagamMakanan({user, foods}) {
                 />
                 <div className="absolute z-10 w-[90%] left-1/2 -translate-x-1/2 dark:bg-gray-900 bg-white p-5 rounded bottom-[10px] text-center">
                   <span className="bg-orange-500 absolute left-1/2 -translate-x-1/2 -top-[10px] text-white px-5 rounded py-1 text-sm">
-                    {food.asal_makanan}
+                    {food.asal}
                   </span>
                   <h3 className="mt-3 font-bold dark:text-gray-200">{food.nama}</h3>
                   <small className="text-gray-700 dark:text-gray-400">{food.deskripsi}</small>
@@ -96,7 +96,7 @@ export default function RagamMakanan({user, foods}) {
 
       {/* Modal Detail Makanan */}
       {modalOpen && selectedFood && (
-        <section className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+        <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-9999999999 flex items-center justify-center">
           <div className="bg-white dark:bg-gray-950 md:w-[500px] w-[95%] md:mx-0 mx-auto p-7 rounded relative">
             {/* Tombol Tutup Modal */}
             <button
@@ -126,7 +126,7 @@ export default function RagamMakanan({user, foods}) {
               <div className="flex items-center justify-between">
                 <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
                   <FaMapLocation />
-                  {selectedFood.asal_makanan}
+                  {selectedFood.asal}
                 </p>
               </div>
             </div>

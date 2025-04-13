@@ -180,131 +180,129 @@ export default function Detail() {
 
       <main className="grid lg:grid-cols-3 md:px-20 px-5 gap-20 mt-20 mb-20">
         <div className="lg:col-span-2 text-gray-800 dark:text-gray-200">
-            <ArticleContent content={
-                        //@ts-ignore
-                        artikel.content} />
+            <ArticleContent
+                content={artikel.content}
+            />
 
             <ShareButton />
         </div>
-        <div>
-            <div className="bg-gray-50 dark:bg-gray-950 lg:p-10 p-5 rounded">
-                <img
-                src={
-                    //@ts-ignore
-                    artikel.user.image ? `../storage/${artikel.user.image}` : "../images/NO IMAGE AVAILABLE.jpg"}
-                className="w-[70px] rounded"
-                alt="avatar"
-                />
-                <h1 className="font-bold mt-4 text-gray-800 dark:text-gray-300">
+        <div className="sticky md:top-30 self-start bg-gray-50 lg:p-10 p-5 rounded shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] border-2 border-gray-100 border-2 dark:border-gray-900 dark:bg-gray-800">
+            <img
+            src={
+                //@ts-ignore
+                artikel.user.image ? `../storage/${artikel.user.image}` : "../images/NO IMAGE AVAILABLE.jpg"}
+            className="w-[70px] rounded"
+            alt="avatar"
+            />
+            <h1 className="font-bold mt-4 text-gray-800 dark:text-gray-300">
+            {//@ts-ignore
+            artikel.user.name}
+            </h1>
+            <p className="text-sm mt-2 text-gray-700 dark:text-gray-400">
                 {//@ts-ignore
-                artikel.user.name}
-                </h1>
-                <p className="text-sm mt-2 text-gray-700 dark:text-gray-400">
-                    {//@ts-ignore
-                    artikel.user.deskripsi}
-                </p>
+                artikel.user.deskripsi}
+            </p>
 
-            </div>
         </div>
       </main>
 
       <hr className="w-[90%] mx-auto border-slate-300" />
 
-            <div className="grid grid-cols-1 lg:gap-10 gap-4 md:px-20 px-5 mb-8 items-center mt-10">
-                <div className="mb-5">
-                    <h2 className="text-2xl inline-block font-semibold transition-all hover:pr-3 border-b-4 border-red-500 dark:text-gray-200">
-                        KOMENTAR
-                    </h2>
-                </div>
+        <div className="grid grid-cols-1 lg:gap-10 gap-4 md:px-20 px-5 mb-8 items-center mt-10">
+            <div className="mb-5">
+                <h2 className="text-2xl inline-block font-semibold transition-all hover:pr-3 border-b-4 border-red-500 dark:text-gray-200">
+                    KOMENTAR
+                </h2>
+            </div>
 
-                {artikel.komentar.map((item, index) => (
-                    <div className="" key={index}>
-                        <div className="flex items-center mb-3">
-                                <div className={`w-[50px] h-[50px] text-white flex items-center justify-center rounded-full mr-3 ${warnaProfile}`} >
-                                <span className="font-bold">{getInitials(item.nama)}</span>
-                            </div>
-                            <div className="">
-                                <h4 className="text-lg font-bold">{item.nama}</h4>
-                                <p className="text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px]">{item.email}</p>
-                            </div>
+            {artikel.komentar.map((item, index) => (
+                <div className="" key={index}>
+                    <div className="flex items-center mb-3">
+                            <div className={`w-[50px] h-[50px] text-white flex items-center justify-center rounded-full mr-3 ${warnaProfile}`} >
+                            <span className="font-bold">{getInitials(item.nama)}</span>
                         </div>
-                        <p className="text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px] whitespace-pre-wrap">{item.komentar}</p>
+                        <div className="">
+                            <h4 className="text-lg font-bold">{item.nama}</h4>
+                            <p className="text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px]">{item.email}</p>
+                        </div>
                     </div>
-                ))}
+                    <p className="text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px] whitespace-pre-wrap">{item.komentar}</p>
+                </div>
+            ))}
 
-                {/* Form Komentar */}
-                <form onSubmit={handleSubmit} className="bg-gray-100 dark:bg-gray-800 p-5 rounded-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    {/* Nama */}
-                        <div>
-                            <label
+            {/* Form Komentar */}
+            <form onSubmit={handleSubmit} className="bg-gray-100 dark:bg-gray-800 p-5 rounded-lg">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                {/* Nama */}
+                    <div>
+                        <label
                             htmlFor="nama"
                             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                            >
-                            Nama
-                            </label>
-                            <input
+                        >
+                        Nama
+                        </label>
+                        <input
                             type="text"
                             id="nama"
                             name="nama"
                             value={nama}
                             onChange={(e)=> setNama(e.target.value)}
                             placeholder="Masukkan nama Anda"
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300"
-                            />
-                        </div>
+                            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300 dark:text-gray-200"
+                        />
+                    </div>
 
-                        {/* Email */}
-                        <div>
-                            <label
+                    {/* Email */}
+                    <div>
+                        <label
                             htmlFor="email"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                            >
-                            Email
-                            </label>
-                            <input
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 dark:text-gray-200"
+                        >
+                        Email
+                        </label>
+                        <input
                             type="email"
                             id="email"
                             name="email"
                             value={email}
                             onChange={(e)=> setEmail(e.target.value)}
                             placeholder="Masukkan email Anda"
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300"
-                            />
-                        </div>
+                            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300 dark:text-gray-200"
+                        />
                     </div>
+                </div>
 
-                    {/* Komentar */}
-                    <div className="mb-4">
-                    <label
-                        htmlFor="komentar"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                {/* Komentar */}
+                <div className="mb-4">
+                <label
+                    htmlFor="komentar"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                    Komentar
+                </label>
+                <textarea
+                    id="komentar"
+                    name="komentar"
+                    value={komen}
+                    onChange={(e)=> setKomen(e.target.value)}
+                    placeholder="Tulis komentar Anda..."
+                    rows={4}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-200"
+                ></textarea>
+                </div>
+
+                {/* Tombol Submit */}
+                <button
+                    disabled={loadingKomen}
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition cursor-pointer"
                     >
-                        Komentar
-                    </label>
-                    <textarea
-                        id="komentar"
-                        name="komentar"
-                        value={komen}
-                        onChange={(e)=> setKomen(e.target.value)}
-                        placeholder="Tulis komentar Anda..."
-                        rows={4}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    ></textarea>
-                    </div>
-
-                    {/* Tombol Submit */}
-                    <button
-                        disabled={loadingKomen}
-                        type="submit"
-                        className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
-                        >
-                        {loadingKomen ? 'Mengirim...' : 'Kirim Komentar'}
-                    </button>
-                    {komenEror && <p className="text-red-500 mt-2">{komenEror}</p>}
-                    {successMessage && <p className="text-green-500 mt-2">{successMessage}</p>}
-                </form>
-            </div>
+                    {loadingKomen ? 'Mengirim...' : 'Kirim Komentar'}
+                </button>
+                {komenEror && <p className="text-red-500 mt-2">{komenEror}</p>}
+                {successMessage && <p className="text-green-500 mt-2">{successMessage}</p>}
+            </form>
+        </div>
 
       <section className="lg:grid hidden grid-cols-3 gap-10 px-20 mt-10">
         <div className="col-span-3">

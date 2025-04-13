@@ -20,7 +20,7 @@ const ShareButton = () => {
   };
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg mt-10">
+    <div className="p-4 bg-gray-100 rounded-lg mt-10 dark:bg-gray-800">
       <h3 className="text-lg font-semibold mb-4">Bagikan Artikel Ini</h3>
       <div className="flex gap-4 flex-wrap">
         {/* Default Buttons with Icons */}
@@ -64,7 +64,7 @@ const ShareButton = () => {
         {/* More Button */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+          className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 cursor-pointer"
         >
           More
         </button>
@@ -73,7 +73,7 @@ const ShareButton = () => {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-white/30 z-10">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80">
             <h3 className="text-lg font-semibold mb-4">Bagikan ke Lebih Banyak Platform</h3>
             <div className="flex flex-col gap-4">
               <a
@@ -97,7 +97,7 @@ const ShareButton = () => {
             </div>
             <button
               onClick={() => setIsModalOpen(false)}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 cursor-pointer"
             >
               Close
             </button>

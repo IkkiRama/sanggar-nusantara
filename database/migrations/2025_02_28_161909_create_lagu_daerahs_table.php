@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('pencipta')->nullable();
             $table->integer('tahun_diciptakan')->nullable();
-            $table->string('asal_lagu');
+            $table->string('asal');
             $table->string('image')->nullable();
             $table->string('audio');
             $table->string('video')->nullable();

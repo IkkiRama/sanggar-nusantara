@@ -1,5 +1,12 @@
+LINK GITHUB :
+https://github.com/IkkiRama/sanggar-Nusantara/
+
+
+AKUN ADMIN USER:
+email : official@ikki.com
+password : 123
+
+
 NOTEEE : INI SAYA PAKAI LARAGON, JADINYA ADA LINK (http://sanggar-nusantara.test), BUKAN PAKAI LOCALHOST
-
-
 
 KALAU SEMISAL ANDA TIDAK PAKAI LARAGON, HARAP LINK ITU DIGANTI JADI LOCALHOST DAHULU SUPAYA TIDAK EROR

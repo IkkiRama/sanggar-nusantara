@@ -1,3 +1,4 @@
+
 <?php
 
 namespace Database\Factories;
@@ -20,7 +21,7 @@ class LaguDaerahFactory extends Factory
             'nama' => $this->faker->word,
             'pencipta' => $this->faker->name,
             'tahun_diciptakan' => $this->faker->year,
-            'asal_lagu' => $this->faker->city,
+            'asal' => $this->faker->city,
             'image' => $this->faker->imageUrl(),
             'audio' => $this->faker->url,
             'video' => $this->faker->url,

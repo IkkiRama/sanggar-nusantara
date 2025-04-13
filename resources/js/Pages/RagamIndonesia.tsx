@@ -342,31 +342,38 @@ export default function RagamIndonesia() {
           </div>
           <div>
             <div className="grid md:grid-cols-3 grid-cols-2 gap-7">
+
               <Link href="/ragam-indonesia/bahasa-daerah" className="shadow py-4 px-2 text-center rounded border-b-4 border-red-500 hover:bg-red-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <FaLanguage className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">BAHASA</h6>
               </Link>
+
               <Link href="/ragam-indonesia/alat-musik" className="shadow py-4 px-2 text-center rounded border-b-4 border-indigo-500 hover:bg-indigo-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <MdOutlinePiano className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">ALAT MUSIK</h6>
               </Link>
+
               <Link href="/ragam-indonesia/rumah-adat" className="shadow py-4 px-2 text-center rounded border-b-4 border-emerald-500 hover:bg-emerald-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <FaHome className="mx-auto" size={30} />
 
                 <h6 className="mt-3 md:text-base text-sm">RUMAH ADAT</h6>
               </Link>
+
               <Link href="/ragam-indonesia/seni-tari" className="shadow py-4 px-2 text-center rounded border-b-4 border-yellow-500 hover:bg-yellow-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <FaTheaterMasks className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">SENI TARI</h6>
               </Link>
+
               <Link href="/ragam-indonesia/lagu-daerah" className="shadow py-4 px-2 text-center rounded border-b-4 border-purple-500 hover:bg-purple-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <GiMusicalScore className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">LAGU DAERAH</h6>
               </Link>
+
               <Link href="/ragam-indonesia/makanan-khas" className="shadow py-4 px-2 text-center rounded border-b-4 border-orange-500 hover:bg-orange-500 hover:text-white duration-500 cursor-pointer dark:text-gray-200">
                 <FaBowlFood className="mx-auto" size={30} />
                 <h6 className="mt-3 md:text-base text-sm">MAKANAN KHAS</h6>
               </Link>
+
             </div>
           </div>
         </section>

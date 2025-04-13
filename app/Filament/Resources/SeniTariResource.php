@@ -35,7 +35,7 @@ class SeniTariResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('tahun_diciptakan')
                     ->numeric(),
-                Forms\Components\TextInput::make('asal_tari')
+                Forms\Components\TextInput::make('asal')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('kategori')
@@ -77,7 +77,7 @@ class SeniTariResource extends Resource
                 Tables\Columns\TextColumn::make('tahun_diciptakan')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('asal_tari')
+                Tables\Columns\TextColumn::make('asal')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

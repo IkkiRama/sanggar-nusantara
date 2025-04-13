@@ -16,7 +16,7 @@ class SeniTari extends Model
         'nama',
         "pencipta",
         "tahun_diciptakan",
-        "asal_tari",
+        "asal",
         "image",
         "video",
         "kategori",

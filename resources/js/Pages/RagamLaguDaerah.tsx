@@ -9,7 +9,7 @@ interface LaguDaerahItem {
   nama: string;
   pencipta: string;
   tahun_diciptakan: number;
-  asal_lagu: string;
+  asal: string;
   image: string;
   audio?: string;
   video?: string;
@@ -93,7 +93,7 @@ export default function RagamLaguDaerah({ user, laguDaerah = [] }) {
                 />
                 <div className="absolute z-10 w-[90%] left-1/2 -translate-x-1/2 dark:bg-gray-900 bg-white p-5 rounded bottom-[10px] text-center">
                   <span className="bg-emerald-500 absolute left-1/2 -translate-x-1/2 -top-[10px] text-white px-5 rounded py-1 text-sm">
-                    {lagu.asal_lagu}
+                    {lagu.asal}
                   </span>
                   <h3 className="mt-3 font-bold dark:text-gray-200">{lagu.nama}</h3>
                 </div>
@@ -107,7 +107,7 @@ export default function RagamLaguDaerah({ user, laguDaerah = [] }) {
 
       {/* Modal Detail Lagu Daerah */}
       {modalOpen && selectedLagu && (
-        <section className="fixed inset-0 bg-black/40 flex items-center justify-center lg:py-[10%] z-9999999999">
+        <section className="fixed inset-0 bg-black/40 backdrop-blur-lg flex items-center justify-center lg:py-[10%] z-9999999999">
           <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
             {/* Tombol Tutup Modal */}
             <button
@@ -160,7 +160,7 @@ export default function RagamLaguDaerah({ user, laguDaerah = [] }) {
               <hr className="my-5 border-gray-400" />
               <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
                 <FaMapLocation />
-                {selectedLagu.asal_lagu}
+                {selectedLagu.asal}
               </p>
             </div>
           </div>

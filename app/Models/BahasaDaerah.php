@@ -14,7 +14,7 @@ class BahasaDaerah extends Model
 
     protected $fillable = [
         'nama',
-        'daerah_asal',
+        'asal',
         'jumlah_penutur',
         'kategori',
         'deskripsi',

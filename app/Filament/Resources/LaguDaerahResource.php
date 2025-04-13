@@ -55,7 +55,7 @@ class LaguDaerahResource extends Resource
                     ->maxSize(10240), // Contoh batasan ukuran maksimal 10MB,
                 Forms\Components\TextInput::make('video')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('asal_lagu')
+                Forms\Components\TextInput::make('asal')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('lat')
@@ -84,7 +84,7 @@ class LaguDaerahResource extends Resource
                 Tables\Columns\TextColumn::make('tahun_diciptakan')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('asal_lagu')
+                Tables\Columns\TextColumn::make('asal')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

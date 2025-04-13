@@ -21,7 +21,7 @@ class RumahAdatFactory extends Factory
             'user_id' => User::factory(),
             'nama' => $this->faker->word,
             'slug' => $this->faker->slug,
-            'asal_rumah' => $this->faker->city,
+            'asal' => $this->faker->city,
             'image' => $this->faker->imageUrl(),
             'excerpt' => $this->faker->sentence,
             'deskripsi' => $this->faker->text,

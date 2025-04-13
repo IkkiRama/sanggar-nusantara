@@ -7,7 +7,7 @@ import { FaMapLocation } from "react-icons/fa6";
 
 interface BahasaDaerahItem {
   nama: string;
-  daerah_asal: string;
+  asal: string;
   jumlah_penutur: number;
   kategori: string;
   deskripsi: string;
@@ -75,7 +75,7 @@ export default function RagamBahasaDaerah({ user, bahasaDaerah}) {
                 />
                 <div className="absolute z-10 w-[90%] left-1/2 -translate-x-1/2 dark:bg-gray-900 bg-white p-5 rounded bottom-[10px] text-center">
                   <span className="bg-red-500 absolute left-1/2 -translate-x-1/2 -top-[10px] text-white px-5 rounded py-1 text-sm">
-                    {bahasa.daerah_asal}
+                    {bahasa.asal}
                   </span>
                   <h3 className="mt-3 font-bold dark:text-gray-200">{bahasa.nama}</h3>
                   <small className="text-gray-700 dark:text-gray-400">{bahasa.deskripsi}</small>
@@ -90,7 +90,7 @@ export default function RagamBahasaDaerah({ user, bahasaDaerah}) {
 
       {/* Modal Detail Bahasa Daerah */}
       {modalOpen && selectedBahasa && (
-        <section className="fixed inset-0 bg-black/40 z-9999999999 flex items-center justify-center lg:py-[10%]">
+        <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-9999999999 flex items-center justify-center lg:py-[10%]">
           <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
             {/* Tombol Tutup Modal */}
             <button
@@ -128,7 +128,7 @@ export default function RagamBahasaDaerah({ user, bahasaDaerah}) {
               <hr className="my-5 border-gray-400" />
               <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
                 <FaMapLocation />
-                {selectedBahasa.daerah_asal}
+                {selectedBahasa.asal}
               </p>
             </div>
           </div>
