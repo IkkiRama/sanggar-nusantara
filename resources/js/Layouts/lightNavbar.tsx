@@ -67,7 +67,7 @@ const MobileMenuItem = memo(({ href, icon: Icon, label, isDark, onClick, isActiv
         }`}>
             <Icon className="w-5 h-5" />
         </div>
-        <span className="font-medium">{label}</span>
+        <span className="font-medium dark:text-gray-200">{label}</span>
     </Link>
 ));
 
@@ -200,9 +200,9 @@ const Navbar = ({user}) => {
         <>
             {/* Main Navbar */}
             <motion.nav
-                className={`fixed w-full z-50 top-0 transition-all duration-300 ${
+                className={`fixed w-full z-99 top-0 transition-all duration-300 ${
                     isScrolled
-                        ? 'bg-white/80 backdrop-blur-md shadow-md'
+                        ? 'bg-white/80 backdrop-blur-md shadow-md dark:bg-gray-950'
                         : 'bg-transparent'
                 }`}
                 initial={{ y: -100 }}
@@ -214,18 +214,18 @@ const Navbar = ({user}) => {
                         {/* Logo */}
                         <div className="flex-shrink-0">
                             <h2
-                                className="flex items-center text-[#111] font-semibold md:text-xl dark:text-white text-base"
+                                className="flex items-center text-[#111] font-semibold md:text-xl dark:text-white text-sm"
                             >
                                 <Link href={"/"}>Sanggar Nusantara</Link>
                             </h2>
                         </div>
 
                         {/* Desktop Navigation */}
-                        <div className="hidden md:flex">
+                        <div className="hidden lg:flex">
                             <div className={`flex space-x-1 bg-white/80 backdrop-blur-md rounded-xl p-1 shadow-lg`}>
-                                {NAV_ITEMS.map((item) => (
+                                {NAV_ITEMS.map((item, index) => (
                                     <DesktopNavItem
-                                        key={item.id || item.path}
+                                        key={index || item.path}
                                         //@ts-ignore
                                         item={item}
                                         isActive={item.dropdown
@@ -240,7 +240,7 @@ const Navbar = ({user}) => {
                         </div>
 
                         {/* Desktop Auth Section */}
-                        <div className="hidden md:flex items-center space-x-4">
+                        <div className="hidden lg:flex items-center space-x-4">
                             {/* Theme Toggle */}
                             {/* <button
                                 // onClick={toggleTheme}
@@ -249,7 +249,7 @@ const Navbar = ({user}) => {
                             >
                                 {isDark ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
                             </button> */}
-                            <ThemeToggle />
+                            {/* <ThemeToggle /> */}
 
                             {user ? (
                                 <div className="relative">
@@ -330,7 +330,7 @@ const Navbar = ({user}) => {
                         </div>
 
                         {/* Mobile Menu Button */}
-                        <div className="md:hidden flex items-center space-x-2">
+                        <div className="lg:hidden flex items-center space-x-2">
                             {/* <button
                                 onClick={toggleTheme}
                                 className={`p-2 rounded-full transition-all duration-200 bg-white/80 text-blue-600 shadow-lg`}
@@ -345,9 +345,9 @@ const Navbar = ({user}) => {
                                 aria-label="Toggle menu"
                             >
                                 {isMenuOpen ? (
-                                    <FaTimes className="h-6 w-6" />
+                                    <FaTimes className="h-6 w-6 dark:text-gray-200" />
                                 ) : (
-                                    <FaBars className="h-6 w-6" />
+                                    <FaBars className="h-6 w-6 dark:text-gray-200" />
                                 )}
                             </button>
                         </div>
@@ -361,9 +361,9 @@ const Navbar = ({user}) => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="md:hidden overflow-hidden"
+                            className="lg:hidden overflow-hidden"
                         >
-                            <div className={`px-4 py-6 bg-white/95 backdrop-blur-lg`}
+                            <div className={`px-4 py-6 bg-white/95 backdrop-blur-lg dark:bg-gray-900/95 dark:border-t dark:border-gray-800`}
                             >
                                 <div className="space-y-6">
                                     {/* Menu Items */}
@@ -388,7 +388,7 @@ const Navbar = ({user}) => {
                                                                 }`}>
                                                                     <item.icon className="w-5 h-5" />
                                                                 </div>
-                                                                <span className="font-medium">{item.label}</span>
+                                                                <span className="font-medium dark:text-gray-200">{item.label}</span>
                                                             </div>
                                                             <motion.div
                                                                 animate={{ rotate: activeDropdown === item.id ? 180 : 0 }}

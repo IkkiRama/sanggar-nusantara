@@ -51,7 +51,7 @@ export default function RagamRumahAdat({ user, rumahAdat }) {
   return (
     <MainLayout title="Ragam Rumah Adat | Sanggar Nusantara">
       <LightNavbar user={user} />
-      <main className="mt-44 lg:px-20 md:px-10 px-5 dark:bg-black">
+      <main className="pt-44 lg:px-20 md:px-10 px-5 dark:bg-black">
         <h1 className="md:flex gap-3 text-center justify-center items-center font-bold md:text-3xl text-2xl dark:text-gray-200">
           <span className="shadow text-center bg-emerald-500 w-[50px] h-[50px] flex items-center justify-center text-white rounded-full md:mx-0 mx-auto">
             <MdHouse size={30} />
@@ -64,7 +64,7 @@ export default function RagamRumahAdat({ user, rumahAdat }) {
           <div className="relative mb-10">
             <input
               type="text"
-              className="border bg-gray-200 dark:border-gray-900 dark:bg-gray-800 py-2 pr-5 pl-10 rounded md:w-[500px] w-full"
+              className="border bg-gray-200 dark:border-gray-900 dark:bg-gray-800 py-2 pr-5 pl-10 rounded md:w-[500px] w-full dark:text-gray-200"
               placeholder="Cari Rumah Adat"
               onChange={(e) => setFilterSearch(e.target.value)}
             />
@@ -82,12 +82,12 @@ export default function RagamRumahAdat({ user, rumahAdat }) {
                 onClick={() => openModal(rumah)} // Klik untuk buka modal
               >
                 <img
-                  src={rumah.image ? `./storage/${rumah.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                  src={rumah.image ? `../storage/${rumah.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                   className="absolute inset-0 w-full h-full object-cover bg-gray-300"
                   alt={rumah.nama}
                 />
                 <div className="absolute z-10 w-[90%] left-1/2 -translate-x-1/2 dark:bg-gray-900 bg-white p-5 rounded bottom-[10px] text-center">
-                  <span className="bg-orange-500 absolute left-1/2 -translate-x-1/2 -top-[10px] text-white px-5 rounded py-1 text-sm">
+                  <span className="bg-emerald-500 absolute left-1/2 -translate-x-1/2 -top-[10px] text-white px-5 rounded py-1 text-sm">
                     {rumah.asal_rumah}
                   </span>
                   <h3 className="mt-3 font-bold dark:text-gray-200">{rumah.nama}</h3>
@@ -120,7 +120,7 @@ export default function RagamRumahAdat({ user, rumahAdat }) {
             <div>
               {/* Gambar */}
               <img
-                src={`../storage/${selectedRumahAdat.image}`}
+                src={selectedRumahAdat.image ? `../storage/${selectedRumahAdat.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                 className="rounded h-[200px] lg:h-[400px] object-cover w-full bg-gray-300"
                 alt={selectedRumahAdat.nama}
               />

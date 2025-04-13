@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('pencipta')->nullable();
             $table->integer('tahun_diciptakan')->nullable();
             $table->string('asal_lagu');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('audio');
             $table->string('video')->nullable();
             $table->enum('kategori', ['tradisional', 'modern']);

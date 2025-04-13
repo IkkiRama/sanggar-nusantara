@@ -27,7 +27,7 @@ import LightNavbar from "../layouts/lightNavbar";
 import React from "react";
 import MainLayout from './../Layouts/mainLayout';
 import { changeDate } from './../Utils/changeDate';
-import { BookOpen, Calendar } from "lucide-react";
+import { BookOpen, Calendar, MapPin } from "lucide-react";
 
 interface Event {
     kategori_event_id:string;
@@ -81,6 +81,18 @@ const Home = () => {
   const artikelPertama = artikels.length > 0 ? artikels[0] : null;
   const dataArtikel = artikels.length > 3 ? artikels.slice(1, 4) : [];
 
+    const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setIsDark(true);
+    }
+
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
+      setIsDark(e.matches);
+    });
+  }, []);
+
   const changeHeaderImg = (img: any) => {
     const headerImg = document.getElementById(
       "headerImg"
@@ -116,7 +128,7 @@ const Home = () => {
     <MainLayout title="Sanggar Nusantara | Eksplorasi Budaya & Kekayaan Alam Indonesia">
       <LightNavbar user={user} />
 
-      <section className="grid bg-white dark:bg-black min-h-[100vh] lg:grid-cols-2 relative z-10 overflow-hidden">
+      <section className="grid bg-white dark:bg-gray-950 min-h-[100vh] lg:grid-cols-2 relative z-10 overflow-hidden">
         {/* Background Gradient Circle */}
         <span
           className="w-[1000px] h-[1000px] rounded-full absolute -left-[500px] -top-[500px] -rotate-[60deg] animate-spin-slow"
@@ -215,7 +227,6 @@ const Home = () => {
 
         </section>
       </section>
-
 
       <br />
       <br />
@@ -834,24 +845,24 @@ const Home = () => {
         ) : (
             <div className="max-w-[1700px] py-10 lg:px-10 px-3 grid lg:grid-cols-3 grid-cols-1 gap-0 md:gap-10 items-center">
                 {events.length > 0 && events.map((event, index) => (
-                    <Link key={index} href={`/event/${event.slug}`} className="bg-white rounded-lg shadow-sm mb-5 md:mb-0">
+                    <Link key={index} href={`/event/${event.slug}`} className="bg-white rounded-lg shadow-sm mb-5 md:mb-0 dark:bg-gray-950">
                         <img
                         src={event.image ? `./storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
                         alt={event.nama}
                         className="w-full h-[200px] md:h-[270px] object-cover rounded-lg mb-8"
                         />
-                        <h2 className={`px-4 text-lg font-bold mb-2 line-clamp-2`}>{event.nama}</h2>
+                        <h2 className={`px-4 text-lg font-bold mb-2 line-clamp-2 dark:text-gray-200`}>{event.nama}</h2>
 
                         <p className="px-4 text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px] line-clamp-3">{event.excerpt}</p>
 
-                        <div className="mt-5 md:flex gap-10 px-4 pb-4">
-                            <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                                <FaMapMarkedAlt />
-                                <span>{event.tempat}</span>
+                        <div className="mt-5 md:flex gap-5 px-4 pb-4">
+                            <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 w-[60%] items-center">
+                                <MapPin className="w-[25px] h-[25px]" />
+                                <span className="line-clamp-2 text-sm">{event.tempat}</span>
                             </p>
                             <p className="flex gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
                                 <FaCalendar />
-                                <span>{changeDate(new Date(event.tanggal))}</span>
+                                <span className="line-clamp-2 text-sm">{changeDate(new Date(event.tanggal))}</span>
                             </p>
                         </div>
 
@@ -860,7 +871,7 @@ const Home = () => {
                                 ${new Date(event.tanggal) >= new Date() ? "bg-green-100 text-green-600" : "bg-red-100 text-red-500"}
                             `}
                         >
-                            <p className="dark:text-gray-300 lg:text-base md:text-sm text-[12px] font-semibold">
+                            <p className="lg:text-base md:text-sm text-[12px] font-semibold">
                                 {new Date(event.tanggal) >= new Date() ? "Pendaftaran Masih Dibuka" : "Event Sudah Berakhir"}
                             </p>
                         </div>
@@ -870,34 +881,40 @@ const Home = () => {
         )}
         </section>
 
-        <section id="map" className="bg-[linear-gradient(180deg,#FFF,#F4F6F6_100.03%)] px-4">
+        <section id="map" className="px-4"
+            style={{
+                background: isDark
+                ? "#000" // dark mode background
+                : "linear-gradient(180deg, #FFF, #F4F6F6 100.03%)", // light mode gradient
+            }}
+        >
             <div className="max-w-[1350px] mx-auto md:pt-12 lg:pt-16">
                 <img src="/images/indonesian-map.gif" className="w-full" />
                 <div className="text-center max-w-5xl mx-auto mt-5">
-                    <h2 className="text-gray-1000 !leading-tight text-3xl lg:text-4xl font-bold tracking-tight">
+                    <h2 className="text-gray-1000 !leading-tight text-3xl lg:text-4xl font-bold tracking-tight dark:text-gray-200">
                         Sanggar Nusantara Telah Menjangkau Hampir ke Seluruh Indonesia
                     </h2>
-                    <p className="text-gray-800 md:text-lg mt-4">
+                    <p className="text-gray-800 md:text-lg mt-4 dark:text-gray-400">
                         Sanggar Nusantara berkomitmen untuk melestarikan dan memperkenalkan kekayaan budaya serta alam Indonesia. Mari bersama-sama, kita lestarikan warisan nusantara dan wujudkan impian akan Indonesia yang kaya akan seni, tradisi, dan keindahan alamnya.
                     </p>
                 </div>
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 py-12 lg:pb-16 gap-5 w-full max-w-[1350px]">
-                    <div className="bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
+                    <div className="dark:bg-gray-950 bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
                         <h5 className="font-bold text-red-500 text-3xl lg:text-5xl mb-2">34+</h5>
-                        <span className="text-gray-700 lg:text-lg">Provinsi Terjangkau</span>
+                        <span className="text-gray-700 dark:text-gray-500 lg:text-lg">Provinsi Terjangkau</span>
                     </div>
-                    <div className="bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
+                    <div className="dark:bg-gray-950 bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
                         <h5 className="font-bold text-red-500 text-3xl lg:text-5xl mb-2">995+</h5>
-                        <span className="text-gray-700 lg:text-lg">Sanggar & Komunitas Budaya Berpartisipasi</span>
+                        <span className="text-gray-700 dark:text-gray-500 lg:text-lg">Sanggar & Komunitas Budaya Berpartisipasi</span>
                     </div>
-                    <div className="bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
+                    <div className="dark:bg-gray-950 bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
                         <h5 className="font-bold text-red-500 text-3xl lg:text-5xl mb-2">1200+</h5>
-                        <span className="text-gray-700 lg:text-lg">Sekolah & Perguruan Tinggi Terlibat</span>
+                        <span className="text-gray-700 dark:text-gray-500 lg:text-lg">Sekolah & Perguruan Tinggi Terlibat</span>
                     </div>
-                    <div className="bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
+                    <div className="dark:bg-gray-950 bg-white shadow-[0px_25px_50px_0px_rgba(34,39,39,0.07)] rounded-2xl p-4 lg:p-6 flex-1 flex-shrink-0">
                         <h5 className="font-bold text-red-500 text-3xl lg:text-5xl mb-2">190+</h5>
-                        <span className="text-gray-700 lg:text-lg">Mitra & Lembaga Pendukung</span>
+                        <span className="text-gray-700 dark:text-gray-500 lg:text-lg">Mitra & Lembaga Pendukung</span>
                     </div>
                 </div>
             </div>
@@ -1129,7 +1146,7 @@ const Home = () => {
                 </p>
           </div>
 
-          <div className="w-full lg:w-[70%] pl-5 pr-10 lg:pl-0 lg:px-0 lg:pr-20">
+          <div className="w-full lg:w-[70%] pl-5 pr-5 lg:pl-0 lg:px-0 lg:pr-20">
 
             <form action="" className="mt-10 lg:mt-0 ">
                 <label htmlFor="name" className="w-full text-red-500 font-semibold">Nama</label>

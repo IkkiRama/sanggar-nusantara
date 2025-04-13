@@ -64,10 +64,11 @@
 
 
 body {
-    width: 100vw;
+    /* width: 100vw; */
     overflow-x: hidden;
     font-family: "Poppins",
         'figtree', sans-serif;
+    /* overscroll-behavior-x: none; */
 }
 
 #slider1 {
@@ -420,6 +421,14 @@ html.dark .MuiAccordionDetails-root.css-15v22id-MuiAccordionDetails-root {
     margin: 25px 0;
 }
 
+.content-artikel h1,
+.content-artikel h2,
+.content-artikel h3,
+.content-artikel h4,
+.content-artikel h5,
+.content-artikel h6 {
+    font-weight: bold;
+}
 
 
 @keyframes fadeInOut {

@@ -45,7 +45,7 @@ export default function RagamMakanan({user, foods}) {
   return (
     <MainLayout title="Ragam Makanan | Sanggar Nusantara">
         <LightNavbar user={user} />
-      <main className="mt-44 lg:px-20 md:px-10 px-5 dark:bg-black">
+      <main className="pt-44 lg:px-20 md:px-10 px-5 dark:bg-black">
         <h1 className="md:flex gap-3 text-center justify-center items-center font-bold md:text-3xl text-2xl dark:text-gray-200">
           <span className="bg-orange-500 w-[50px] h-[50px] flex items-center justify-center text-white rounded-full md:mx-0 mx-auto">
             <FaBowlFood size={30} />
@@ -57,7 +57,7 @@ export default function RagamMakanan({user, foods}) {
           <div className="relative mb-10">
             <input
               type="text"
-              className="border bg-gray-200 dark:border-gray-900 dark:bg-gray-800 py-2 pr-5 pl-10 rounded md:w-[500px] w-full"
+              className="border bg-gray-200 dark:border-gray-900 dark:bg-gray-800 py-2 pr-5 pl-10 rounded md:w-[500px] w-full dark:text-gray-200"
               placeholder="Cari Makanan"
               onChange={(e) => setFilterSearch(e.target.value)}
             />
@@ -75,7 +75,7 @@ export default function RagamMakanan({user, foods}) {
                 onClick={() => openModal(food)} // Klik untuk buka modal
               >
                 <img
-                  src={food.image ? `./storage/${food.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                  src={food.image ? `../storage/${food.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                   className="absolute inset-0 w-full h-full object-cover bg-gray-300"
                   alt={food.nama}
                 />
@@ -111,7 +111,7 @@ export default function RagamMakanan({user, foods}) {
             <hr className="my-3 dark:border-gray-700" />
             <div>
               <img
-                src={`../storage/${selectedFood.image}`}
+                src={selectedFood.image ? `../storage/${selectedFood.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                 className="rounded h-[200px] object-cover w-full bg-gray-300"
                 alt={selectedFood.nama}
               />

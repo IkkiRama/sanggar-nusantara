@@ -67,9 +67,9 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
     const EventContent = ({ content }) => {
         return (
             <div
-            dangerouslySetInnerHTML={{ __html: content }}
-            style={{ lineHeight: "1.6", fontSize: "16px" }}
-            className="content-artikel"
+                dangerouslySetInnerHTML={{ __html: content }}
+                style={{ lineHeight: "1.6", fontSize: "16px" }}
+                className="content-artikel dark:text-white"
             />
         );
     };
@@ -115,11 +115,11 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
         });
 
         try {
-            const response = await fetch("https://sanggar-nusantara.genbipurwokerto.com/api/diskon", {
+            const response = await fetch("http://sanggar-nusantara.test/api/diskon", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localstorage.getItem("token")}`,
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
                 body: JSON.stringify({
                     totalBiaya: totalBiaya,
@@ -187,11 +187,11 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
         setLoading({ diskon: false, bayar: true });
 
         try {
-        const response = await fetch("https://sanggar-nusantara.genbipurwokerto.com/api/bayar", {
+        const response = await fetch("http://sanggar-nusantara.test/api/bayar", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localstorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({
             user_id: user.id,
@@ -323,7 +323,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                 </Head> */}
               <LightNavbar user={user} />
 
-            <div className="bg-gray-100 dark:bg-black leading-normal tracking-normal">
+            <div className="bg-gray-100 dark:bg-gray-950 leading-normal tracking-normal pb-10 md:pb-20">
 
                 {alertMessage.text !== "" && (
                     <div className={`fixed top-5 left-1/2 w-[90%] lg:w-fit transform -translate-x-1/2 text-white py-2 px-4 rounded-lg shadow-lg animate-fade-in-out z-999999 flex gap-4 ${
@@ -333,31 +333,31 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                         {alertMessage.text}
                     </div>
                 )}
-                <div className="grid lg:grid-cols-5 pt-20 pb-10 md:px-20 px-5 mb-8 items-center bg-gray-100 dark:bg-gray-950 relative md:gap-6">
+                <div className="grid container mx-auto px-4 lg:grid-cols-5 pt-10 md:pt-20 pb-5 md:px-20 px-5 mb-8 items-center bg-gray-100 dark:bg-gray-950 relative md:gap-6">
                     <span className="h-full lg:w-[700px] w-full absolute right-0 lg:bg-gradient-to-l bg-gradient-to-b from-red-700/30 to-red-700/0"></span>
 
                     <div className="lg:col-span-3 order-2 lg:order-1 relative">
-                        <h1 className="lg:leading-[2.7rem] font-bold md:text-3xl lg:text-left text-center mb-2 text-xl text-gray-900 dark:text-gray-200">
+                        <h1 className="lg:leading-[2.7rem] font-bold md:text-3xl lg:text-left text-center mb-2 text-lg text-gray-900 dark:text-gray-200">
                             {//@ts-ignore
                             event.nama}
                         </h1>
 
                         <div className="md:flex gap-10 md:mb-8 mb-4">
-                            <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                                <MapPin />
+                            <p className="flex md:mb-0 mb-5 md:text-base text-[14px] gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
+                                <MapPin className="w-[20px] h-[20px]" />
                                 <span>{
                                 //@ts-ignore
                                 event.tempat}</span>
                             </p>
                             <p className="flex gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                                <FaCalendar />
+                                <FaCalendar className="w-[20px] h-[20px]" />
                                 <span>{changeDate(new Date(
                                     //@ts-ignore
                                     event.tanggal))}</span>
                             </p>
                         </div>
 
-                        <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap lg:text-base md:text-sm text-[15px]">{
+                        <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap lg:text-base md:text-sm text-[14px]">{
                         //@ts-ignore
                         event.excerpt}</p>
                     </div>
@@ -373,18 +373,15 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                     </div>
                 </div>
 
-                {/* <div className="relative max-w-5xl mx-auto px-5 md:px-0">
-                </div> */}
+                <div className="container mx-auto sm:px-6 px-0 md:justify-center flex-wrap lg:flex-nowrap relative mt-10 flex-grow flex justify-between lg:gap-10 h-full">
 
-                <div className="container sm:px-6 px-2 md:justify-center flex-wrap lg:flex-nowrap relative mt-10 flex-grow flex justify-between lg:gap-10 h-full">
-
-                    <div className="w-full lg:w-2/3 bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-lg border-2 border-gray-200">
+                    <div className="w-full dark:bg-gray-950 lg:w-2/3 bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] md:rounded-lg md:border-2 md:border-gray-200 dark:border-gray-900">
 
                         {/* Sticky Tabs */}
-                        <div className="sticky bg-white/80 backdrop-blur-md rounded-tl-lg rounded-tr-lg top-20 z-10 shadow-sm flex">
+                        <div className="sticky dark:bg-gray-950 bg-white/80 backdrop-blur-md md:rounded-tl-lg md:rounded-tr-lg md:top-20 top-15 z-10 shadow-sm flex">
                             <button
                             className={`flex-1 py-5 text-center font-medium cursor-pointer ${
-                                activeTab === "deskripsi" ? "border-b-2 border-blue-600 text-blue-600 font-semibold" : "text-gray-600"
+                                activeTab === "deskripsi" ? "border-b-2 border-blue-600 text-blue-600 font-semibold" : "border-b-2 border-white/80 dark:border-gray-950 text-gray-600 dark:text-gray-200"
                             }`}
                             onClick={() => setActiveTab("deskripsi")}
                             >
@@ -392,7 +389,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                             </button>
                             <button
                             className={`flex-1 py-5 text-center font-medium cursor-pointer ${
-                                activeTab === "tiket" ? "border-b-2 border-blue-600 text-blue-600" : "text-gray-600"
+                                activeTab === "tiket" ? "border-b-2 border-blue-600 text-blue-600 font-semibold" : "border-b-2 border-white/80 dark:border-gray-950 text-gray-600 dark:text-gray-200"
                             }`}
                             onClick={() => setActiveTab("tiket")}
                             >
@@ -419,13 +416,13 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                             {activeTab === "tiket" && (
                                 <div className="space-y-4 w-full">
                                     {hargaTiket.map((ticket) => (
-                                        <div key={ticket.id} className="border w-full border-blue-400 rounded-lg p-4 bg-blue-50 relative flex flex-col">
+                                        <div key={ticket.id} className="border w-full border-blue-400 rounded-lg p-4 bg-blue-50 relative flex flex-col dark:bg-gray-950">
                                         <div className="flex justify-between items-center cursor-pointer" onClick={() => toggleExpand(ticket.id)}>
-                                            <h3 className="font-semibold">{ticket.nama}</h3>
+                                            <h3 className="font-semibold dark:text-gray-200">{ticket.nama}</h3>
                                             {expandedId === ticket.id ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
                                         </div>
-                                        <p className="text-gray-600 text-sm">
-                                            Pembelian Tiket : {ticket.id} {formatTanggalPendek(ticket.tanggal_mulai)} - {formatTanggalPanjang(ticket.tanggal_selesai)}
+                                        <p className="text-gray-600 text-sm dark:text-gray-400">
+                                            Pembelian Tiket : {formatTanggalPendek(ticket.tanggal_mulai)} - {formatTanggalPanjang(ticket.tanggal_selesai)}
                                         </p>
                                         <p className={`text-gray-700 whitespace-pre-wrap text-sm my-2 transition-all ${expandedId === ticket.id ? "line-clamp-none" : "line-clamp-1"}`}>{ticket.deskripsi}</p>
                                         <div className="flex items-center text-blue-600 text-sm mt-1">
@@ -434,7 +431,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                                         </div>
                                         <hr className="border-dashed border-gray-300 my-2" />
                                         <div className="flex justify-between items-center">
-                                            <span className="text-lg font-bold">
+                                            <span className="text-base md:text-lg font-bold dark:text-gray-200">
                                                 {
                                                 ticket.harga === 0 ?
                                                     "Gratis" :
@@ -443,11 +440,11 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                                             </span>
 
                                             {new Date(ticket.tanggal_selesai) < new Date() ? ( // Cek jika event sudah berakhir
-                                                <span className="text-lg font-bold text-red-500">
+                                                <span className="text-sm md:text-lg font-bold text-red-500">
                                                     Pemesanan telah ditutup
                                                 </span>
                                             ) : ticket.kuota === 0 ? (
-                                                <span className="text-lg font-bold text-red-500">
+                                                <span className="text-sm md:text-lg font-bold text-red-500">
                                                     Sold Out
                                                 </span>
                                             ) : (
@@ -458,7 +455,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                                                     >
                                                         -
                                                     </button>
-                                                    <span className="w-5 text-center">{selectedTickets.find(t => t.id === ticket.id)?.kuota || 0}</span>
+                                                    <span className="w-5 text-center dark:text-gray-200">{selectedTickets.find(t => t.id === ticket.id)?.kuota || 0}</span>
                                                     <button
                                                         className="border border-blue-400 text-blue-400 rounded-full w-7 h-7 flex items-center justify-center cursor-pointer"
                                                         onClick={() => updateQuantity(ticket.id, 1)}
@@ -477,8 +474,8 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
 
                     </div>
 
-                    <div className="w-full lg:w-[30%] self-start lg:sticky mt-10 lg:mt-0 top-28">
-                        <div className="bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-lg border-2 border-gray-200 px-4 py-7">
+                    <div className="w-full lg:w-[30%] self-start lg:sticky md:mt-5 top-28">
+                        <div className="bg-white dark:bg-gray-950 md:shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] md:rounded-lg md:border-2 md:border-gray-200 px-4 py-7">
 
                             <div className="border-b-2 border-b-gray-200 px-3 pb-5 flex  gap-4">
                                 {selectedTickets.length > 0 ? (
@@ -489,10 +486,10 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                                                 <div className="w-full space-y-2">
                                                     <div key={ticket.id} className="flex justify-between">
                                                         <div className="">
-                                                            <p className="text-slate-700 font-medium">{ticket.nama}</p>
-                                                            <span className="text-gray-600 text-sm">{ticket.kuota} Tiket</span>
+                                                            <p className="text-slate-700 font-medium dark:text-gray-300">{ticket.nama}</p>
+                                                            <span className="text-gray-600 dark:text-gray-400 text-sm">{ticket.kuota} Tiket</span>
                                                         </div>
-                                                        <span className="text-gray-800 font-bold">
+                                                        <span className="text-gray-800 dark:text-gray-200 font-bold">
                                                             {
                                                             ticket.harga === 0 ?
                                                                 "Gratis" :
@@ -507,14 +504,14 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                                 ) : (
                                     <>
                                         <img src="/images/ic-ticket-widget.svg" alt="image icon tiket" />
-                                        <p className="text-gray-600">Kamu belum memilih tiket. Silakan pilih lebih dulu di tab menu TIKET.</p>
+                                        <p className="text-gray-600 dark:text-gray-300 ">Kamu belum memilih tiket. Silakan pilih lebih dulu di tab menu TIKET.</p>
                                     </>
                                 )}
                             </div>
 
                             <div className="flex justify-between my-4">
-                                <p className="text-gray-600">{totalTickets > 0 ? `Total ${totalTickets} tiket` : "Harga mulai dari"}</p>
-                                <p className="text-gray-800 font-bold text-xl">
+                                <p className="text-gray-600 dark:text-gray-300">{totalTickets > 0 ? `Total ${totalTickets} tiket` : "Harga mulai dari"}</p>
+                                <p className="text-gray-800 font-bold text-xl dark:text-gray-200">
                                     {totalTickets > 0
                                     ? `Rp ${totalPrice.toLocaleString("id-ID")}`
                                     : minPrice === 0
@@ -538,21 +535,21 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
             {/* Modal */}
             {isOpen && (
                 <div className="fixed lg:z-30 z-999 inset-0 bg-white/20 backdrop-blur-md bg-opacity-50 flex justify-center items-center lg:py-[30%]">
-                    <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 rounded-lg shadow-lg w-[95%] lg:w-[40%]">
+                    <div className="bg-white dark:bg-gray-950 overflow-y-auto max-h-screen lg:p-6 p-4 rounded-lg shadow-lg w-[95%] lg:w-[40%]">
                         <div className="flex justify-between items-center border-b border-gray-300 pb-4">
-                            <h2 className="text-lg font-semibold">Checkout Event</h2>
+                            <h2 className="text-lg font-semibold dark:text-gray-200">Checkout Event</h2>
                             <button className="cursor-pointer" onClick={() => setIsOpen(false)}>
-                                <X className="w-5 h-5 text-gray-600" />
+                                <X className="w-5 h-5 text-gray-600 dark:text-gray-200" />
                             </button>
                         </div>
 
-                        <div className="mt-4 px-2 overflow-y-auto">
-                            <label className="block font-semibold text-lg text-slate-800">Kode Promo</label>
+                        <div className="mt-4 md:px-2 overflow-y-auto">
+                            <label className="block font-semibold text-lg text-slate-800 dark:text-gray-200">Kode Promo</label>
                             <div className="flex gap-3 mt-2 mb-1">
                                 <input
                                     type="text"
                                     placeholder="Masukkan kode promo agar lebih hemat"
-                                    className="w-full lg:px-4 px-3 py-2 border-2 border-gray-300 rounded-lg text-gray-700 focus:ring-1 focus:ring-blue-300 outline-1 focus:outline-2 outline-gray-200 focus:outline-secondary focus:outline-blue-500"
+                                    className="w-full lg:px-4 px-3 py-2 border-2 border-gray-300 rounded-lg text-gray-700 focus:ring-1 focus:ring-blue-300 outline-1 focus:outline-2 outline-gray-200 focus:outline-secondary focus:outline-blue-500 dark:text-gray-400"
                                     value={kodePromo}
                                     onChange={(e) => setKodePromo(e.target.value)}
                                     onKeyDown={(e) => e.key === "Enter" && cekDiskon()}
@@ -562,7 +559,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                                     type="button"
                                     onClick={cekDiskon}
                                     disabled={loading.diskon || diskon.kode !== ""}
-                                    className={`lg:px-4 px-3 py-2 rounded-md font-semibold cursor-pointer whitespace-nowrap ${
+                                    className={`lg:px-4 px-3 py-2 rounded-md font-semibold cursor-pointer whitespace-nowrap text-sm lg:text-base ${
                                         diskon.kode ? "bg-gray-400 text-white" : "bg-red-500 text-white"
                                     }`}
                                 >
@@ -577,22 +574,22 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                         </div>
 
                         <div className="mt-3">
-                            <h3 className="block mb-3 font-semibold text-lg text-slate-800">Payment details</h3>
+                            <h3 className="block mb-3 font-semibold text-lg text-slate-800 dark:text-gray-200">Payment details</h3>
                             <div className="text-base font-medium text-slate-500 flex flex-col gap-3">
-                                <div className="flex justify-between">
-                                    <span>Total harga tiket</span>
-                                    <span>{`Rp ${totalPrice.toLocaleString("id-ID")}`}</span>
+                                <div className="flex justify-between gap-2">
+                                    <span className="dark:text-gray-300 text-sm md:text-base">Total harga tiket</span>
+                                    <span className="dark:text-gray-300 text-sm md:text-base">{`Rp ${totalPrice.toLocaleString("id-ID")}`}</span>
                                 </div>
 
                                 {diskon.nilai_diskon !== 0 && (
-                                    <div className="flex justify-between text-green-600">
-                                        <span>Diskon</span>
-                                        <span>- {diskon.nilai_diskon}</span>
+                                    <div className="flex justify-between gap-2 text-green-600">
+                                        <span className="text-sm md:text-base">Diskon</span>
+                                        <span className="text-sm md:text-base">- Rp {diskon.nilai_diskon.toLocaleString("id-ID")}</span>
                                     </div>
                                 )}
 
-                                <div className="flex justify-between text-red-600 relative">
-                                    <span className="flex items-center gap-1">
+                                <div className="flex justify-between items-center gap-2 text-red-600 relative">
+                                    <span className="flex items-center gap-1 text-sm md:text-base">
                                         Pajak PPN
                                         {/* Icon tanda tanya dengan tooltip */}
                                         <span className="relative">
@@ -610,13 +607,13 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                                             )}
                                         </span>
                                     </span>
-                                    <span>+ Rp {totalPrice > 0 ?
+                                    <span className="text-sm md:text-base whitespace-nowrap">+ Rp {totalPrice > 0 ?
                                     pajakPPN.toLocaleString("id-ID") : 0}</span>
                                 </div>
 
                                 {/* Service Fee */}
-                                <div className="flex justify-between text-red-600 relative">
-                                    <span className="flex items-center gap-1">
+                                <div className="flex justify-between items-center gap-2 text-red-600 relative">
+                                    <span className="flex items-center gap-1 text-sm md:text-base">
                                         Biaya servis per pembelian
                                         {/* Icon tanda tanya dengan tooltip */}
                                         <span className="relative">
@@ -634,11 +631,11 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                                             )}
                                         </span>
                                     </span>
-                                    <span>+ Rp 15.000</span>
+                                    <span className="text-sm md:text-base whitespace-nowrap">+ Rp 15.000</span>
                                 </div>
 
                                 <div className="flex justify-between font-semibold mt-4 text-slate-700">
-                                    <span>Total transfer</span>
+                                    <span className="dark:text-gray-300">Total transfer</span>
                                     <span className="text-black">{`Rp ${totalBiaya.toLocaleString("id-ID")}`}</span>
                                 </div>
                             </div>
@@ -649,7 +646,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                                 checked={isChecked}
                                 onChange={() => setIsChecked(!isChecked)}
                             />
-                            <label htmlFor="terms" className="text-sm cursor-pointer text-gray-700">
+                            <label htmlFor="terms" className="text-sm cursor-pointer text-gray-700 dark:text-gray-400">
                                 Saya setuju dengan <span className="text-blue-600 font-semibold">Terms & Conditions</span>
                             </label>
                         </div>

@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Support\Colors\Color;
+use Illuminate\Support\Carbon;
 
 class HargaEventsRelationManager extends RelationManager
 {
@@ -32,9 +33,20 @@ class HargaEventsRelationManager extends RelationManager
                 Forms\Components\Textarea::make('deskripsi')
                     ->columnSpanFull(),
                 Forms\Components\DateTimePicker::make('tanggal_mulai')
-                    ->required(),
+                    ->required()
+                    ->reactive(),
                 Forms\Components\DateTimePicker::make('tanggal_selesai')
-                    ->required(),
+                    ->required()
+                    ->after('tanggal_mulai') // Opsional jika pakai Livewire property
+                    ->reactive()
+                    ->rules([
+                        fn (callable $get) => function ($attribute, $value, $fail) use ($get) {
+                            $start = $get('tanggal_mulai');
+                            if ($start && $value && Carbon::parse($value)->lessThanOrEqualTo(Carbon::parse($start))) {
+                                $fail('Tanggal selesai harus lebih dari tanggal mulai.');
+                            }
+                        },
+                    ]),
             ]);
     }
 
@@ -44,7 +56,9 @@ class HargaEventsRelationManager extends RelationManager
             ->recordTitleAttribute('nama')
             ->columns([
                 Tables\Columns\TextColumn::make('nama'),
-                Tables\Columns\TextColumn::make('harga'),
+                Tables\Columns\TextColumn::make('harga')
+                    ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.'))
+                    ->color('success'),
                 Tables\Columns\TextColumn::make('kuota'),
                 Tables\Columns\TextColumn::make('tanggal_mulai'),
                 Tables\Columns\TextColumn::make('tanggal_selesai'),

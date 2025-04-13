@@ -56,7 +56,7 @@ export default function RagamLaguDaerah({ user, laguDaerah = [] }) {
   return (
     <MainLayout title="Ragam Lagu Daerah | Sanggar Nusantara">
       <LightNavbar user={user} />
-      <main className="mt-44 lg:px-20 md:px-10 px-5 dark:bg-black">
+      <main className="pt-44 lg:px-20 md:px-10 px-5 dark:bg-black">
         <h1 className="md:flex gap-3 text-center justify-center items-center font-bold md:text-3xl text-2xl dark:text-gray-200">
           <span className="shadow text-center bg-emerald-500 w-[50px] h-[50px] flex items-center justify-center text-white rounded-full md:mx-0 mx-auto">
             <FaMusic size={30} />
@@ -69,7 +69,7 @@ export default function RagamLaguDaerah({ user, laguDaerah = [] }) {
           <div className="relative mb-10">
             <input
               type="text"
-              className="border bg-gray-100 border-gray-500 focus:outline-2 focus:outline-blue-500 dark:border-gray-900 dark:bg-gray-800 py-2 pr-5 pl-10 rounded md:w-[500px] w-full"
+              className="border bg-gray-100 border-gray-500 focus:outline-2 focus:outline-blue-500 dark:border-gray-900 dark:bg-gray-800 py-2 pr-5 pl-10 rounded md:w-[500px] w-full dark:text-gray-200"
               placeholder="Cari Lagu Daerah"
               onChange={(e) => setFilterSearch(e.target.value)}
             />
@@ -87,7 +87,7 @@ export default function RagamLaguDaerah({ user, laguDaerah = [] }) {
                 onClick={() => openModal(lagu)} // Klik untuk buka modal
               >
                 <img
-                  src={lagu.image ? `./storage/${lagu.image}` : "/images/NO_IMAGE_AVAILABLE.jpg"}
+                  src={lagu.image ? `../storage/${lagu.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                   className="absolute inset-0 w-full bg-gray-300 h-full object-cover"
                   alt={lagu.nama}
                 />
@@ -107,11 +107,11 @@ export default function RagamLaguDaerah({ user, laguDaerah = [] }) {
 
       {/* Modal Detail Lagu Daerah */}
       {modalOpen && selectedLagu && (
-        <section className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center lg:py-[10%]">
+        <section className="fixed inset-0 bg-black/40 flex items-center justify-center lg:py-[10%] z-9999999999">
           <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
             {/* Tombol Tutup Modal */}
             <button
-              className="cursor-pointer absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-orange-500"
+              className="cursor-pointer absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-emerald-500"
               onClick={() => setModalOpen(false)}
             >
               <FaTimes />
@@ -125,7 +125,7 @@ export default function RagamLaguDaerah({ user, laguDaerah = [] }) {
             <div>
               {/* Gambar */}
               <img
-                src={`./storage/${selectedLagu.image}`}
+                src={selectedLagu.image ? `../storage/${selectedLagu.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                 className="rounded h-[300px] object-cover w-full bg-gray-300"
                 alt={selectedLagu.nama}
               />

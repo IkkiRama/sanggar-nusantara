@@ -23,14 +23,23 @@ export default function MainLayout({ children, title = 'Home' }: MainLayoutProps
     <div className="w-full">
         <Head title={title}>
         </Head>
-        {/* Content */}
-        <div className="relative z-10">
-            <main className="transition-colors duration-300">
-                {children}
-            </main>
-            <Footer />
-            <ScrollToTop />
+
+        <div className="min-h-screen relative transition-colors duration-300">
+            <div className="fixed inset-0 transition-colors duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100" />
+
+                {/* Optional: Add subtle texture */}
+                <div className="absolute inset-0 bg-pattern opacity-[0.02] pointer-events-none" />
+            </div>
+            <div className="relative overflow-x-clip z-10 dark:bg-gray-950">
+                <main className="transition-colors duration-300">
+                    {children}
+                </main>
+                <Footer />
+                <ScrollToTop />
+            </div>
         </div>
+        {/* Content */}
     </div>
   );
 }

@@ -59,10 +59,10 @@ class PembelianEventResource extends Resource
                     ->required(),
                 Forms\Components\Select::make('jenis_tiket')
                     ->options([
-                        "umum" => "Umum",
-                        "vip" => "VIP",
-                        "vvip" => "VVIP",
-                        "beasiswa" => "Beasiswa",
+                        "Umum" => "Umum",
+                        "VIP" => "VIP",
+                        "VVIP" => "VVIP",
+                        "Beasiswa" => "Beasiswa",
                     ])
                     ->preload()
                     ->required(),

@@ -193,12 +193,12 @@ export default function Event() {
                         </div>
 
                         <div className="hidden md:flex justify-start md:justify-center mb-4">
-                            <button
+                            {/* <button
                                 onClick={() => setShowFilter(true)}
                                 className="md:mr-4 bg-gray-200 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 outline-1 outline-gray-300 flex items-center cursor-pointer"
                             >
                                 <SlidersHorizontal className="w-5 h-5 mr-2" /> Filter
-                            </button>
+                            </button> */}
 
                             {["Semua Kegiatan", "Sedang Berlangsung", "Sudah Berakhir"].map((tab) => (
                                 <button
@@ -276,7 +276,7 @@ export default function Event() {
 
                                 <div className="mt-3 md:flex gap-5 px-4 pb-4">
                                     <p className="w-[70%] flex md:mb-0 mb-2 gap-2 text-gray-600 items-center">
-                                        <MapPin className="w-[30px] h-[30px]" />
+                                        <MapPin className="w-[25px] h-[25px]" />
                                         <span className="line-clamp-2 text-sm">{item.tempat}</span>
                                     </p>
                                     <p className="w-[30%] flex gap-2 text-sm text-gray-600 items-center">

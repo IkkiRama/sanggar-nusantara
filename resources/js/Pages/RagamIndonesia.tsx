@@ -250,8 +250,8 @@ export default function RagamIndonesia() {
     <MainLayout title="Ragam Indonesia | Sanggar Nusantara">
         <LightNavbar user={user} />
 
-      <header className="mt-20 relative grid lg:grid-cols-2 pt-10 lg:px-10 px-5 lg:max-h-[700px] max-h-screen overflow-y-hidden after:absolute after:bg-gradient-to-t dark:after:from-black dark:after:to-black/10 after:from-white after:to-white/10 after:w-full after:h-[130px] after:bottom-0">
-        <div className="h-full flex-col justify-center items-center lg:pt-20">
+      <header className="pt-20 dark:bg-black relative grid lg:grid-cols-2 pt-10 lg:px-10 px-5 max-h-screen overflow-y-hidden after:absolute after:bg-gradient-to-t dark:after:from-black dark:after:to-black/10 after:from-white after:to-white/10 after:w-full after:h-[130px] after:bottom-0">
+        <div className="h-full flex-col justify-center items-center lg:pt-30">
           <h4 className="text-2xl font-semibold text-red-500 mb-5">
             Indonesia Kaya
           </h4>
@@ -260,12 +260,12 @@ export default function RagamIndonesia() {
             Memukau
           </h1>
           <div className="flex gap-5">
-            <a href="#jelajahi" className="bg-red-500 px-4 py-3 rounded-lg border-2 border-red-500 text-white">
+            <Link href="#jelajahi" className="bg-red-500 px-4 py-3 rounded-lg border-2 border-red-500 text-white">
                 Jelajahi Sekarang
-            </a>
-            <a href="/peta-interaktif" className="bg-white px-4 py-3 rounded-lg border-2 border-red-500 text-red-500">
+            </Link>
+            <Link href="/peta-interaktif" className="bg-white px-4 py-3 rounded-lg border-2 border-red-500 dark:bg-gray-950 dark:text-white dark:border-white text-red-500">
                 Peta Interaktif
-            </a>
+            </Link>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-5 lg:rotate-3 lg:-mt-20 mt-20 overflow-hidden">
@@ -327,7 +327,7 @@ export default function RagamIndonesia() {
       </header>
 
       <main id="jelajahi" className="lg:px-20 md:px-10 px-5 dark:bg-black">
-        <section className="grid lg:grid-cols-2 gap-10 py-7 mt-20 place-items-center">
+        <section className="grid lg:grid-cols-2 gap-10 py-27 place-items-center">
           <div>
             <h2 className="font-bold md:text-3xl text-xl mb-3 dark:text-gray-100">
               INDONESIA KAYA AKAN BUDAYA DAN KEBERAGAMAN-NYA
@@ -508,7 +508,7 @@ export default function RagamIndonesia() {
               </h5>
 
               <Accordion atomic={true}>
-                <AccordionItem title="Makna Lagu">
+                <AccordionItem title="Makna Lagu" className="bg-gray-100 dark:bg-gray-800 rounded-md">
                   <p className="p-5 text-sm text-gray-800 dark:text-gray-200">
                     <p
                       dangerouslySetInnerHTML={{ __html: selectedSong.mean }}
@@ -662,7 +662,7 @@ export default function RagamIndonesia() {
           <ReactCardSlider slides={slides} />
         </section>
 
-        <section className="mt-20 mb-20">
+        <section className="mt-20 pb-20">
           <div className="flex items-center justify-between">
             <div className="md:flex gap-10 items-center mb-10">
               <div className="shadow py-4 w-[100px] text-center rounded bg-orange-500 text-white">

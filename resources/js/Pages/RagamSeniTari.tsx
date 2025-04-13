@@ -53,7 +53,7 @@ export default function RagamSeniTari({ user, seniTari }) {
   return (
     <MainLayout title="Ragam Seni Tari | Sanggar Nusantara">
       <LightNavbar user={user} />
-      <main className="mt-44 lg:px-20 md:px-10 px-5 dark:bg-black">
+      <main className="pt-44 lg:px-20 md:px-10 px-5 dark:bg-black">
         <h1 className="md:flex gap-3 text-center justify-center items-center font-bold md:text-3xl text-2xl dark:text-gray-200">
           <span className="shadow text-center bg-yellow-500 w-[50px] h-[50px] flex items-center justify-center text-white rounded-full md:mx-0 mx-auto">
             <FaTheaterMasks size={30} />
@@ -66,7 +66,7 @@ export default function RagamSeniTari({ user, seniTari }) {
           <div className="relative mb-10">
             <input
               type="text"
-              className="border bg-gray-100 border-gray-500 focus:outline-2 focus:outline-red-500 dark:border-gray-900 dark:bg-gray-800 py-2 pr-5 pl-10 rounded md:w-[500px] w-full"
+              className="border bg-gray-100 border-gray-500 focus:outline-2 focus:outline-red-500 dark:border-gray-900 dark:bg-gray-800 py-2 pr-5 pl-10 rounded md:w-[500px] w-full dark:text-gray-200"
               placeholder="Cari Seni Tari"
               onChange={(e) => setFilterSearch(e.target.value)}
             />
@@ -84,7 +84,7 @@ export default function RagamSeniTari({ user, seniTari }) {
                 onClick={() => openModal(tari)} // Klik untuk buka modal
               >
                 <img
-                  src={tari.image ? `./storage/${tari.image}` : "/images/NO_IMAGE_AVAILABLE.jpg"}
+                  src={tari.image ? `../storage/${tari.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                   className="absolute inset-0 w-full bg-gray-300 h-full object-cover"
                   alt={tari.nama}
                 />
@@ -108,7 +108,7 @@ export default function RagamSeniTari({ user, seniTari }) {
           <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
             {/* Tombol Tutup Modal */}
             <button
-              className="cursor-pointer absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-orange-500"
+              className="cursor-pointer absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-yellow-500"
               onClick={() => setModalOpen(false)}
             >
               <FaTimes />
@@ -122,7 +122,7 @@ export default function RagamSeniTari({ user, seniTari }) {
             <div>
               {/* Gambar */}
               <img
-                src={`../storage/${selectedTari.image}`}
+                src={selectedTari.image ? `../storage/${selectedTari.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                 className="rounded h-[200px] lg:h-[400px] object-cover w-full bg-gray-300"
                 alt={selectedTari.nama}
               />
