@@ -10,17 +10,10 @@ import content from "./../data/content.json";
 // icons
 import {
   FaCalendar,
-  FaChevronLeft,
-  FaChevronRight,
-  FaComment,
   FaEye,
-  FaFacebookF,
-  FaHeart,
-  FaInstagram,
   FaMapMarkerAlt,
   FaUser,
   FaQuoteRight,
-  FaYoutube,
   FaMapMarkedAlt,
 } from "react-icons/fa";
 import {

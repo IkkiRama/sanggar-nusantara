@@ -342,7 +342,7 @@ class FrontController extends Controller
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         Config::$isProduction = true;
         Config::$isSanitized = true;
-        Config::$is3ds = true;
+        Config::$is3ds = true; 
 
         return DB::transaction(function () use ($request) {
             $discountId = $request->discount_amount > 0 ? $request->discount_id : null;

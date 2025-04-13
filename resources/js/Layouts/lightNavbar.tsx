@@ -3,18 +3,16 @@ import { Link, usePage } from '@inertiajs/react';
 import { ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-    FaHome, FaInfoCircle, FaBuilding, FaTimes, FaBars,
-    FaUser, FaEnvelope, FaUserCircle, FaSignOutAlt,
-    FaTachometerAlt, FaSun, FaMoon, FaFolder,
-    FaStar, FaPodcast,
-    FaNetworkWired,
-    FaHistory,
+    FaHome, FaTimes, FaBars,
+    FaUser, FaUserCircle, FaSignOutAlt,
     FaBookOpen,
-    FaTicketAlt
+    FaTicketAlt,
+    FaSun,
+    FaMoon
 } from 'react-icons/fa';
 
-import { BookOpen } from 'lucide-react';
 import { FaEarthAsia } from 'react-icons/fa6';
+import ThemeToggle from '../Components/ThemeToggle';
 
 const NAV_ITEMS = [
     { path: '/', label: 'Beranda', icon: FaHome },
@@ -251,6 +249,7 @@ const Navbar = ({user}) => {
                             >
                                 {isDark ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
                             </button> */}
+                            <ThemeToggle />
 
                             {user ? (
                                 <div className="relative">
