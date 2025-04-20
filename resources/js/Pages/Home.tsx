@@ -81,7 +81,47 @@ const Home = () => {
   const artikelPertama = artikels.length > 0 ? artikels[0] : null;
   const dataArtikel = artikels.length > 3 ? artikels.slice(1, 4) : [];
 
-    const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const [nama, setNama] = useState("");
+  const [email, setEmail] = useState("");
+  const [pesan, setPesan] = useState("");
+
+    const handleSubmit = async (e : any) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        setSuccessMessage('');
+
+
+        try {
+            const response = await fetch('http://sanggar-nusantara.test/api/kontak', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({nama, email, pesan}),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to send your message. Please try again later.');
+            }
+
+            setSuccessMessage('Pesan Anda berhasil dikirim!');
+            setNama("")
+            setEmail("")
+            setPesan("")
+
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
   useEffect(() => {
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -734,15 +774,22 @@ const Home = () => {
             {tabActive == "news" ? (
                 <>
                     <Link href={`/artikel/${artikelPertama.slug}`} className="grid lg:grid-cols-5 gap-10 items-center lg:px-20 md:px-10 px-5 pt-10">
-                    <div className="h-[200px] md:h-[350px] w-full rounded-md overflow-hidden lg:col-span-2">
-                        <img
-                        src={artikelPertama.image ? `./storage/${artikelPertama.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
-                        alt={`image artikel ${artikelPertama.nama}`}
-                        className="object-cover h-full w-full"
-                        data-aos-once="true"
-                        data-aos="fade-left"
-                        />
-                    </div>
+                        <div className="h-[200px] md:h-[350px] w-full rounded-md overflow-hidden lg:col-span-2 relative">
+                            <img
+                                src={artikelPertama.image ? `./storage/${artikelPertama.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                                alt={`image artikel ${artikelPertama.nama}`}
+                                className="object-cover h-full w-full"
+                                data-aos-once="true"
+                                data-aos="fade-left"
+                            />
+
+                            {artikelPertama.status_artikel === "premium" && (
+                                <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                    Premium
+                                </span>
+                            )}
+                        </div>
+
                         <div
                         className="lg:col-span-3"
                         data-aos-once="true"
@@ -789,11 +836,19 @@ const Home = () => {
                         <section className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-10 md:px-20 px-4 mt-10">
                         {dataArtikel.length > 0 && dataArtikel.map((artikel) => (
                             <Link key={artikel.slug} href={`/news/read/${artikel.slug}`} className="mt-5">
-                                <img
-                                src={`./storage/${artikel.image}`} // Menggunakan gambar dari API
-                                alt={artikel.title}
-                                className="h-[200px] sm:h-[250px] object-cover w-full rounded"
-                                />
+
+                                <div className="h-[200px] sm:h-[250px] relative">
+                                    {artikel.status_artikel === "premium" && (
+                                        <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                            Premium
+                                        </span>
+                                    )}
+                                    <img
+                                        src={`./storage/${artikel.image}`} // Menggunakan gambar dari API
+                                        alt={artikel.title}
+                                        className="h-full object-cover w-full rounded"
+                                    />
+                                </div>
 
                                 <h3 className="mt-3 text-xl font-bold text-white">
                                 {artikel.title} {/* Menampilkan judul artikel */}
@@ -857,11 +912,21 @@ const Home = () => {
                 <div className="max-w-[1700px] py-10 lg:px-10 px-3 grid lg:grid-cols-3 grid-cols-1 gap-0 md:gap-10 items-center">
                     {events.length > 0 && events.map((event, index) => (
                         <Link key={index} href={`/event/${event.slug}`} className="bg-white rounded-lg shadow-sm mb-5 md:mb-0 dark:bg-gray-950">
-                            <img
-                            src={event.image ? `./storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
-                            alt={event.nama}
-                            className="w-full h-[200px] md:h-[270px] object-cover rounded-lg mb-8"
-                            />
+
+                            <div className="h-[200px] md:h-[270px] relative">
+
+                                {event.status_event === "premium" && (
+                                    <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                        Premium
+                                    </span>
+                                )}
+                                <img
+                                src={event.image ? `./storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
+                                alt={event.nama}
+                                className="w-full h-full object-cover rounded-lg mb-8"
+                                />
+
+                            </div>
                             <h2 className={`px-4 text-lg font-bold mb-2 line-clamp-2 dark:text-gray-200`}>{event.nama}</h2>
 
                             <p className="px-4 text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px] line-clamp-3">{event.excerpt}</p>
@@ -1161,24 +1226,40 @@ const Home = () => {
 
           <div className="w-full lg:w-[70%] pl-5 pr-5 lg:pl-0 lg:px-0 lg:pr-20">
 
-            <form action="" className="mt-10 lg:mt-0 ">
+            <form onSubmit={handleSubmit} className="mt-10 lg:mt-0 ">
                 <label htmlFor="name" className="w-full text-red-500 font-semibold">Nama</label>
                 <input type="text" id="name"
+                    value={nama}
+                    onChange={(e)=> setNama(e.target.value)}
                     className="w-full rounded-lg border-2 border-gray-200 focus:outline-red-500 p-3 outline-2 outline-gray-200 focus:outline-secondary my-3 bg-slate-200 text-dark"
+                    required
                     placeholder="Masukkan nama anda..."/>
 
                 <label htmlFor="email" className="w-full text-red-500 font-semibold">Email</label>
                 <input type="email" id="email"
+                    value={email}
+                    onChange={(e)=> setEmail(e.target.value)}
                     className="w-full rounded-lg border-2 border-gray-200 focus:outline-red-500 p-3 outline-2 outline-gray-200 focus:outline-secondary my-3 bg-slate-200 text-dark"
+                    required
                     placeholder="Masukkan email anda..."/>
 
                 <label htmlFor="message" className="w-full text-red-500 font-semibold">Pesan</label>
                 <textarea id="message" rows={5}
+                    value={pesan}
+                    onChange={(e)=> setPesan(e.target.value)}
                     className="w-full rounded-lg border-2 border-gray-200 focus:outline-red-500 p-3 outline-2 outline-gray-200 focus:outline-secondary my-3 bg-slate-200 text-dark"
+                    required
                     placeholder="Masukkan pesan anda..."></textarea>
 
+                {/* Submit Button */}
                 <button
-                    className="px-10 py-3 bg-red-500 focus:outline-secondary focus:outline-blue-500 rounded-lg shadow-md text-white font-semibold">Kirim</button>
+                    disabled={loading}
+                    type="submit"
+                    className="px-10 py-3 bg-red-500 focus:outline-secondary focus:outline-blue-500 cursor-pointer rounded-lg shadow-md text-white font-semibold">
+                  {loading ? 'Mengirim...' : 'Kirim Pesan'}
+                </button>
+                {error && <p className="text-red-500 mt-2">{error}</p>}
+                {successMessage && <p className="text-green-500 mt-2">{successMessage}</p>}
 
             </form>
 

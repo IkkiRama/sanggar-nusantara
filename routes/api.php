@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/artikel/{slug}', [FrontController::class, 'showArtikel']);
 Route::post('/komen', [FrontController::class, 'storeKomenAPI']);
 Route::post('/diskon', [FrontController::class, 'showDiskonAPI']);
+Route::post('/kontak', [FrontController::class, 'submitKontak']);
 Route::post('/bayar', [TransaksiController::class, 'storeOrderAPI']);
 // Route::post('/updatePassword', [FrontController::class, 'updatePasswordAPI']);
 // Route::middleware('auth:sanctum')->get('/midtrans/token/{order_id}', [ProfileController::class, 'getSnapToken']);

@@ -123,9 +123,9 @@ export default function Artikel() {
                     }}
                 >
                     {artikelTerbaru.status_artikel === "premium" && (
-                    <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
-                        Premium
-                    </span>
+                        <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                            Premium
+                        </span>
                     )}
                     <div className="w-[80%]">
                         <h6 className={`${getRandomColor("text")} md:mb-3 mb-1 font-semibold md:text-base text-sm`}>

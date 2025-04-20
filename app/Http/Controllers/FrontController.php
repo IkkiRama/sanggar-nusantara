@@ -9,6 +9,7 @@ use App\Models\Discount;
 use App\Models\DiscountUser;
 use App\Models\Event;
 use App\Models\Komentar;
+use App\Models\Kontak;
 use App\Models\LaguDaerah;
 use App\Models\MakananKhas;
 use App\Models\Order;
@@ -400,6 +401,34 @@ class FrontController extends Controller
             'seniTari' => $seniTari,
         ]);
     }
+
+    public function submitKontak(Request $request){
+        $headers = [
+            'Content-Type' => 'application/json',
+            'X-Powered-By' => 'Rifki Romadhan',
+            'X-Content-Language' => 'id',
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ];
+
+        $validated = $request->validate([
+            'nama'  => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'pesan' => 'required|string',
+        ]);
+
+        // Simpan data ke dalam database
+        $contact = Kontak::create($validated);
+
+        // Kembalikan response
+        return response()->json([
+            'success' => true,
+            'message' => 'Kontak berhasil disimpan.',
+            'data'    => $contact,
+        ], 201, $headers);
+    }
+
+
 
     public function updatePasswordAPI(Request $request)
     {
