@@ -113,7 +113,7 @@ export default function Profile({user, pembelianEvents}) {
 
         <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">
             <div className="flex flex-wrap gap-5 lg:flex-nowrap 2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">
-            
+
                 <UserProfile isActive="dashboard" user={user} />
                 <div className="p-5 md:mt-0 mt-40 relative overflow-x-auto bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl w-full lg:w-[75%] table-scroll">
                     <div className="bg-red-500 text-white p-4 rounded-lg mb-4">
@@ -265,7 +265,7 @@ export default function Profile({user, pembelianEvents}) {
                                 ))}
                                 {pembelianEvents.length === 0 && (
                                     <div className="mt-16 flex justify-center items-center flex-col">
-                                        <img src="./images/kosong.svg" className="lg:w-[10%] w-[25%] h-[30%]" alt="icon-splash" />
+                                        <img src="./../images/kosong.svg" className="lg:w-[10%] w-[25%] h-[30%]" alt="icon-splash" />
                                         <h1 className="text-2xl lg:text-3xl text-center font-semibold mt-5 lg:mt-8 text-red-500">Belum Ada Event</h1>
                                     </div>
                                 )}
