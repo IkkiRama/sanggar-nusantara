@@ -4,6 +4,15 @@ LINK GITHUB :
 https://github.com/IkkiRama/sanggar-Nusantara/
 
 
+KETIK
+
+npm run dev
+
+terlebih dahulu sebelum mengunjungi websitenya
+
+
+
+
 AKUN ADMIN USER:
 email : official@ikki.com
 password : 123
