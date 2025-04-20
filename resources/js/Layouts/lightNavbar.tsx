@@ -255,7 +255,7 @@ const Navbar = ({user}) => {
                                 <div className="relative">
                                     <div className="flex items-center space-x-4">
                                         {/* <Link
-                                            href="/profile"
+                                            href="/profile/dashboard"
                                             className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center bg-white/80 text-gray-700 hover:bg-gray-100 shadow-lg`}
                                         >
                                             <FaTachometerAlt className="mr-2" />
@@ -279,7 +279,7 @@ const Navbar = ({user}) => {
                                                 className={`absolute right-0 mt-2 w-48 rounded-xl shadow-lg py-2 border bg-white border-gray-100`}
                                             >
                                                 <Link
-                                                    href="/profile"
+                                                    href="/profile/dashboard"
                                                     className={`block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50`}
                                                 >
                                                     <FaUser className="inline-block mr-2" />
@@ -449,11 +449,11 @@ const Navbar = ({user}) => {
                                                 /> */}
                                                 <MobileMenuItem
                                                 //@ts-ignore
-                                                    href="/profile"
+                                                    href="/profile/dashboard"
                                                     icon={FaUser}
                                                     label="Profile"
                                                     onClick={handleItemClick}
-                                                    isActive={url === '/profile'}
+                                                    isActive={url === '/profile/dashboard'}
                                                 />
                                                 <a
                                                     href="/logout"

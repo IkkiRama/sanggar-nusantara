@@ -44,7 +44,7 @@ class EventResource extends Resource
                 Forms\Components\TextInput::make('tempat')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('tanggal')
+                Forms\Components\DateTimePicker::make('tanggal')
                     ->required(),
                  Forms\Components\TextInput::make('link_gmap')
                     ->label('Google Maps Link')

@@ -1,8 +1,15 @@
 /** @type {import('tailwindcss').Config} */
+
+const defaultTheme = require("tailwindcss/defaulttheme");
+
 module.exports = {
     darkMode: "class",
     content: ["./src/**/*.{js,jsx,ts,tsx}"],
     theme: {
+        screens: {
+            xs: "425px",
+            ...defaultTheme.screens,
+        },
         extend: {
             animation: {
                 marquee: "marquee 30s linear infinite",
@@ -33,9 +40,16 @@ module.exports = {
             },
 
             screens: {
-                "2xl": "1320px",
+                // xs: "480px", // Extra small devices
+                // sm: "640px", // Small devices
+                // md: "768px", // Medium devices
+                // lg: "1024px", // Large devices
+                // xl: "1980px", // Extra large devices
+                // "2xl": "2236px", // 2X large devices
+                "3xl": "1920px", // Custom breakpoint
             },
         },
     },
     plugins: [],
+    safelist: ["ultra:h-[40vh]", "ultra:text-4xl", "ultra:max-w-[2000px]"],
 };

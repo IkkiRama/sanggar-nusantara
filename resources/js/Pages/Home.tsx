@@ -128,104 +128,106 @@ const Home = () => {
     <MainLayout title="Sanggar Nusantara | Eksplorasi Budaya & Kekayaan Alam Indonesia">
       <LightNavbar user={user} />
 
-      <section className="grid bg-white dark:bg-gray-950 min-h-[100vh] lg:grid-cols-2 relative z-10 overflow-hidden">
-        {/* Background Gradient Circle */}
-        <span
-          className="w-[1000px] h-[1000px] rounded-full absolute -left-[500px] -top-[500px] -rotate-[60deg] animate-spin-slow"
-          style={{
-            backgroundImage:
-              "radial-gradient(169.40% 89.55% at 94.76% 6.29%, rgba(239, 68, 68, 0.70) 0%, rgba(239, 68, 68, 0.0) 100%)",
-          }}
-        ></span>
+      <section className="bg-white dark:bg-gray-950 max-h-[100vh]  relative z-10 overflow-hidden">
+        <div className="grid lg:grid-cols-2 max-w-[1600px] h-full mx-auto px-4">
+            {/* Background Gradient Circle */}
+            <span
+            className="w-[1000px] h-[1000px] rounded-full absolute -left-[500px] -top-[500px] -rotate-[60deg] animate-spin-slow"
+            style={{
+                backgroundImage:
+                "radial-gradient(169.40% 89.55% at 94.76% 6.29%, rgba(239, 68, 68, 0.70) 0%, rgba(239, 68, 68, 0.0) 100%)",
+            }}
+            ></span>
 
-        {/* Left Section */}
-        <section className="md:pl-24 px-5 md:px-0 flex lg:flex-col sm:flex-row flex-col lg:items-start items-center lg:justify-center justify-between lg:order-1 order-2 lg:gap-0 gap-10 mb-10">
+            {/* Left Section */}
+            <section className="md:pl-24 px-5 md:px-0 flex lg:flex-col sm:flex-row flex-col lg:items-start items-center lg:justify-center justify-between lg:order-1 order-2 lg:gap-0 gap-10 mb-10">
 
-          {/* Big Title */}
-          <div className="sm:hidden md:hidden flex mt-5 justify-center w-full sm:order-1 order-1 lg:mb-10">
-            <h1
-              className="lg:text-8xl md:text-5xl sm:text-7xl text-3xl text-center font-semibold text-red-500"
-              data-aos="fade-right"
-            >
-              SANGGAR NUSANTARA
-            </h1>
-          </div>
+            {/* Big Title */}
+            <div className="sm:hidden md:hidden flex mt-5 justify-center w-full sm:order-1 order-1 lg:mb-10">
+                <h1
+                className="lg:text-8xl md:text-5xl sm:text-7xl text-3xl text-center font-semibold text-red-500"
+                data-aos="fade-right"
+                >
+                SANGGAR NUSANTARA
+                </h1>
+            </div>
 
-          <div className="hidden lg:flex w-full sm:order-1 order-1 lg:mb-10">
-            <h1
-              className="lg:text-8xl md:text-5xl sm:text-7xl text-3xl font-semibold text-red-500"
-              data-aos="fade-right"
-            >
-              SANGGAR <br /> NUSANTARA
-            </h1>
-          </div>
+            <div className="hidden lg:flex w-full sm:order-1 order-1 lg:mb-10">
+                <h1
+                className="lg:text-8xl md:text-5xl sm:text-7xl text-3xl font-semibold text-red-500"
+                data-aos="fade-right"
+                >
+                SANGGAR <br /> NUSANTARA
+                </h1>
+            </div>
 
-          {/* Description Text */}
-          <div className="w-full sm:order-1 order-2 lg:mb-32">
+            {/* Description Text */}
+            <div className="w-full sm:order-1 order-2 lg:mb-32">
 
-            <p
-              className="text-sm lg:text-[16px] text-gray-800 dark:text-gray-200 animate-slide-right leading-6"
-              data-aos-delay="100"
-            >
-              {content.header.id}
-            </p>
-          </div>
+                <p
+                className="text-sm lg:text-[16px] text-gray-800 dark:text-gray-200 animate-slide-right leading-6"
+                data-aos-delay="100"
+                >
+                {content.header.id}
+                </p>
+            </div>
 
-          {/* Thumbnails Grid */}
-          <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-2 lg:gap-5 gap-3 sm:order-2 order-1 md:mr-24 lg:mr-0">
-            {[
-              { img: "/images/header/subheader2_thumb.jpg", delay: 900 },
-              { img: "/images/header/subheader1_thumb.jpg", delay: 600 },
-              { img: "/images/header/subheader3_thumb.jpg", delay: 300 },
-              { img: "/images/header/subheader4_thumb.jpg", delay: 200 },
-            ].map((thumb, idx) => (
-              <div
-                key={idx}
-                className="cursor-pointer transition-transform hover:scale-110 after:transition-all relative after:content-[''] after:inset-0 after:absolute after:bg-black/30 after:rounded-md hover:after:scale-0 after:scale-100 lg:col-span-1 sm:col-span-2"
-                onClick={() => setOpen(true)}
-                data-aos="fade-left"
-                data-aos-delay={thumb.delay}
-              >
-                <img
-                  src={thumb.img}
-                  alt={`subheader${idx + 1}`}
-                  className="lg:w-[120px] sm:w-[200px] w-full sm:h-[120px] h-[100%] rounded-md object-cover"
+            {/* Thumbnails Grid */}
+            <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-2 lg:gap-5 gap-3 sm:order-2 order-1 md:mr-24 lg:mr-0">
+                {[
+                { img: "/images/header/subheader2_thumb.jpg", delay: 900 },
+                { img: "/images/header/subheader1_thumb.jpg", delay: 600 },
+                { img: "/images/header/subheader3_thumb.jpg", delay: 300 },
+                { img: "/images/header/subheader4_thumb.jpg", delay: 200 },
+                ].map((thumb, idx) => (
+                <div
+                    key={idx}
+                    className="cursor-pointer transition-transform hover:scale-110 after:transition-all relative after:content-[''] after:inset-0 after:absolute after:bg-black/30 after:rounded-md hover:after:scale-0 after:scale-100 lg:col-span-1 sm:col-span-2"
+                    onClick={() => setOpen(true)}
+                    data-aos="fade-left"
+                    data-aos-delay={thumb.delay}
+                >
+                    <img
+                    src={thumb.img}
+                    alt={`subheader${idx + 1}`}
+                    className="lg:w-[120px] sm:w-[200px] w-full sm:h-[120px] h-[100%] rounded-md object-cover"
+                    />
+                </div>
+                ))}
+                <Lightbox
+                open={open}
+                close={() => setOpen(false)}
+                slides={[
+                    { src: "/images/header/subheader1.jpg" },
+                    { src: "/images/header/subheader2.jpg" },
+                    { src: "/images/header/subheader3.jpg" },
+                    { src: "/images/header/subheader4.jpg" },
+                ]}
                 />
-              </div>
-            ))}
-            <Lightbox
-              open={open}
-              close={() => setOpen(false)}
-              slides={[
-                { src: "/images/header/subheader1.jpg" },
-                { src: "/images/header/subheader2.jpg" },
-                { src: "/images/header/subheader3.jpg" },
-                { src: "/images/header/subheader4.jpg" },
-              ]}
+            </div>
+
+            </section>
+
+            {/* Right Section with Image Background */}
+            <section className="lg:h-[800px] text-center items-center flex justify-center flex-wrap w-full h-[300px] sm:h-full mt-12 lg:order-2 order-1">
+            <img
+                id="headerImg"
+                src="/images/header/header.png"
+                alt="headerImg"
+                className="h-full w-full object-cover"
             />
-          </div>
-
-        </section>
-
-        {/* Right Section with Image Background */}
-        <section className="lg:h-[800px] text-center items-center flex justify-center flex-wrap w-full h-[300px] sm:h-full mt-12 lg:order-2 order-1">
-          <img
-            id="headerImg"
-            src="/images/header/header.png"
-            alt="headerImg"
-            className="h-full w-full object-cover"
-          />
 
 
-          {/* Large Title */}
-          {/* <div className="lg:hidden w-full mb-10 flex justify-center text-center z-10">
-            <h1
-              className="lg:text-8xl sm:text-7xl text-4xl font-semibold text-red-500"
-              data-aos="fade-left"
-              >SANGGAR NUSANTARA</h1>
-          </div> */}
+            {/* Large Title */}
+            {/* <div className="lg:hidden w-full mb-10 flex justify-center text-center z-10">
+                <h1
+                className="lg:text-8xl sm:text-7xl text-4xl font-semibold text-red-500"
+                data-aos="fade-left"
+                >SANGGAR NUSANTARA</h1>
+            </div> */}
 
-        </section>
+            </section>
+        </div>
       </section>
 
       <br />
@@ -233,219 +235,226 @@ const Home = () => {
       <br />
       <br />
 
-      <section className="grid lg:grid-cols-2 lg:px-20 md:px-14 sm:px-12 px-8 gap-28 items-center lg:mt-20 mt-10 relative">
-        <span
-          className="lg:w-[1000px] lg:h-[1000px] w-[500px] h-[500px] lg:rounded-full absolute lg:-right-[250px] lg:-top-[500px] lg:-rotate-[0deg] -right-[200px] rotate-90"
-          style={{
-            backgroundImage:
-              "radial-gradient(169.40% 89.55% at 94.76% 6.29%, rgba(239, 68, 68, 0.70) 0%, rgba(239, 68, 68, 0.0) 100%)",
-          }}
-        ></span>
+      <section className="overflow-hidden lg:px-20 md:px-14 sm:px-12 px-8 gap-28 items-center lg:mt-20 mt-10 relative">
+        <div className="grid lg:grid-cols-2 max-w-[1600px] h-full mx-auto px-4 ">
+            <span
+            className="lg:w-[1000px] lg:h-[1000px] w-[500px] h-[500px] lg:rounded-full absolute lg:-right-[250px] lg:-top-[500px] lg:-rotate-[0deg] -right-[200px] rotate-90"
+            style={{
+                backgroundImage:
+                "radial-gradient(169.40% 89.55% at 94.76% 6.29%, rgba(239, 68, 68, 0.70) 0%, rgba(239, 68, 68, 0.0) 100%)",
+            }}
+            ></span>
 
-        <img
-          src="/images/plane.png"
-          alt="plane"
-          className="absolute w-[200px] lg:-top-[100px] -top-[150px]"
-        />
+            <img
+            src="/images/plane.png"
+            alt="plane"
+            className="absolute w-[200px] lg:-top-[100px] -top-[150px]"
+            />
 
-        <div className="md:text-left text-center ">
-          <h2
-            className="font-bold md:text-3xl text-2xl mb-5 dark:text-gray-200"
-            data-aos="fade-right"
-            data-aos-once="true"
-          >
-            <span className="relative md:pe-32 pe-16 md:pl-0 pl-16">
-              NUSANTARA
-              <img
-                src="/images/Decore.png"
-                className="absolute bottom-[10px] h-[23px] left-[-25px] w-full -z-10 sm:block hidden"
-              />
-            </span>
-          </h2>
-          <p
-            className="md:text-sm text-base text-gray-800 dark:text-gray-300 mb-10"
-            data-aos="fade-right"
-            data-aos-once="true"
-            data-aos-delay="200"
-          >
-            {content.explore.body.id}
-          </p>
-
-          <span>
-            <Link
-              href="/ragam-indonesia"
-              className="md:px-7 py-3 px-5 inline-flex gap-3 items-center bg-red-500 hover:bg-red-400 rounded-full text-white md:text-sm text-[12px]"
-              data-aos="fade-up"
-              data-aos-once="true"
-              data-aos-delay="500"
+            <div className="md:text-left text-center ">
+            <h2
+                className="font-bold md:text-3xl text-2xl mb-5 dark:text-gray-200"
+                data-aos="fade-right"
+                data-aos-once="true"
             >
-              <FaMapMarkerAlt size={20} />
-              Explorasi Sekarang
-            </Link>
-          </span>
-        </div>
-        <div className="h-[400px] lg:flex hidden lg:justify-start gap-5">
-          <div className="h-full w-[40%] -translate-y-10">
-            <img
-              src="/images/explore/2.jpg"
-              alt="image explore section 1"
-              className="h-full w-full object-cover"
-              data-aos="fade-up"
-              data-aos-once="true"
-            />
-          </div>
-          <div className="h-full w-[40%] translate-y-10">
-            <img
-              src="/images/explore/1.jpg"
-              alt="image explore section 2"
-              className="h-full w-full object-cover"
-              data-aos="fade-down"
-              data-aos-once="true"
-            />
-          </div>
+                <span className="relative md:pe-32 pe-16 md:pl-0 pl-16">
+                NUSANTARA
+                <img
+                    src="/images/Decore.png"
+                    className="absolute bottom-[10px] h-[23px] left-[-25px] w-full -z-10 sm:block hidden"
+                />
+                </span>
+            </h2>
+            <p
+                className="md:text-sm text-base text-gray-800 dark:text-gray-300 mb-10"
+                data-aos="fade-right"
+                data-aos-once="true"
+                data-aos-delay="200"
+            >
+                {content.explore.body.id}
+            </p>
+
+            <span>
+                <Link
+                href="/ragam-indonesia"
+                className="md:px-7 py-3 px-5 inline-flex gap-3 items-center bg-red-500 hover:bg-red-400 rounded-full text-white md:text-sm text-[12px]"
+                data-aos="fade-up"
+                data-aos-once="true"
+                data-aos-delay="500"
+                >
+                <FaMapMarkerAlt size={20} />
+                Explorasi Sekarang
+                </Link>
+            </span>
+            </div>
+            <div className="h-[400px] lg:flex hidden lg:justify-start gap-5">
+            <div className="h-full w-[40%] -translate-y-10">
+                <img
+                src="/images/explore/2.jpg"
+                alt="image explore section 1"
+                className="h-full w-full object-cover"
+                data-aos="fade-up"
+                data-aos-once="true"
+                />
+            </div>
+            <div className="h-full w-[40%] translate-y-10">
+                <img
+                src="/images/explore/1.jpg"
+                alt="image explore section 2"
+                className="h-full w-full object-cover"
+                data-aos="fade-down"
+                data-aos-once="true"
+                />
+            </div>
+            </div>
+
         </div>
       </section>
 
-      <section className="grid lg:grid-cols-4 md:grid-cols-2 md:gap-10 gap-5 lg:px-20 md:px-14 sm:px-12 px-8 mt-36 relative">
-        <span
-          className="lg:w-[1200px] lg:h-[1200px] w-[500px] h-[500px] lg:rounded-full absolute lg:-left-[500px] lg:bottom-[-500px] lg:rotate-[-150deg] -left-[200px] rotate-90 lg:block hidden"
-          style={{
-            backgroundImage:
-              "radial-gradient(169.40% 89.55% at 94.76% 6.29%, rgba(239, 68, 68, 0.70) 0%, rgba(239, 68, 68, 0.0) 100%)",
-          }}
-        ></span>
+      <section className="lg:px-20 md:px-14 sm:px-12 px-8 mt-36 relative">
+        <div className="grid lg:grid-cols-4 md:grid-cols-2 md:gap-10 gap-5  max-w-[1600px] h-full mx-auto px-4">
 
-        <div className="lg:col-span-4 md:col-span-2">
-          <h3
-            className="font-bold md:text-3xl text-2xl md:text-left text-center dark:text-gray-200"
-            data-aos="fade-right"
-            data-aos-once="true"
-          >
-            ASPEK BUDAYA DI
-            <span className="text-red-500"> INDONESIA</span>
-          </h3>
-          <p
-            className="text-gray-800 dark:text-gray-300 lg:w-2/3 md:w-3/4 w-full md:mx-0 mx-auto md:text-left text-center md:text-sm text-[13px] mt-5"
-            data-aos="fade-right"
-            data-aos-delay="300"
-            data-aos-once="true"
-          >
-            {content.cultureAspect.id}
-          </p>
-        </div>
-        <div data-aos="flip-left" data-aos-delay="250" data-aos-once="true">
-          <div
-            className="lg:h-[500px] md:h-[400px] h-[250px] rounded-md overflow-hidden relative after:content-[''] after:absolute after:inset-0 after:bg-black/40 bg-cover bg-center p-5 md:hover:scale-110 transition-all"
+            <span
+            className="lg:w-[1200px] lg:h-[1200px] w-[500px] h-[500px] lg:rounded-full absolute lg:-left-[500px] lg:bottom-[-500px] lg:rotate-[-150deg] -left-[200px] rotate-90 lg:block hidden"
             style={{
-              backgroundImage: "url(/images/card/musik.jpg)",
+                backgroundImage:
+                "radial-gradient(169.40% 89.55% at 94.76% 6.29%, rgba(239, 68, 68, 0.70) 0%, rgba(239, 68, 68, 0.0) 100%)",
             }}
-          >
-            <div className="relative z-10 flex flex-col justify-between h-full">
-              <div>
-                <p className="text-white flex items-center gap-2">
-                  <FaMapMarkerAlt />
-                  <small>Bonang, Jawa Timur</small>
-                </p>
-              </div>
-              <div>
-                <h4 className="font-bold text-xl text-white md:mb-5 mb-2">
-                  {"LAGU & MUSIK"}
-                </h4>
-                <p className="text-gray-200 md:text-sm text-[12px]">
-                  Nikmati keindahan seni musik Bonang di Jawa Timur. Temukan
-                  harmoni yang khas dan cerita yang tersembunyi di setiap
-                  nadanya.
-                  {/* Experience the beauty of Bonang music in East Java. Discover the distinctive harmony and hidden stories within each note. */}
-                </p>
-              </div>
+            ></span>
+
+            <div className="lg:col-span-4 md:col-span-2">
+            <h3
+                className="font-bold md:text-3xl text-2xl md:text-left text-center dark:text-gray-200"
+                data-aos="fade-right"
+                data-aos-once="true"
+            >
+                ASPEK BUDAYA DI
+                <span className="text-red-500"> INDONESIA</span>
+            </h3>
+            <p
+                className="text-gray-800 dark:text-gray-300 lg:w-2/3 md:w-3/4 w-full md:mx-0 mx-auto md:text-left text-center md:text-sm text-[13px] mt-5"
+                data-aos="fade-right"
+                data-aos-delay="300"
+                data-aos-once="true"
+            >
+                {content.cultureAspect.id}
+            </p>
             </div>
-          </div>
-        </div>
-        <div data-aos="flip-left" data-aos-delay="500" data-aos-once="true">
-          <div
-            className="lg:h-[500px] md:h-[400px] h-[250px] rounded-md overflow-hidden relative after:content-[''] after:absolute after:inset-0 after:bg-black/40 bg-cover bg-center p-5 md:hover:scale-110 transition-all"
-            style={{
-              backgroundImage: "url(/images/card/arsitektur.jpg)",
-            }}
-          >
-            <div className="relative z-10 flex flex-col justify-between h-full">
-              <div>
-                <p className="text-white flex items-center gap-2">
-                  <FaMapMarkerAlt />
-                  <small>Rumah Panggung, Sulawesi Selatan</small>
-                </p>
-              </div>
-              <div>
-                <h4 className="font-bold text-xl uppercase text-white md:mb-5 mb-2">
-                  {"ARSITEKTUR BANGUNAN"}
-                </h4>
-                <p className="text-gray-200 md:text-sm text-[12px]">
-                  Temukan keunikan dan harmoni arsitektur rumah panggung di
-                  Sulawesi Selatan, simbol budaya yang kaya.
-                  {/* Discover the uniqueness and harmony of the stilt house architecture in South Sulawesi, a symbol of rich cultural heritage. */}
-                </p>
-              </div>
+            <div data-aos="flip-left" data-aos-delay="250" data-aos-once="true">
+            <div
+                className="lg:h-[500px] md:h-[400px] h-[250px] rounded-md overflow-hidden relative after:content-[''] after:absolute after:inset-0 after:bg-black/40 bg-cover bg-center p-5 md:hover:scale-110 transition-all"
+                style={{
+                backgroundImage: "url(/images/card/musik.jpg)",
+                }}
+            >
+                <div className="relative z-10 flex flex-col justify-between h-full">
+                <div>
+                    <p className="text-white flex items-center gap-2">
+                    <FaMapMarkerAlt />
+                    <small>Bonang, Jawa Timur</small>
+                    </p>
+                </div>
+                <div>
+                    <h4 className="font-bold text-xl text-white md:mb-5 mb-2">
+                    {"LAGU & MUSIK"}
+                    </h4>
+                    <p className="text-gray-200 md:text-sm text-[12px]">
+                    Nikmati keindahan seni musik Bonang di Jawa Timur. Temukan
+                    harmoni yang khas dan cerita yang tersembunyi di setiap
+                    nadanya.
+                    {/* Experience the beauty of Bonang music in East Java. Discover the distinctive harmony and hidden stories within each note. */}
+                    </p>
+                </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div data-aos-once="true" data-aos="flip-left" data-aos-delay="750">
-          <div
-            className="lg:h-[500px] md:h-[400px] h-[250px] rounded-md overflow-hidden relative after:content-[''] after:absolute after:inset-0 after:bg-black/40 bg-cover bg-center p-5 md:hover:scale-110 transition-all"
-            style={{
-              backgroundImage: "url(/images/card/upacara.jpg)",
-            }}
-          >
-            <div className="relative z-10 flex flex-col justify-between h-full">
-              <div>
-                <p className="text-white flex items-center gap-2">
-                  <FaMapMarkerAlt />
-                  <small>Seren Taun, Jawa Barat</small>
-                </p>
-              </div>
-              <div>
-                <h4 className="font-bold text-xl text-white md:mb-5 mb-2">
-                  UPACARA
-                </h4>
-                <p className="text-gray-200 md:text-sm text-[12px]">
-                  Temukan ungkapan syukur atas pertanian setahun. Rasakan
-                  keharmonisan manusia, Tuhan, dan alam dalam budaya unik.
-                  {/* Discover the expression of gratitude for a year of agriculture. Feel the harmony between humans, God, and nature in a unique cultural context. */}
-                </p>
-              </div>
             </div>
-          </div>
-        </div>
-        <div data-aos-once="true" data-aos="flip-left" data-aos-delay="1000">
-          <div
-            className="lg:h-[500px] md:h-[400px] h-[250px] rounded-md overflow-hidden relative after:content-[''] after:absolute after:inset-0 after:bg-black/40 bg-cover bg-center p-5 md:hover:scale-110 transition-all"
-            style={{
-              backgroundImage: "url(/images/card/pakaian.jpg)",
-            }}
-          >
-            <div className="relative z-10 flex flex-col justify-between h-full">
-              <div>
-                <p className="text-white flex items-center gap-2">
-                  <FaMapMarkerAlt />
-                  <small>Sunda, Jawa Barat</small>
-                </p>
-              </div>
-              <div>
-                <h4 className="font-bold text-xl text-white md:mb-5 mb-2">
-                  PAKAIAN
-                </h4>
-                <p className="text-gray-200 md:text-sm text-[12px]">
-                  Dengan desain dan corak yang beragam, busana tradisional Sunda
-                  mencerminkan kekayaan budaya dan identitas khas masyarakatnya.
-                  {/* With diverse designs and patterns, Sundanese traditional clothing reflects the cultural richness and distinctive identity of its community. */}
-                </p>
-              </div>
+            <div data-aos="flip-left" data-aos-delay="500" data-aos-once="true">
+            <div
+                className="lg:h-[500px] md:h-[400px] h-[250px] rounded-md overflow-hidden relative after:content-[''] after:absolute after:inset-0 after:bg-black/40 bg-cover bg-center p-5 md:hover:scale-110 transition-all"
+                style={{
+                backgroundImage: "url(/images/card/arsitektur.jpg)",
+                }}
+            >
+                <div className="relative z-10 flex flex-col justify-between h-full">
+                <div>
+                    <p className="text-white flex items-center gap-2">
+                    <FaMapMarkerAlt />
+                    <small>Rumah Panggung, Sulawesi Selatan</small>
+                    </p>
+                </div>
+                <div>
+                    <h4 className="font-bold text-xl uppercase text-white md:mb-5 mb-2">
+                    {"ARSITEKTUR BANGUNAN"}
+                    </h4>
+                    <p className="text-gray-200 md:text-sm text-[12px]">
+                    Temukan keunikan dan harmoni arsitektur rumah panggung di
+                    Sulawesi Selatan, simbol budaya yang kaya.
+                    {/* Discover the uniqueness and harmony of the stilt house architecture in South Sulawesi, a symbol of rich cultural heritage. */}
+                    </p>
+                </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div className="lg:col-span-4 md:col-span-2 text-center mt-8">
-          <Link href="/ragam-indonesia" className="bg-red-500 hover:bg-red-400 text-white md:py-3 py-2 md:px-10 px-7 md:text-sm text-[12px] rounded-full">
-            Lihat Lebih Banyak
-          </Link>
+            </div>
+            <div data-aos-once="true" data-aos="flip-left" data-aos-delay="750">
+            <div
+                className="lg:h-[500px] md:h-[400px] h-[250px] rounded-md overflow-hidden relative after:content-[''] after:absolute after:inset-0 after:bg-black/40 bg-cover bg-center p-5 md:hover:scale-110 transition-all"
+                style={{
+                backgroundImage: "url(/images/card/upacara.jpg)",
+                }}
+            >
+                <div className="relative z-10 flex flex-col justify-between h-full">
+                <div>
+                    <p className="text-white flex items-center gap-2">
+                    <FaMapMarkerAlt />
+                    <small>Seren Taun, Jawa Barat</small>
+                    </p>
+                </div>
+                <div>
+                    <h4 className="font-bold text-xl text-white md:mb-5 mb-2">
+                    UPACARA
+                    </h4>
+                    <p className="text-gray-200 md:text-sm text-[12px]">
+                    Temukan ungkapan syukur atas pertanian setahun. Rasakan
+                    keharmonisan manusia, Tuhan, dan alam dalam budaya unik.
+                    {/* Discover the expression of gratitude for a year of agriculture. Feel the harmony between humans, God, and nature in a unique cultural context. */}
+                    </p>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div data-aos-once="true" data-aos="flip-left" data-aos-delay="1000">
+            <div
+                className="lg:h-[500px] md:h-[400px] h-[250px] rounded-md overflow-hidden relative after:content-[''] after:absolute after:inset-0 after:bg-black/40 bg-cover bg-center p-5 md:hover:scale-110 transition-all"
+                style={{
+                backgroundImage: "url(/images/card/pakaian.jpg)",
+                }}
+            >
+                <div className="relative z-10 flex flex-col justify-between h-full">
+                <div>
+                    <p className="text-white flex items-center gap-2">
+                    <FaMapMarkerAlt />
+                    <small>Sunda, Jawa Barat</small>
+                    </p>
+                </div>
+                <div>
+                    <h4 className="font-bold text-xl text-white md:mb-5 mb-2">
+                    PAKAIAN
+                    </h4>
+                    <p className="text-gray-200 md:text-sm text-[12px]">
+                    Dengan desain dan corak yang beragam, busana tradisional Sunda
+                    mencerminkan kekayaan budaya dan identitas khas masyarakatnya.
+                    {/* With diverse designs and patterns, Sundanese traditional clothing reflects the cultural richness and distinctive identity of its community. */}
+                    </p>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div className="lg:col-span-4 md:col-span-2 text-center mt-8">
+            <Link href="/ragam-indonesia" className="bg-red-500 hover:bg-red-400 text-white md:py-3 py-2 md:px-10 px-7 md:text-sm text-[12px] rounded-full">
+                Lihat Lebih Banyak
+            </Link>
+            </div>
+
         </div>
       </section>
 
@@ -720,165 +729,169 @@ const Home = () => {
 
 
       <section className="lg:mb-20 mb-10 bg-red-500">
-        {tabActive == "news" ? (
-            <>
-                <Link href={`/artikel/${artikelPertama.slug}`} className="grid lg:grid-cols-5 gap-10 items-center lg:px-20 md:px-10 px-5 pt-10">
-                <div className="h-[200px] md:h-[350px] w-full rounded-md overflow-hidden lg:col-span-2">
-                    <img
-                    src={`./storage/${artikelPertama.image}`}
-                    alt={`image artikel ${artikelPertama.nama}`}
-                    className="object-cover h-full w-full"
-                    data-aos-once="true"
-                    data-aos="fade-left"
-                    />
-                </div>
-                    <div
-                    className="lg:col-span-3"
-                    data-aos-once="true"
-                    data-aos="fade-right"
-                    >
+        <div className="max-w-[1600px] h-full mx-auto px-4">
 
-                    {artikelPertama && (
-                        <>
-                        <h5 className="text-white font-semibold md:mb-5 mb-3 md:text-base text-sm">
-                            {artikelPertama.kategori.nama}
-                        </h5>
+            {tabActive == "news" ? (
+                <>
+                    <Link href={`/artikel/${artikelPertama.slug}`} className="grid lg:grid-cols-5 gap-10 items-center lg:px-20 md:px-10 px-5 pt-10">
+                    <div className="h-[200px] md:h-[350px] w-full rounded-md overflow-hidden lg:col-span-2">
+                        <img
+                        src={artikelPertama.image ? `./storage/${artikelPertama.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                        alt={`image artikel ${artikelPertama.nama}`}
+                        className="object-cover h-full w-full"
+                        data-aos-once="true"
+                        data-aos="fade-left"
+                        />
+                    </div>
+                        <div
+                        className="lg:col-span-3"
+                        data-aos-once="true"
+                        data-aos="fade-right"
+                        >
 
-                        <h2 className="font-bold md:text-3xl text-xl text-white ">
-                            {artikelPertama.title}
-                        </h2>
+                        {artikelPertama && (
+                            <>
+                            <h5 className="text-white font-semibold md:mb-5 mb-3 md:text-base text-sm">
+                                {artikelPertama.kategori.nama}
+                            </h5>
 
-                        <p className="mt-5 md:text-base text-[12px] text-white">
-                            {artikelPertama.excerpt}
-                        </p>
+                            <h2 className="font-bold md:text-3xl text-xl text-white ">
+                                {artikelPertama.title}
+                            </h2>
 
-                        <div className="flex gap-5 mt-10 text-slate-200 md:text-base text-sm">
-                            <span className="flex gap-2 items-center">
-                            <FaEye />
-                            <small>{artikelPertama.views.toLocaleString()} views</small>
-                            </span>
-                            <span className="flex gap-2 items-center">
-                                <FaCalendar />
-                                <small>{changeDate(new Date(artikelPertama.published_at))}</small>
-                            </span>
-                            <span className="flex gap-2 artikelPertamas-center">
-                                <FaUser />
-                                <small>Penulis : {artikelPertama.user.name}</small>
-                            </span>
+                            <p className="mt-5 md:text-base text-[12px] text-white">
+                                {artikelPertama.excerpt}
+                            </p>
 
+                            <div className="flex gap-5 mt-10 text-slate-200 md:text-base text-sm">
+                                <span className="flex gap-2 items-center">
+                                <FaEye />
+                                <small>{artikelPertama.views.toLocaleString()} views</small>
+                                </span>
+                                <span className="flex gap-2 items-center">
+                                    <FaCalendar />
+                                    <small>{changeDate(new Date(artikelPertama.published_at))}</small>
+                                </span>
+                                <span className="flex gap-2 artikelPertamas-center">
+                                    <FaUser />
+                                    <small>Penulis : {artikelPertama.user.name}</small>
+                                </span>
+
+                            </div>
+
+                            </>
+                        )}
                         </div>
 
-                        </>
-                    )}
+                    </Link>
+                    {moreNews ? (
+                    <>
+                        <section className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-10 md:px-20 px-4 mt-10">
+                        {dataArtikel.length > 0 && dataArtikel.map((artikel) => (
+                            <Link key={artikel.slug} href={`/news/read/${artikel.slug}`} className="mt-5">
+                                <img
+                                src={`./storage/${artikel.image}`} // Menggunakan gambar dari API
+                                alt={artikel.title}
+                                className="h-[200px] sm:h-[250px] object-cover w-full rounded"
+                                />
+
+                                <h3 className="mt-3 text-xl font-bold text-white">
+                                {artikel.title} {/* Menampilkan judul artikel */}
+                                </h3>
+
+                                <div className="my-3 md:my-5 flex gap-5">
+                                <span className="flex gap-2 items-center text-white">
+                                    <FaUser />
+                                    <small>{artikel.user.name}</small> {/* Menampilkan nama penulis */}
+                                </span>
+                                <span className="flex gap-2 items-center text-white">
+                                    <FaCalendar />
+                                    <small>{new Date(artikel.published_at).toLocaleDateString("id-ID", {
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                    })}</small> {/* Menampilkan tanggal terbit dalam format lokal */}
+                                </span>
+                                </div>
+                                <p className="text-white mt-2 text-sm">
+                                {artikel.excerpt} {/* Menampilkan ringkasan artikel */}
+                                </p>
+                            </Link>
+                        ))}
+                        </section>
+
+                        <div className="flex flex-wrap justify-center text-center pb-10 ">
+                        <button
+                            className="w-full sm:w-[unset] mx-3 sm:mx-0 bg-white border-2 border-white hover:bg-slate-200 hover:border-red-400 text-red-500 text-sm sm:px-5 py-2 mt-10 rounded-full inline-flex items-center justify-center sm:gap-2 cursor-pointer "
+                            onClick={() => {
+                            setMoreNews(false);
+                            }}
+                        >
+                            {"Lebih Sedikit"}
+                            <MdKeyboardDoubleArrowUp className="ml-5" />
+                        </button>
+                        <Link
+                            href={"/artikel"}
+                            className="w-full sm:w-[unset] mx-3 sm:mx-0 border-2 border-white hover:bg-white text-white hover:text-red-500 text-sm sm:px-5 py-2 mt-10 rounded-full inline-flex items-center sm:gap-2 justify-center md:ml-5"
+                        >
+                            {"Semua Berita"}
+                            <MdKeyboardDoubleArrowRight className="ml-5" />
+                        </Link>
+                        </div>
+                    </>
+                    ) : (
+                    <div className="text-center pb-10 lg:block">
+                        <button
+                        className="bg-white hover:bg-red-400 text-red-500 mx-auto text-sm px-5 py-2 mt-10 rounded-full cursor-pointer inline-flex items-center gap-2"
+                        onClick={() => {
+                            setMoreNews(true);
+                        }}
+                        >
+                        {"Lihat Lainnya"}
+                        <MdKeyboardDoubleArrowDown />
+                        </button>
                     </div>
-
-                </Link>
-                {moreNews ? (
-                <>
-                    <section className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-10 md:px-20 px-4 mt-10">
-                    {dataArtikel.length > 0 && dataArtikel.map((artikel) => (
-                        <Link key={artikel.slug} href={`/news/read/${artikel.slug}`} className="mt-5">
+                    )}
+                </>
+            ) : (
+                <div className="max-w-[1700px] py-10 lg:px-10 px-3 grid lg:grid-cols-3 grid-cols-1 gap-0 md:gap-10 items-center">
+                    {events.length > 0 && events.map((event, index) => (
+                        <Link key={index} href={`/event/${event.slug}`} className="bg-white rounded-lg shadow-sm mb-5 md:mb-0 dark:bg-gray-950">
                             <img
-                            src={`./storage/${artikel.image}`} // Menggunakan gambar dari API
-                            alt={artikel.title}
-                            className="h-[200px] sm:h-[250px] object-cover w-full rounded"
+                            src={event.image ? `./storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
+                            alt={event.nama}
+                            className="w-full h-[200px] md:h-[270px] object-cover rounded-lg mb-8"
                             />
+                            <h2 className={`px-4 text-lg font-bold mb-2 line-clamp-2 dark:text-gray-200`}>{event.nama}</h2>
 
-                            <h3 className="mt-3 text-xl font-bold text-white">
-                            {artikel.title} {/* Menampilkan judul artikel */}
-                            </h3>
+                            <p className="px-4 text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px] line-clamp-3">{event.excerpt}</p>
 
-                            <div className="my-3 md:my-5 flex gap-5">
-                            <span className="flex gap-2 items-center text-white">
-                                <FaUser />
-                                <small>{artikel.user.name}</small> {/* Menampilkan nama penulis */}
-                            </span>
-                            <span className="flex gap-2 items-center text-white">
-                                <FaCalendar />
-                                <small>{new Date(artikel.published_at).toLocaleDateString("id-ID", {
-                                day: "2-digit",
-                                month: "long",
-                                year: "numeric",
-                                })}</small> {/* Menampilkan tanggal terbit dalam format lokal */}
-                            </span>
+                            <div className="mt-5 md:flex gap-5 px-4 pb-4">
+                                <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 w-[60%] items-center">
+                                    <MapPin className="w-[25px] h-[25px]" />
+                                    <span className="line-clamp-2 text-sm">{event.tempat}</span>
+                                </p>
+                                <p className="flex gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
+                                    <FaCalendar />
+                                    <span className="line-clamp-2 text-sm">{changeDate(new Date(event.tanggal))}</span>
+                                </p>
                             </div>
-                            <p className="text-white mt-2 text-sm">
-                            {artikel.excerpt} {/* Menampilkan ringkasan artikel */}
-                            </p>
+
+                            <div
+                                className={`p-5 rounded-b-lg text-center
+                                    ${new Date(event.tanggal) >= new Date() ? "bg-green-100 text-green-600" : "bg-red-100 text-red-500"}
+                                `}
+                            >
+                                <p className="lg:text-base md:text-sm text-[12px] font-semibold">
+                                    {new Date(event.tanggal) >= new Date() ? "Pendaftaran Masih Dibuka" : "Event Sudah Berakhir"}
+                                </p>
+                            </div>
                         </Link>
                     ))}
-                    </section>
-
-                    <div className="flex flex-wrap justify-center text-center pb-10 ">
-                    <button
-                        className="w-full sm:w-[unset] mx-3 sm:mx-0 bg-white border-2 border-white hover:bg-slate-200 hover:border-red-400 text-red-500 text-sm sm:px-5 py-2 mt-10 rounded-full inline-flex items-center justify-center sm:gap-2 cursor-pointer "
-                        onClick={() => {
-                        setMoreNews(false);
-                        }}
-                    >
-                        {"Lebih Sedikit"}
-                        <MdKeyboardDoubleArrowUp className="ml-5" />
-                    </button>
-                    <Link
-                        href={"/news"}
-                        className="w-full sm:w-[unset] mx-3 sm:mx-0 border-2 border-white hover:bg-white text-white hover:text-red-500 text-sm sm:px-5 py-2 mt-10 rounded-full inline-flex items-center sm:gap-2 justify-center md:ml-5"
-                    >
-                        {"Semua Berita"}
-                        <MdKeyboardDoubleArrowRight className="ml-5" />
-                    </Link>
-                    </div>
-                </>
-                ) : (
-                <div className="text-center pb-10 lg:block">
-                    <button
-                    className="bg-white hover:bg-red-400 text-red-500 mx-auto text-sm px-5 py-2 mt-10 rounded-full cursor-pointer inline-flex items-center gap-2"
-                    onClick={() => {
-                        setMoreNews(true);
-                    }}
-                    >
-                    {"Lihat Lainnya"}
-                    <MdKeyboardDoubleArrowDown />
-                    </button>
                 </div>
-                )}
-            </>
-        ) : (
-            <div className="max-w-[1700px] py-10 lg:px-10 px-3 grid lg:grid-cols-3 grid-cols-1 gap-0 md:gap-10 items-center">
-                {events.length > 0 && events.map((event, index) => (
-                    <Link key={index} href={`/event/${event.slug}`} className="bg-white rounded-lg shadow-sm mb-5 md:mb-0 dark:bg-gray-950">
-                        <img
-                        src={event.image ? `./storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
-                        alt={event.nama}
-                        className="w-full h-[200px] md:h-[270px] object-cover rounded-lg mb-8"
-                        />
-                        <h2 className={`px-4 text-lg font-bold mb-2 line-clamp-2 dark:text-gray-200`}>{event.nama}</h2>
+            )}
 
-                        <p className="px-4 text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px] line-clamp-3">{event.excerpt}</p>
-
-                        <div className="mt-5 md:flex gap-5 px-4 pb-4">
-                            <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 w-[60%] items-center">
-                                <MapPin className="w-[25px] h-[25px]" />
-                                <span className="line-clamp-2 text-sm">{event.tempat}</span>
-                            </p>
-                            <p className="flex gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                                <FaCalendar />
-                                <span className="line-clamp-2 text-sm">{changeDate(new Date(event.tanggal))}</span>
-                            </p>
-                        </div>
-
-                        <div
-                            className={`p-5 rounded-b-lg text-center
-                                ${new Date(event.tanggal) >= new Date() ? "bg-green-100 text-green-600" : "bg-red-100 text-red-500"}
-                            `}
-                        >
-                            <p className="lg:text-base md:text-sm text-[12px] font-semibold">
-                                {new Date(event.tanggal) >= new Date() ? "Pendaftaran Masih Dibuka" : "Event Sudah Berakhir"}
-                            </p>
-                        </div>
-                    </Link>
-                ))}
-            </div>
-        )}
+        </div>
         </section>
 
         <section id="map" className="px-4"
@@ -1138,7 +1151,7 @@ const Home = () => {
       <section id="contact">
         <div className="my-14 flex flex-row justify-center flex-wrap lg:flex-nowrap">
           <div
-              className="w-full lg:w-[30%] 2xl:w-[40%] px-5 lg:px-0 py-10 lg:pl-20 bg-[#0f172a] lg:rounded-tr-xl lg:rounded-br-xl lg:mr-3">
+              className="w-full lg:w-[30%] px-5 lg:px-0 py-10 lg:pl-20 bg-[#0f172a] lg:rounded-tr-xl lg:rounded-br-xl lg:mr-3">
                 <h2 className="font-bold text-3xl mb-3 lg:text-4xl text-white">Kontak</h2>
                 <div className="w-40 h-1 lg:h-2 rounded-full mb-5 lg:mb-10 bg-red-500"></div>
                 <p className="text-base text-white lg:text-lg">

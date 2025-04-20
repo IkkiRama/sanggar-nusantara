@@ -260,7 +260,12 @@ export default function Event() {
                     <>
                         <div className="grid lg:grid-cols-3 grid-cols-1 gap-7 md:gap-10 items-center lg:px-10 px-3">
                             {filteredEvents.map((item, index) => (
-                            <Link key={index} href={`/event/${item.slug}`} className="bg-white rounded-lg shadow-sm">
+                            <Link key={index} href={`/event/${item.slug}`} className="bg-white rounded-lg shadow-sm relative">
+                                {item.status_event === "premium" && (
+                                    <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs lg:text-base font-bold px-2 py-1 rounded">
+                                        Premium
+                                    </span>
+                                )}
                                 <img
                                 src={item.image ? `./storage/${item.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                                 alt={item.nama}

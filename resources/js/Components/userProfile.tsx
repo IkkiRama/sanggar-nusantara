@@ -17,7 +17,7 @@ const UserProfile = ({isActive, user}) => {
         </Link> */}
 
       <img
-        src={user.image ? `./storage/${user.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+        src={user.image ? `../storage/${user.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
         alt="Profile"
         className="w-[150px] h-[150px] border-[5px] border-white rounded-full mx-auto object-cover -mt-14"
       />
@@ -33,7 +33,7 @@ const UserProfile = ({isActive, user}) => {
 
       <ul className="mt-5">
 
-        <Link href="/profile">
+        <Link href="/profile/dashboard">
             <li className={`p-3 rounded-lg dark:text-gray-300 cursor-pointer flex flex-row gap-3 mb-2
                 ${isActive === "dashboard" ? "bg-blue-500 text-white font-semibold" : "font-medium hover:bg-gray-300 dark:hover:bg-gray-700"}
             `}><LayoutDashboard className="w-5 h-5" /> Dashboard</li>

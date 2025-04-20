@@ -13,9 +13,9 @@ createInertiaApp({
     setup({ el, App, props }) {
         createRoot(el).render(
             <BrowserRouter>
-                <ThemeProvider>
+                {/* <ThemeProvider> */}
                     <App {...props} />
-                </ThemeProvider>
+                {/* </ThemeProvider> */}
             </BrowserRouter>
         );
     },

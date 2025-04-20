@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\CorsMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,6 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Middleware CORS untuk API
+        // $middleware->api(append: [
+        //     CorsMiddleware::class,
+        // ]);
+
+        // Middleware untuk web (jika perlu)
         $middleware->web(append: [
             HandleInertiaRequests::class,
         ]);

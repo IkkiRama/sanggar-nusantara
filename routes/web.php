@@ -3,7 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
+use Endroid\QrCode\Builder\Builder;
+
 
 Route::get('/', [FrontController::class, 'index']);
 Route::get('/subscription', [FrontController::class, 'subscription']);
@@ -12,18 +15,21 @@ Route::get('/peta-interaktif', [FrontController::class, 'petaInteraktif']);
 
 Route::get('/event', [FrontController::class, 'event']);
 Route::get('/event/{slug}', [FrontController::class, 'showEvent']);
+Route::get('/payment-status/{orderId}', [TransaksiController::class, 'paymentSuccess']);
 
 Route::get('/artikel', [FrontController::class, 'artikel']);
-Route::get('/artikel/{slug}', [FrontController::class, 'showArtikel']);
+Route::get('/artikel/{slug}', [FrontController::class, 'detailArtikel']);
 
-Route::get('/profile', [ProfileController::class, 'index']);
+Route::get('/profile/dashboard', [ProfileController::class, 'index']);
 Route::get('/profile/invoice/{orderId}', [ProfileController::class, 'invoice']);
-Route::get('/payment-success/{orderId}', [FrontController::class, 'paymentSuccess']);
 Route::get('/etiket/{orderId}', [ProfileController::class, 'etiket']);
 Route::get('/profile/invoice/{orderId}', [ProfileController::class, 'invoice']);
 Route::get('/profile/edit', [ProfileController::class, 'profileEdit']);
 Route::get('/profile/transaksi', [ProfileController::class, 'transaksi']);
 Route::get('/profile/ubah-password', [ProfileController::class, 'ubahPassword']);
+
+Route::get('/download-etiket/{orderId}', [ProfileController::class, 'downloadEtiket']);
+Route::get('/qr/{orderId}/{ticketNo}', [ProfileController::class, 'generateQr']);
 
 Route::get('/ragam-indonesia', [FrontController::class, 'ragamIndonesia']);
 Route::get('/ragam-indonesia/bahasa-daerah', [FrontController::class, 'bahasaDaerah']);

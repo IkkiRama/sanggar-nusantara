@@ -1,9 +1,16 @@
 import { Head, Link } from "@inertiajs/react";
 import { Calendar, Download, MapPin, Printer, Ticket } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 
-const ETiket = ({orders}) => {
+const DownloadEtiket = ({orders}) => {
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            window.print();
+        }, 500); // kasih delay biar render dulu
+
+        return () => clearTimeout(timeout);
+    }, []);
     const changeDate = (tanggal: Date) => {
         const formattedDate = new Intl.DateTimeFormat("id-ID", {
             day: "2-digit",
@@ -37,22 +44,10 @@ const ETiket = ({orders}) => {
 
   return (
     <div className="relative min-h-screen bg-gray-100">
-        <Head title="E-Tiket | Sanggar Nusantara" />
+        <Head title={`Download E-Tiket ${orders[0].order_id}`} />
       {/* Fixed Header */}
-      {/* <header className="fixed top-0 left-0 w-full bg-white shadow-md py-4 md:px-6 px-4 flex z-[99999999999999] justify-between items-center print:hidden">
-        <h1 className="lg:text-xl text-base font-bold text-red-500">Sanggar Nusantara</h1>
-        <a
-            target="_blank"
-            href={`/download-etiket/${orders[0].order_id}`}
-            className="bg-red-500 text-sm text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 cursor-pointer font-semibold flex gap-3"
-        >
-            <Download className="hidden lg:block" />
-          Download E-Tiket
-        </a>
-      </header> */}
-
       {/* Content */}
-        <div className="2xl:max-w-[2000px] mx-auto px-4 2xl:px-10 flex flex-col items-center gap-7 lg:gap-10 min-h-screen pt-5 pb-28">
+        <div className="flex flex-col items-center gap-7 lg:gap-10 min-h-screen pt-5 pb-28">
             {orders.map((order, index) =>
                 Array.from({ length: order.jumlah_tiket }).map((_, i) => (
                 <div
@@ -174,9 +169,8 @@ const ETiket = ({orders}) => {
                 ))
             )}
         </div>
-
     </div>
   );
 };
 
-export default ETiket;
+export default DownloadEtiket;
