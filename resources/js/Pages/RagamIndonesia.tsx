@@ -250,8 +250,8 @@ export default function RagamIndonesia() {
     <MainLayout title="Ragam Indonesia | Sanggar Nusantara">
         <LightNavbar user={user} />
 
-      <header className="pt-20 h-screen max-h-[100vh] lg:h-[40vh] lg:max-h-[60vh] xl:h-screen xl:max-h-[100vh] 3xl:h-[60vh] 3xl:max-h-[60vh] overflow-hiddenoverflow-hidden dark:bg-black pt-10 lg:px-10 px-5">
-        <div className="grid lg:grid-cols-2 max-w-[1600px] 3xl:h-[60vh] h-full 3xl:max-w-[2000px] mx-auto px-4 3xl:px-10 after:absolute after:bg-gradient-to-t dark:after:from-black dark:after:to-black/10 after:from-white after:to-white/10 relative">
+      <header className="relative grid lg:grid-cols-2 pt-10 lg:px-10 px-5 lg:max-h-[830px] max-h-screen overflow-y-hidden after:absolute after:bg-gradient-to-t dark:after:from-black dark:after:to-black/10 after:from-white after:to-white/10 after:w-full after:h-[130px] after:bottom-0 container mx-auto">
+        {/* <div className="grid lg:grid-cols-2 max-w-[1600px] 3xl:h-[60vh] h-full 3xl:max-w-[2000px] mx-auto px-4 3xl:px-10 after:absolute after:bg-gradient-to-t dark:after:from-black dark:after:to-black/10 after:from-white after:to-white/10 relative"> */}
 
             <div className="h-full flex-col justify-center items-center lg:pt-30">
             <h4 className="text-3xl font-semibold text-red-500 mb-5">
@@ -269,6 +269,7 @@ export default function RagamIndonesia() {
                     Peta Interaktif
                 </Link>
             </div>
+
             </div>
             <div className="grid grid-cols-2 gap-5 lg:rotate-3 lg:-mt-20 mt-20 h-full overflow-hidden">
                 <div className="grid grid-cols-1 gap-5 animate-scroll-to-t">
@@ -327,7 +328,7 @@ export default function RagamIndonesia() {
                 </div>
             </div>
 
-        </div>
+        {/* </div> */}
       </header>
 
       <main id="jelajahi" className="lg:px-20 md:px-10 px-5 dark:bg-black">

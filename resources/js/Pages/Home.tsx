@@ -27,7 +27,7 @@ import LightNavbar from "../layouts/lightNavbar";
 import React from "react";
 import MainLayout from './../Layouts/mainLayout';
 import { changeDate } from './../Utils/changeDate';
-import { BookOpen, Calendar, MapPin } from "lucide-react";
+import { BookOpen, Calendar, CheckCircle, MapPin } from "lucide-react";
 
 interface Event {
     kategori_event_id:string;
@@ -71,10 +71,12 @@ interface PageProps {
 }
 
 
-const Home = () => {
+const Home = ({plans}) => {
+    const { user } = usePage().props;
   const [open, setOpen] = useState(false);
   const [tabActive, setTabActive] = useState("news");
-  const { user } = usePage().props;
+  const tabs = ["Bulanan", "Triwulanan", "Tahunan"];
+  const [tabActiveSubscription, setTabActiveSubscription] = useState("Bulanan");
 
   const { events = [], artikels = [] } = usePage<PageProps>().props;  // Ambil data dari Laravel
 
@@ -90,6 +92,8 @@ const Home = () => {
   const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
   const [pesan, setPesan] = useState("");
+
+
 
     const handleSubmit = async (e : any) => {
         e.preventDefault();
@@ -784,7 +788,10 @@ const Home = () => {
                             />
 
                             {artikelPertama.status_artikel === "premium" && (
-                                <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                <span
+                                data-aos-once="true"
+                                data-aos="fade-right"
+                                className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
                                     Premium
                                 </span>
                             )}
@@ -835,7 +842,7 @@ const Home = () => {
                     <>
                         <section className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-10 md:px-20 px-4 mt-10">
                         {dataArtikel.length > 0 && dataArtikel.map((artikel) => (
-                            <Link key={artikel.slug} href={`/news/read/${artikel.slug}`} className="mt-5">
+                            <Link key={artikel.slug} href={`/artikel/${artikel.slug}`} className="mt-5">
 
                                 <div className="h-[200px] sm:h-[250px] relative">
                                     {artikel.status_artikel === "premium" && (
@@ -913,7 +920,7 @@ const Home = () => {
                     {events.length > 0 && events.map((event, index) => (
                         <Link key={index} href={`/event/${event.slug}`} className="bg-white rounded-lg shadow-sm mb-5 md:mb-0 dark:bg-gray-950">
 
-                            <div className="h-[200px] md:h-[270px] relative">
+                            <div className="h-[200px] md:h-[270px] relative mb-5">
 
                                 {event.status_event === "premium" && (
                                     <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
@@ -923,7 +930,7 @@ const Home = () => {
                                 <img
                                 src={event.image ? `./storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
                                 alt={event.nama}
-                                className="w-full h-full object-cover rounded-lg mb-8"
+                                className="w-full h-full object-cover rounded-lg"
                                 />
 
                             </div>
@@ -1050,6 +1057,104 @@ const Home = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="">
+            <div>
+                <h2 className="text-red-500 text-center text-3xl font-bold">Pilih Paket Budaya Terbaik untuk Kamu</h2>
+                <p className="mx-auto mt-4 md:text-lg text-center lg:max-w-[50%] dark:text-white mb-7 md:mb-4">Gabung bersama Sanggar Nusantara dan dapatkan pengalaman budaya yang menginspirasi. Garansi 30 hari uang kembali jika kamu berubah pikiran.
+                </p>
+
+                {/* Mobile Tabs */}
+                <div className="md:hidden flex justify-around w-full border-b border-gray-300 pb-2">
+                    {tabs.map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => setTabActiveSubscription(tab)}
+                            className={` font-semibold cursor-pointer px-4 py-2 ${tabActiveSubscription === tab ? "text-blue-600" : "text-gray-500" }`}
+                        >
+                            {tab}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="hidden md:flex justify-start md:justify-center">
+                    {tabs.map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => setTabActiveSubscription(tab)}
+                            className={`cursor-pointer px-4 py-2 mx-2 rounded-lg ${tabActiveSubscription === tab ? "bg-red-600 text-white" : "active:bg-gray-300 bg-gray-200 hover:bg-gray-300"}`}
+                        >
+                            <span className="font-semibold">{tab}</span>
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:mt-10 mt-5">
+                {plans.filter((plan) => plan.durasi === tabActiveSubscription ).map((plan, index) => (
+                    <div
+                        key={index}
+                        className={`border rounded-2xl p-6 shadow-md transition-transform transform lg:hover:scale-105 ${
+                        plan.highlight
+                            ? "border-yellow-500 bg-yellow-50 lg:scale-105"
+                            : "border-gray-200 bg-white"
+                        }`}
+                    >
+                        {plan.specialTag && (
+                            <div className="mb-5 md:mb-3 text-sm font-medium text-white bg-indigo-400 inline-block px-3 py-1 rounded-full">
+                                {plan.specialTag}
+                            </div>
+                        )}
+                        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                            {plan.name}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-3">{plan.description}</p>
+                        {plan.specialNote && (
+                            <p className="text-xs text-gray-500 italic mb-2">{plan.specialNote}</p>
+                        )}
+                        {/* Harga */}
+                        {plan.price === 0 ? (
+                            <p className="text-2xl font-bold text-indigo-700 mb-1">Gratis</p>
+                        ) :  (
+                            <>
+                                <div className="text-2xl font-bold text-indigo-700 mb-3">
+                                    Rp{plan.price.toLocaleString()}/{plan.durasi}
+                                </div>
+
+                                <div className="flex gap-5 mb-5 items-center">
+                                    {plan.price < plan.originalPrice && (
+                                        <div className="text-sm text-gray-500 line-through">
+                                            Rp{plan.originalPrice.toLocaleString()}/{plan.durasi}
+                                        </div>
+                                    )}
+                                    <p className="text-sm font-medium text-white bg-emerald-600 inline-block px-3 py-1 rounded-full">
+                                        Hemat {Math.round(((plan.originalPrice - plan.price) / plan.originalPrice) * 100)}%
+                                    </p>
+                                </div>
+                            </>
+                        )}
+
+                        <button
+                            className={`w-full cursor-pointer font-semibold py-2 rounded-lg transition mb-4
+                                ${plan.highlight
+                                ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                                : "border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50"
+                                }`}
+                        >
+                            {plan.highlight ? "Pilih Paket Favorit" : "Langganan Sekarang"}
+                        </button>
+                        <ul className="space-y-2">
+                        {plan.features.map((feature, i) => (
+                            <li key={i} className="flex items-start text-gray-700">
+                            <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5" />
+                            {feature}
+                            </li>
+                        ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
         </div>
 
         <div>

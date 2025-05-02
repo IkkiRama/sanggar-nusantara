@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->integer('harga');
+            $table->integer('harga_diskon');
             $table->enum('durasi', ['30', '90', '365']);
             $table->text('deskripsi');
             $table->text('fitur'); // JSON berisi daftar fitur

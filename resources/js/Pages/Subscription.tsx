@@ -1,174 +1,111 @@
-import React, { useEffect } from "react";
-import { FaBell } from "react-icons/fa";
-import { Accordion, AccordionItem } from "react-light-accordion";
-import "react-light-accordion/demo/css/index.css";
-import { Link } from "react-router-dom";
-
-import DarkNavbar from "../layouts/darkNavbar";
+import React, { useState } from "react";
+import { CheckCircle } from "lucide-react";
 import MainLayout from "../Layouts/mainLayout";
 import LightNavbar from "../layouts/lightNavbar";
-import { usePage } from "@inertiajs/react";
 
-export default function Subscription() {
-    const { user } = usePage().props;
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  const faqDescription = {
-    benefit:
-      "Berlangganan bukan hanya soal akses eksklusif ke konten keren, tapi juga tentang keuntungan eksklusif. Kamu bisa dapetin info terkini duluan sebelum yang lain, nikmatin acara eksklusif, dan bahkan lepas dari gangguan iklan. Ada juga diskon, promosi, dan hadiah spesial buat yang langganan setia. Jadi, dengan berlangganan, bukan cuma akses ke konten premium, tapi juga gaya hidup kekinian dan manfaat ekstra lainnya!",
-    cara: "Dapatkan akses eksklusif dengan berlangganan sekarang! Pilih paketmu, bayar, dan langsung nikmati konten premium serta penawaran spesial. Mudah, cepat, dan langsung di ujung jari. Tetap update tanpa ribet!",
-  };
+export default function SubscriptionPlans({plans,user}) {
+    const [tabActive, setTabActive] = useState("Bulanan");
+    const tabs = ["Bulanan", "Triwulanan", "Tahunan"];
 
   return (
-    <MainLayout title="Berlangganan | Sanggar Nusantara">
+    <MainLayout title="Pilih Paket Langganan Sanggar Nusantara | Sanggar Nusantara">
         <LightNavbar user={user} />
 
-      <header className="grid lg:grid-cols-2 md:gap-10 items-center md:px-20 px-5 lg:h-[800px] h-[700px] relative">
-        <span
-          className="w-[1000px] h-[1000px] rounded-full absolute -left-[500px] -top-[500px] -rotate-[60deg]"
-          style={{
-            backgroundImage:
-              "radial-gradient(169.40% 89.55% at 94.76% 6.29%, rgba(239, 68, 68, 0.70) 0%, rgba(239, 68, 68, 0.0) 100%)",
-          }}
-        ></span>
+        <div className="bg-white py-20 px-4 lg:px-20 lg:pt-28 lg:pb-20">
+            <h2 className="text-3xl font-bold text-center mb-7 md:mb-4 text-gray-800">
+                Pilih Paket Langganan Sanggar Nusantara
+            </h2>
 
-        <div>
-          <h2 className="md:text-5xl text-3xl font-bold mb-5 dark:text-gray-100">
-            {/* after:content-[''] after:w-[10px] after:h-full after:absolute after:bg-red-500 relative z-10 after:-z-10 after:-left-[13px] after:bottom-0 */}
-            SUBSCRIPTION
-            <span className="text-red-500">.</span>
-          </h2>
-          <p className="md:text-sm text-[12px] text-gray-800 dark:text-gray-300">
-            Berlangganan sekarang untuk mendapatkan konten eksklusif dan tetap
-            terinformasi dengan berita dan penawaran terbaru
-          </p>
-          <div className="relative mt-10 flex">
-            <input
-              type="text"
-              className="border px-5 py-2 dark:bg-gray-700 dark:border-gray-700 bg-gray-100 dark:text-gray-200 text-gray-800 rounded-l  md:max-w-[350px] max-w-[200px]"
-              placeholder="Email..."
-            />
-            <button className="bg-red-500  px-5 py-2 text-white border border-red-500 hover:bg-red-400 hover:border-red-400 rounded-r md:text-base text-sm">
-              Subscribe
-            </button>
-          </div>
-          <div className="mt-10">
-            <h3 className="font-semibold mb-3 md:text-base text-sm md:text-left text-center">
-              Subscribe lewat :
-            </h3>
-            <div className="flex md:justify-start justify-center gap-10">
-              <div className="flex flex-col md:items-start items-center">
-                <img
-                  src="/images/icons/gmail.png"
-                  alt="gmailIcon"
-                  className="w-[30px]"
-                />
-                <p className="mt-2 dark:text-gray-300 text-sm">Gmail</p>
-              </div>
-              <div className="flex flex-col md:items-start items-center">
-                <img
-                  src="/images/icons/instagram.png"
-                  alt="instagramIcon"
-                  className="w-[30px]"
-                />
-                <p className="mt-2 dark:text-gray-300 text-sm">Instagram</p>
-              </div>
-              <div className="flex flex-col md:items-start items-center">
-                <img
-                  src="/images/icons/facebook.png"
-                  alt="facebookIcon"
-                  className="w-[30px]"
-                />
-                <p className="mt-2 dark:text-gray-300 text-sm">Facebook</p>
-              </div>
+            {/* Mobile Tabs */}
+            <div className="md:hidden flex justify-around w-full border-b border-gray-300 pb-2">
+                {tabs.map((tab) => (
+                    <button
+                        key={tab}
+                        onClick={() => setTabActive(tab)}
+                        className={` font-semibold cursor-pointer px-4 py-2 ${tabActive === tab ? "text-blue-600" : "text-gray-500" }`}
+                    >
+                        {tab}
+                    </button>
+                ))}
             </div>
-          </div>
-          <hr className="my-5 dark:border-gray-800" />
-          <p className="flex gap-3 items-center mt-5 text-gray-700 dark:text-gray-300 md:text-sm text-[12px] md:text-left text-center">
-            <FaBell /> Mendapatkan notifikasi ketika ada berita baru.
-          </p>
-        </div>
-        <div className="h-[450px] lg:flex hidden lg:justify-start gap-5">
-          <div className="h-full w-[40%] -translate-y-10">
-            <img
-              src="/images/explore/2.jpg"
-              alt="image section explore 1"
-              className="h-full w-full object-cover"
-              data-aos="fade-up"
-              data-aos-once="true"
-            />
-          </div>
-          <div className="h-full w-[40%] translate-y-10">
-            <img
-              src="/images/explore/1.jpg"
-              alt="image section explore 2"
-              className="h-full w-full object-cover"
-              data-aos="fade-down"
-              data-aos-once="true"
-            />
-          </div>
-        </div>
-      </header>
-      <main className="grid lg:grid-cols-3 gap-10 md:px-20 px-5 mb-20">
-        <div>
-          <h2 className="text-3xl font-bold mb-5 dark:text-gray-100">
-            Frequently <br /> Asked Question
-            <span className="text-red-500">.</span>
-          </h2>
-          <p className="text-sm text-gray-800 dark:text-gray-300 mb-10">
-            Jika ada pertanyaan lainnya, silahkan hubungi <br /> tim kami di
-            support@sanggarnusantara.com
-          </p>
-          <button className="text-sm border-2 z-10 after:transition-all text-gray-50  px-5 py-3 border-red-500 after:content-[''] after:absolute relative after:inset-0 after:bg-red-500 after:-translate-x-1 after:-translate-y-1 after:-z-10 hover:after:translate-x-0 hover:after:translate-y-0">
-            Lihat semua FAQ
-          </button>
-        </div>
-        <div className="lg:col-span-2">
-          <Accordion atomic={true}>
-            <AccordionItem title="Apa benefit dari berlangganan?">
-              <p className="p-5 text-sm text-gray-800 dark:text-gray-200">
-                {faqDescription.benefit}
-              </p>
-            </AccordionItem>
 
-            <AccordionItem title="Bagaimana Cara Berlangganan?">
-              <p className="p-5 text-sm text-gray-800 dark:text-gray-200">
-                {faqDescription.cara}
-              </p>
-            </AccordionItem>
+            <div className="hidden md:flex justify-start md:justify-center">
+                {tabs.map((tab) => (
+                    <button
+                        key={tab}
+                        onClick={() => setTabActive(tab)}
+                        className={`cursor-pointer px-4 py-2 mx-2 rounded-lg ${tabActive === tab ? "bg-indigo-600 text-white" : "active:bg-gray-300 bg-gray-200 hover:bg-gray-300"}`}
+                    >
+                        <span className="font-semibold">{tab}</span>
+                    </button>
+                ))}
+            </div>
 
-            <AccordionItem title="Saya Ingin Berhenti Berlangganan">
-              <p className="p-5 text-sm text-gray-800 dark:text-gray-200">
-                {faqDescription.benefit}
-              </p>
-            </AccordionItem>
-            <AccordionItem title="Bagaimana Caranya Agar Saya Mendapatkan Notifikasi Pembaharuan?">
-              <p className="p-5 text-sm text-gray-800 dark:text-gray-200">
-                {faqDescription.benefit}
-              </p>
-            </AccordionItem>
-            <AccordionItem title="Bagaimana Cara Mengganti Email yang Sudah Terdaftar Subscription?">
-              <p className="p-5 text-sm text-gray-800 dark:text-gray-200">
-                {faqDescription.benefit}
-              </p>
-            </AccordionItem>
-            <AccordionItem title="Apakah Subcription Itu Berbayar?">
-              <p className="p-5 text-sm text-gray-800 dark:text-gray-200">
-                {faqDescription.benefit}
-              </p>
-            </AccordionItem>
-          </Accordion>
+            <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:mt-10 mt-5">
+                {plans.filter((plan) => plan.durasi === tabActive ).map((plan, index) => (
+                    <div
+                        key={index}
+                        className={`border rounded-2xl p-6 shadow-md transition-transform transform lg:hover:scale-105 ${
+                        plan.highlight
+                            ? "border-yellow-500 bg-yellow-50 lg:scale-105"
+                            : "border-gray-200 bg-white"
+                        }`}
+                    >
+                        {plan.specialTag && (
+                            <div className="mb-5 md:mb-3 text-sm font-medium text-white bg-indigo-400 inline-block px-3 py-1 rounded-full">
+                                {plan.specialTag}
+                            </div>
+                        )}
+                        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                            {plan.name}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-3">{plan.description}</p>
+                        {plan.specialNote && (
+                            <p className="text-xs text-gray-500 italic mb-2">{plan.specialNote}</p>
+                        )}
+                        {/* Harga */}
+                        {plan.price === 0 ? (
+                            <p className="text-2xl font-bold text-indigo-700 mb-1">Gratis</p>
+                        ) :  (
+                            <>
+                                <div className="text-2xl font-bold text-indigo-700 mb-3">
+                                    Rp{plan.price.toLocaleString()}/{plan.durasi}
+                                </div>
+
+                                <div className="flex gap-5 mb-5 items-center">
+                                    {plan.price < plan.originalPrice && (
+                                        <div className="text-sm text-gray-500 line-through">
+                                            Rp{plan.originalPrice.toLocaleString()}/{plan.durasi}
+                                        </div>
+                                    )}
+                                    <p className="text-sm font-medium text-white bg-emerald-600 inline-block px-3 py-1 rounded-full">
+                                        Hemat {Math.round(((plan.originalPrice - plan.price) / plan.originalPrice) * 100)}%
+                                    </p>
+                                </div>
+                            </>
+                        )}
+
+                        <button
+                            className={`w-full cursor-pointer font-semibold py-2 rounded-lg transition mb-4
+                                ${plan.highlight
+                                ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                                : "border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50"
+                                }`}
+                        >
+                            {plan.highlight ? "Pilih Paket Favorit" : "Langganan Sekarang"}
+                        </button>
+                        <ul className="space-y-2">
+                        {plan.features.map((feature, i) => (
+                            <li key={i} className="flex items-start text-gray-700">
+                            <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5" />
+                            {feature}
+                            </li>
+                        ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
         </div>
-      </main>
-
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-
     </MainLayout>
   );
 }

@@ -14,6 +14,7 @@ use App\Models\LaguDaerah;
 use App\Models\MakananKhas;
 use App\Models\Order;
 use App\Models\PembelianEvent;
+use App\Models\Plan;
 use App\Models\RumahAdat;
 use App\Models\SeniTari;
 use Illuminate\Http\Request;
@@ -63,13 +64,67 @@ class FrontController extends Controller
             ->orderBy('created_at', 'desc')
             ->limit(4)->get();
 
+                $plans = Plan::whereNull('deleted_at')->get();
+
+        $specialTags = [
+            "🎉 Mulai Gratis",
+            "🔥 Populer",
+            "💼 Terbaik untuk Profesional"
+        ];
+
+        $response = $plans->map(function ($plan) use ($specialTags) {
+            // Konversi durasi ke label
+            $durationMap = [
+                '30' => 'Bulanan',
+                '90' => 'Triwulanan',
+                '365' => 'Tahunan',
+            ];
+
+            $durationLabel = $durationMap[$plan->durasi] ?? 'lainnya';
+
+            // Pecah fitur menjadi array
+            $features = array_filter(array_map(function ($line) {
+                return trim(preg_replace('/^-/', '', $line));
+            }, preg_split('/\r\n|\r|\n/', $plan->fitur)));
+
+            // Pecah deskripsi menjadi dua paragraf
+            $deskripsiParts = preg_split('/\r\n|\r|\n/', $plan->deskripsi);
+            $description = trim($deskripsiParts[0] ?? '');
+            $specialNote = trim($deskripsiParts[1] ?? '');
+
+            // Mapping specialTag berdasarkan nama plan
+            $tagMap = [
+                "Gratis" => $specialTags[0],
+                "Pelajar" => $specialTags[1],
+                "Profesional" => $specialTags[2],
+            ];
+
+            return [
+                "name" => $plan->nama,
+                "description" => $description,
+                "specialNote" => $specialNote,
+                "price" => (int) $plan->harga_diskon,
+                "originalPrice" => (int) $plan->harga,
+                "durasi" => $durationLabel,
+                "features" => array_values($features),
+                "highlight" => $plan->nama === "Pelajar",
+                "specialTag" => $tagMap[$plan->nama] ?? null,
+            ];
+        });
+
         return Inertia::render('Home', [
             'events' => $events,
             'artikels' => $artikels,
+            "plans" => $response,
             'user' => Auth::user(),
         ]);
     }
 
+    public function keranjang(){
+        return Inertia::render('Cart', [
+            'user' => Auth::user(),
+        ]);
+    }
 
     public function event(Request $request)
     {
@@ -282,6 +337,62 @@ class FrontController extends Controller
                 'error' => $e->getMessage() // Hapus di production kalau perlu
             ], 500);
         }
+    }
+
+
+    public function subscription(){
+        $plans = Plan::whereNull('deleted_at')->get();
+
+        $specialTags = [
+            "🎉 Mulai Gratis",
+            "🔥 Populer",
+            "💼 Terbaik untuk Profesional"
+        ];
+
+        $response = $plans->map(function ($plan) use ($specialTags) {
+            // Konversi durasi ke label
+            $durationMap = [
+                '30' => 'Bulanan',
+                '90' => 'Triwulanan',
+                '365' => 'Tahunan',
+            ];
+
+            $durationLabel = $durationMap[$plan->durasi] ?? 'lainnya';
+
+            // Pecah fitur menjadi array
+            $features = array_filter(array_map(function ($line) {
+                return trim(preg_replace('/^-/', '', $line));
+            }, preg_split('/\r\n|\r|\n/', $plan->fitur)));
+
+            // Pecah deskripsi menjadi dua paragraf
+            $deskripsiParts = preg_split('/\r\n|\r|\n/', $plan->deskripsi);
+            $description = trim($deskripsiParts[0] ?? '');
+            $specialNote = trim($deskripsiParts[1] ?? '');
+
+            // Mapping specialTag berdasarkan nama plan
+            $tagMap = [
+                "Gratis" => $specialTags[0],
+                "Pelajar" => $specialTags[1],
+                "Profesional" => $specialTags[2],
+            ];
+
+            return [
+                "name" => $plan->nama,
+                "description" => $description,
+                "specialNote" => $specialNote,
+                "price" => (int) $plan->harga_diskon,
+                "originalPrice" => (int) $plan->harga,
+                "durasi" => $durationLabel,
+                "features" => array_values($features),
+                "highlight" => $plan->nama === "Pelajar",
+                "specialTag" => $tagMap[$plan->nama] ?? null,
+            ];
+        });
+
+        return Inertia::render('Subscription', [
+            'user' => Auth::user(),
+            "plans" => $response
+        ]);
     }
 
 

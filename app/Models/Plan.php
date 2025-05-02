@@ -10,10 +10,10 @@ class Plan extends Model
 {
     /** @use HasFactory<\Database\Factories\PlanFactory> */
     use HasFactory, SoftDeletes;
-    protected $fillable = ['nama', 'harga', 'durasi', 'deskripsi', 'fitur'];
-    protected $casts = [
-        'fitur' => 'array',
-    ];
+    protected $fillable = ['nama', 'harga', 'harga_diskon', 'durasi', 'deskripsi', 'fitur'];
+    // protected $casts = [
+    //     'fitur' => 'array',
+    // ];
 
     public function subscriptions() {
         return $this->hasMany(Subscription::class);

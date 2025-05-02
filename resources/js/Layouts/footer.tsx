@@ -137,9 +137,9 @@ export default function Footer() {
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">WhatsApp</a>
                     <a href="https://github.com/IkkiRama"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">GitHub</a>
-                    <a href="https://www.instagram.com/george_ikki/"
+                    <a href="https://www.instagram.com"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Instagram</a>
-                    <a href="https://www.youtube.com/channel/UCDYgvHIUtwRDRfS4srHFQDg"
+                    <a href="https://www.youtube.com"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Youtube</a>
                     <a href="https://www.linkedin.com/in/rifki-romadhan/"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">LinkedIn</a>

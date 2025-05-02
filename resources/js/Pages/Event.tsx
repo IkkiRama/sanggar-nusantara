@@ -129,8 +129,6 @@ export default function Event() {
                 }
             });
 
-            console.log("Response Data:", response.data); // Cek data di console
-
             if (response.data && Array.isArray(response.data.events)) {
                 setFilteredEvents(response.data.events);
                 setTotalPages(response.data.totalPages);

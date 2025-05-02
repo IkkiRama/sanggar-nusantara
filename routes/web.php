@@ -9,6 +9,7 @@ use Endroid\QrCode\Builder\Builder;
 
 
 Route::get('/', [FrontController::class, 'index']);
+Route::get('/keranjang', [FrontController::class, 'keranjang']);
 Route::get('/subscription', [FrontController::class, 'subscription']);
 Route::get('/peta-interaktif', [FrontController::class, 'petaInteraktif']);
 // Route::post('/komen', [FrontController::class, 'storeKomen']);

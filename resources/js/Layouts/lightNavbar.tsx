@@ -8,7 +8,8 @@ import {
     FaBookOpen,
     FaTicketAlt,
     FaSun,
-    FaMoon
+    FaMoon,
+    FaShoppingBag
 } from 'react-icons/fa';
 
 import { FaEarthAsia } from 'react-icons/fa6';
@@ -253,14 +254,17 @@ const Navbar = ({user}) => {
 
                             {user ? (
                                 <div className="relative">
-                                    <div className="flex items-center space-x-4">
-                                        {/* <Link
-                                            href="/profile/dashboard"
-                                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center bg-white/80 text-gray-700 hover:bg-gray-100 shadow-lg`}
+                                    <div className="flex items-center space-x-2">
+                                        <Link
+                                            href="/keranjang"
+                                            className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center bg-white/80 text-gray-700 hover:bg-gray-100 shadow-lg`}
                                         >
-                                            <FaTachometerAlt className="mr-2" />
-                                            Profile
-                                        </Link> */}
+                                            <FaShoppingBag className="w-[20px] h-[20px]" />
+
+                                            <span className="absolute -top-1 right-[-10px] bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+                                                99+
+                                            </span>
+                                        </Link>
                                         <button
                                             onClick={() => setIsProfileOpen(!isProfileOpen)}
                                             className={`cursor-pointer flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium bg-white/80 text-blue-600 hover:bg-blue-50 shadow-lg`}
@@ -439,14 +443,6 @@ const Navbar = ({user}) => {
                                     <div className={`pt-4 border-t border-gray-200`}>
                                         {user ? (
                                             <div className="space-y-2">
-                                                {/* <MobileMenuItem
-                                                //@ts-ignore
-                                                    href="/dashboard"
-                                                    icon={FaTachometerAlt}
-                                                    label="Dashboard"
-                                                    onClick={handleItemClick}
-                                                    isActive={url === '/dashboard'}
-                                                /> */}
                                                 <MobileMenuItem
                                                 //@ts-ignore
                                                     href="/profile/dashboard"

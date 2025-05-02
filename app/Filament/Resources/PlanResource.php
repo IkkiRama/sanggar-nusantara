@@ -33,9 +33,6 @@ class PlanResource extends Resource
                 Forms\Components\TextInput::make('nama')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('harga')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\Select::make('durasi')
                     ->options([
                         "30" => "30 Hari",
@@ -43,8 +40,13 @@ class PlanResource extends Resource
                         "365" => "365 Hari",
                     ])
                     ->preload()
-                    ->columnSpanFull()
                     ->required(),
+                Forms\Components\TextInput::make('harga')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('harga_diskon')
+                    ->required()
+                    ->numeric(),
                 Forms\Components\Textarea::make('deskripsi')
                     ->required()
                     ->columnSpanFull(),
@@ -61,6 +63,9 @@ class PlanResource extends Resource
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('harga')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('harga_diskon')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('durasi'),

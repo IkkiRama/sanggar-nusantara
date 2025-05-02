@@ -19,6 +19,7 @@ class PlanFactory extends Factory
         return [
             'nama' => $this->faker->word,
             'harga' => $this->faker->randomElement(['50000', '99000', '199000']),
+            'harga_diskon' => $this->faker->randomElement(['50000', '99000', '199000']),
             'durasi' => $this->faker->randomElement(['30', '90', '365']),
             'deskripsi' => $this->faker->paragraphs(3, true),
             'fitur' => json_encode(['akses_video', 'tanpa_iklan', 'unduh_materi'])
