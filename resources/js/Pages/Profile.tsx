@@ -7,18 +7,22 @@ import { LucideCalendarDays, Ticket } from 'lucide-react';
 import formatTanggal from './../Utils/formatTanggal';
 import toCapitalize from './../Utils/toCapitalize';
 import ProfileLayout from '../Layouts/profileLayout';
+import { useAuth } from '../Hooks/useAuth';
 
 
 
-export default function Profile({user, pembelianEvents}) {
+export default function Profile({pembelianEvents}) {
+    const { user, loading } = useAuth();
     const [isChecking, setIsChecking] = useState(true);
     const [activeTab, setActiveTab] = useState("event");
     const [snapToken, setSnapToken] = useState<string | null>(null);
 
 
+
+
     useEffect(() => {
         if (!user) {
-            window.location.href = '/login'; // Redirect ke halaman login jika belum login
+            window.location.href = '/masuk'; // Redirect ke halaman login jika belum login
         } else {
             setIsChecking(false);
         }

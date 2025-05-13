@@ -25,7 +25,9 @@ class ProfileController extends Controller
     }
 
     function index() {
-        $userId = Auth::id(); // Mengambil ID user yang sedang login
+        $userId = session('user_id'); // Mengambil ID user yang sedang login
+
+        dd($userId);
 
             // Cek semua order pending milik user
             $ordersPending = DB::table('orders')
@@ -62,7 +64,6 @@ class ProfileController extends Controller
             ->get();
 
         return Inertia::render('Profile', [
-            'user' => Auth::user(),
             "pembelianEvents" => $pembelianEvents
         ]);
     }
@@ -103,7 +104,6 @@ class ProfileController extends Controller
             ->firstOrFail();
 
         return Inertia::render('Invoice', [
-            'user' => Auth::user(),
             'order' => $order,
         ]);
     }
@@ -231,7 +231,6 @@ class ProfileController extends Controller
 
     function profileEdit() {
         return Inertia::render('EditProfile', [
-            'user' => Auth::user(),
         ]);
     }
 
@@ -251,14 +250,12 @@ class ProfileController extends Controller
         }
 
         return Inertia::render('TransaksiProfile', [
-            'user' => Auth::user(),
             'transaksi' => $transaksi,
         ]);
     }
 
     function ubahPassword() {
         return Inertia::render('UbahPassword', [
-            'user' => Auth::user(),
         ]);
     }
 }

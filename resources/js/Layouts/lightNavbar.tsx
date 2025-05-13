@@ -13,7 +13,8 @@ import {
 } from 'react-icons/fa';
 
 import { FaEarthAsia } from 'react-icons/fa6';
-import ThemeToggle from '../Components/ThemeToggle';
+import { useAuth } from '../Hooks/useAuth';
+
 
 const NAV_ITEMS = [
     { path: '/', label: 'Beranda', icon: FaHome },
@@ -147,6 +148,8 @@ const DesktopNavItem = memo(({ item, isActive, isDark, activeDropdown, onDropdow
 
 
 const Navbar = ({user}) => {
+    // const { user, loading } = useAuth();
+
     const { url } = usePage();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -303,13 +306,13 @@ const Navbar = ({user}) => {
                             ) : (
                                 <>
                                     {/* <Link
-                                        href="/daftar"
+                                        href="/admin/login"
                                         className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-white/80 text-red-600 hover:bg-blue-50 shadow-lg`}
                                     >
                                         Daftar
                                     </Link> */}
                                     <a
-                                        href="/login"
+                                        href="/admin/login"
                                         className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-white bg-red-500 hover:bg-red-400 shadow-lg`}
                                     >
                                         Masuk
@@ -320,13 +323,13 @@ const Navbar = ({user}) => {
 
 
                             {/* <Link
-                                href="/daftar"
+                                href="/admin/login"
                                 className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-white/80 text-red-600 hover:bg-blue-50 shadow-lg`}
                             >
                                 Daftar
                             </Link>
                             <Link
-                                href="/masuk"
+                                href="/admin/login"
                                 className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-white bg-red-500 hover:bg-blue-50 shadow-lg`}
                             >
                                 Masuk
@@ -342,6 +345,17 @@ const Navbar = ({user}) => {
                             >
                                 {isDark ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
                             </button> */}
+
+                            <Link
+                                href="/keranjang"
+                                className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center text-gray-700`}
+                            >
+                                <FaShoppingBag className="w-[20px] h-[20px]" />
+
+                                <span className="absolute -top-1 right-[-10px] bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+                                    99+
+                                </span>
+                            </Link>
 
                             <button
                                 onClick={toggleMenu}
@@ -464,26 +478,26 @@ const Navbar = ({user}) => {
                                             </div>
                                         ) : (
                                             <a
-                                                href="/login"
+                                                href="/admin/login"
                                                 className={`flex items-center space-x-3 p-3 rounded-xl text-blue-600 hover:bg-blue-50 transition-all duration-200`}
                                                 onClick={handleItemClick}
                                             >
                                                 <div className={`size-9 rounded-xl flex items-center justify-center bg-blue-50`}>
                                                     <FaUser className="w-5 h-5" />
                                                 </div>
-                                                <span className="font-medium">Login</span>
+                                                <span className="font-medium">daftar</span>
                                             </a>
                                         )}
 
                                         {/* <Link
-                                            href="/login"
+                                            href="/admin/login"
                                             className={`flex items-center space-x-3 p-3 rounded-xl text-blue-600 hover:bg-blue-50 transition-all duration-200`}
                                             onClick={handleItemClick}
                                         >
                                             <div className={`size-9 rounded-xl flex items-center justify-center bg-blue-50`}>
                                                 <FaUser className="w-5 h-5" />
                                             </div>
-                                            <span className="font-medium">Login</span>
+                                            <span className="font-medium">daftar</span>
                                         </Link> */}
                                     </div>
                                 </div>

@@ -72,6 +72,9 @@ interface PageProps {
 
 
 const Home = ({plans}) => {
+    const token = localStorage.getItem('token');
+    console.log("Token dari localStorage:", token);
+
     const { user } = usePage().props;
   const [open, setOpen] = useState(false);
   const [tabActive, setTabActive] = useState("news");

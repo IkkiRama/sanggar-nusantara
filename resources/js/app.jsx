@@ -3,7 +3,9 @@ import { createInertiaApp } from '@inertiajs/react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from './Components/ThemeContext';
+import { AuthProvider } from './Hooks/useAuth';
 // import { ThemeProvider } from "./ThemeContext";
+
 
 createInertiaApp({
     resolve: name => {
@@ -13,9 +15,11 @@ createInertiaApp({
     setup({ el, App, props }) {
         createRoot(el).render(
             <BrowserRouter>
-                {/* <ThemeProvider> */}
-                    <App {...props} />
-                {/* </ThemeProvider> */}
+                <AuthProvider>
+                    {/* <ThemeProvider> */}
+                        <App {...props} />
+                    {/* </ThemeProvider> */}
+                </AuthProvider>
             </BrowserRouter>
         );
     },

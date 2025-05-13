@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->integer('item_id');
-            $table->enum('item_type', ['event', 'produk']);
+            $table->enum('item_type', ['subscription', 'product', 'event', 'course']);
             $table->integer('jumlah')->default(1);
             $table->integer('harga');
-            $table->text('deskripsi');
             $table->timestamps();
         });
     }

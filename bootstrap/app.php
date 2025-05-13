@@ -15,9 +15,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         // Middleware CORS untuk API
-        // $middleware->api(append: [
-        //     CorsMiddleware::class,
-        // ]);
+        $middleware->api(append: [
+            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // 'throttle:api',
+            // \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // CorsMiddleware::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        ]);
 
         // Middleware untuk web (jika perlu)
         $middleware->web(append: [

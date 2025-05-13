@@ -1,57 +1,48 @@
-import { usePage } from '@inertiajs/react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import axios from 'axios';
 
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    type: 'admin' | 'operator' | 'user';
-    is_active: boolean;
-    roles?: string[];
-    permissions?: string[];
-}
+// Misal tipe user seperti ini
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
 
-interface PageProps {
-    auth: {
-        user: User | null;
-    };
-}
+type AuthContextType = {
+  user: User | null;
+  setUser: (user: User | null) => void;
+  loading: boolean;
+};
 
-export function useAuth() {
-    //@ts-ignore
-    const { props } = usePage<PageProps>();
-    const auth = props.auth || { user: null };
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-    const hasRole = (role: string): boolean => {
-        if (!auth.user) return false;
-        return auth.user.type === role || auth.user.roles?.includes(role) || false;
-    };
+// Provider untuk AuthContext
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    const hasPermission = (permission: string): boolean => {
-        if (!auth.user) return false;
-        return auth.user.permissions?.includes(permission) || false;
-    };
+  // Ambil data user saat pertama kali app dimuat
+  useEffect(() => {
+    axios.get('/api/user', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    })
+      .then(response => setUser(response.data))
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
+  }, []);
 
-    const isAdmin = (): boolean => {
-        if (!auth.user) return false;
-        return auth.user.type === 'admin' || hasRole('admin');
-    };
+  return (
+    <AuthContext.Provider value={{ user, setUser, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-    const isOperator = (): boolean => {
-        if (!auth.user) return false;
-        return auth.user.type === 'operator' || hasRole('operator');
-    };
-
-    const isUser = (): boolean => {
-        if (!auth.user) return false;
-        return auth.user.type === 'user' || hasRole('user');
-    };
-
-    return {
-        user: auth.user,
-        hasRole,
-        hasPermission,
-        isAdmin,
-        isOperator,
-        isUser,
-    };
-}
+// Hook untuk mengakses context di komponen lain
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error('useAuth must be used within an AuthProvider');
+  return context;
+};

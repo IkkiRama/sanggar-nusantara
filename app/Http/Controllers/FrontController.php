@@ -113,16 +113,16 @@ class FrontController extends Controller
         });
 
         return Inertia::render('Home', [
+            "user" => Auth::user(),
             'events' => $events,
             'artikels' => $artikels,
             "plans" => $response,
-            'user' => Auth::user(),
         ]);
     }
 
     public function keranjang(){
         return Inertia::render('Cart', [
-            'user' => Auth::user(),
+            "user" => Auth::user(),
         ]);
     }
 
@@ -162,14 +162,13 @@ class FrontController extends Controller
             return response()->json([
                 'events' => $events,
                 'totalPages' => $totalPages,
-                'user' => Auth::user(),
             ]);
         }
 
         return Inertia::render('Event', [
+            "user" => Auth::user(),
             'events' => $events,
             'totalPages' => $totalPages,
-            'user' => Auth::user(),
         ]);
     }
 
@@ -199,10 +198,10 @@ class FrontController extends Controller
             $message = 'Event ini hanya tersedia penuh untuk pengguna premium.';
 
             return Inertia::render('DetailEvent', [
+                "user" => Auth::user(),
                 'event' => $eventPreview,
                 'hargaTiket' => [],
                 'events' => [],
-                'user' => Auth::user(),
                 'restricted' => compact('status', 'message')
             ]);
         }
@@ -226,10 +225,10 @@ class FrontController extends Controller
         }
 
         return Inertia::render('DetailEvent', [
+            "user" => Auth::user(),
             'event' => $event,
             'hargaTiket' => $event->harga,
             'events' => $events,
-            'user' => Auth::user(),
         ]);
     }
 
@@ -265,11 +264,11 @@ class FrontController extends Controller
             ->get();
 
         return Inertia::render('Artikel', [
+            "user" => Auth::user(),
             'artikelTerbaru' => $dataArtikel->first(),
             'artikelBerikutnya' => $dataArtikel->slice(1, 2)->values(),
             'artikels' => $dataArtikel->slice(3)->values(),
             'trendingArtikel' => $trendingArtikel,
-            'user' => Auth::user(),
         ]);
     }
 
@@ -390,7 +389,7 @@ class FrontController extends Controller
         });
 
         return Inertia::render('Subscription', [
-            'user' => Auth::user(),
+            "user" => Auth::user(),
             "plans" => $response
         ]);
     }
@@ -399,8 +398,8 @@ class FrontController extends Controller
 
     public function detailArtikel($slug){
         return Inertia::render('Detail', [
+            "user" => Auth::user(),
             'slug' => $slug,
-            'user' => Auth::user(),
         ]);
     }
 
@@ -442,7 +441,7 @@ class FrontController extends Controller
         $seniTari = SeniTari::latest()->get();
 
         return Inertia::render('Map', [
-            'user' => Auth::user(),
+            "user" => Auth::user(),
             'foods' => $foods,
             'alatMusik' => $alatMusik,
             'rumahAdat' => $rumahAdat,
@@ -454,7 +453,7 @@ class FrontController extends Controller
 
     function ragamIndonesia() {
         return Inertia::render('RagamIndonesia', [
-            'user' => Auth::user(),
+            "user" => Auth::user(),
         ]);
     }
 
@@ -462,7 +461,7 @@ class FrontController extends Controller
         $foods = MakananKhas::latest()->get();
 
         return Inertia::render('RagamMakanan', [
-            'user' => Auth::user(),
+            "user" => Auth::user(),
             'foods' => $foods,
         ]);
     }
@@ -471,7 +470,7 @@ class FrontController extends Controller
         $alatMusik = AlatMusik::latest()->get();
 
         return Inertia::render('RagamAlatMusik', [
-            'user' => Auth::user(),
+            "user" => Auth::user(),
             'alatMusik' => $alatMusik,
         ]);
     }
@@ -480,7 +479,7 @@ class FrontController extends Controller
         $rumahAdat = RumahAdat::latest()->get();
 
         return Inertia::render('RagamRumahAdat', [
-            'user' => Auth::user(),
+            "user" => Auth::user(),
             'rumahAdat' => $rumahAdat,
         ]);
     }
@@ -490,7 +489,7 @@ class FrontController extends Controller
         $laguDaerah = LaguDaerah::latest()->get();
 
         return Inertia::render('RagamLaguDaerah', [
-            'user' => Auth::user(),
+            "user" => Auth::user(),
             'laguDaerah' => $laguDaerah,
         ]);
     }
@@ -499,7 +498,7 @@ class FrontController extends Controller
         $bahasaDaerah = BahasaDaerah::latest()->get();
 
         return Inertia::render('RagamBahasadaerah', [
-            'user' => Auth::user(),
+            "user" => Auth::user(),
             'bahasaDaerah' => $bahasaDaerah,
         ]);
     }
@@ -508,7 +507,7 @@ class FrontController extends Controller
         $seniTari = SeniTari::latest()->get();
 
         return Inertia::render('RagamSeniTari', [
-            'user' => Auth::user(),
+            "user" => Auth::user(),
             'seniTari' => $seniTari,
         ]);
     }

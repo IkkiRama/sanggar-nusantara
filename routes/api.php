@@ -1,14 +1,21 @@
 <?php
 
 use App\Http\Controllers\ArtikelController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransaksiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Cache\RateLimiting\Limit;
 
-Route::get('/artikel/{slug}', [FrontController::class, 'showArtikel']);
+// Tambahkan di atas route API kamu
+// RateLimiter::for('api', function (Request $request) {
+//     return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+// });
+
 Route::post('/komen', [FrontController::class, 'storeKomenAPI']);
 Route::post('/diskon', [FrontController::class, 'showDiskonAPI']);
 Route::post('/kontak', [FrontController::class, 'submitKontak']);
@@ -20,6 +27,15 @@ Route::post('/midtrans-callback', [TransaksiController::class, 'updateTransactio
 Route::get('/midtrans/token/{order_id}', [ProfileController::class, 'getSnapToken']);
 Route::post('/event/batalkan/{orderId}', [ProfileController::class, 'batalkanTransaksi']);
 
-Route::middleware(['auth:sanctum', 'cors'])->group(function () {
+
+
+Route::post('/daftar', [AuthController::class, 'postRegister']);
+// Route::post('/masuk', [AuthController::class, 'postLogin']);
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/artikel/{slug}', [FrontController::class, 'showArtikel']);
 });
 

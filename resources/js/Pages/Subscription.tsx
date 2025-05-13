@@ -34,7 +34,7 @@ export default function SubscriptionPlans({plans,user}) {
                     <button
                         key={tab}
                         onClick={() => setTabActive(tab)}
-                        className={`cursor-pointer px-4 py-2 mx-2 rounded-lg ${tabActive === tab ? "bg-indigo-600 text-white" : "active:bg-gray-300 bg-gray-200 hover:bg-gray-300"}`}
+                        className={`cursor-pointer px-4 py-2 mx-2 rounded-lg ${tabActive === tab ? "bg-red-600 text-white" : "active:bg-gray-300 bg-gray-200 hover:bg-gray-300"}`}
                     >
                         <span className="font-semibold">{tab}</span>
                     </button>
@@ -85,15 +85,17 @@ export default function SubscriptionPlans({plans,user}) {
                             </>
                         )}
 
-                        <button
-                            className={`w-full cursor-pointer font-semibold py-2 rounded-lg transition mb-4
-                                ${plan.highlight
-                                ? "bg-indigo-600 hover:bg-indigo-700 text-white"
-                                : "border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50"
-                                }`}
-                        >
-                            {plan.highlight ? "Pilih Paket Favorit" : "Langganan Sekarang"}
-                        </button>
+                        <form action="/" method="post">
+                            <button
+                                className={`w-full cursor-pointer font-semibold py-2 rounded-lg transition mb-4
+                                    ${plan.highlight
+                                    ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                                    : "border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50"
+                                    }`}
+                            >
+                                {plan.highlight ? "Pilih Paket Favorit" : "Langganan Sekarang"}
+                            </button>
+                        </form>
                         <ul className="space-y-2">
                         {plan.features.map((feature, i) => (
                             <li key={i} className="flex items-start text-gray-700">
