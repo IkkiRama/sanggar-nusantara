@@ -1,3 +1,9 @@
+ngga kehapus fotonya
+ubah foto di admin panel
+data provinsi dll ngga masu berubah meskipun ada di database datanya
+data selected desa belum bisa masuk ke db
+
+
 MOHON DIPERHATIKAN DULU REQUIREMENT NODE JS DAN PHP NYA SUPAYA TIDAK EROR DALAM MENG INSTALL DEPENDENSI NYA
 
 LINK GITHUB :

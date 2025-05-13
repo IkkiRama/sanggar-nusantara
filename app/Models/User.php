@@ -54,7 +54,7 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
-    public function alamat() { return $this->hasOne(Alamat::class, 'id_user'); }
+    public function alamat() { return $this->hasOne(Alamat::class, 'user_id'); }
 
     public function artikel()
     {
@@ -90,7 +90,7 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(DiscountUser::class);
     }
-    
+
     public function komentar(): HasMany
     {
         return $this->hasMany(Komentar::class, 'artikel_id');

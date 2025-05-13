@@ -28,6 +28,8 @@ export default function Detail() {
     // const { artikel = {}, rekomendasiArtikel = [] } = usePage<PageProps>().props;
     const { user, slug } = usePage().props;
     const [artikel, setArtikel] = useState<ArtikelType | null>(null);
+    const [messageArtikel, setMessageArtikel] = useState("");
+
     const [komentar, setKomentar] = useState<KomentarType[]>([]);
     const [rekomendasiArtikel, setRekomendasiArtikel] = useState<RekomendasiArtikelType[]>([]);
     const [error, setError] = useState(null);
@@ -54,7 +56,7 @@ export default function Detail() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://sanggar-nusantara.test/api/artikel/${slug}`
+          `/api/artikel/${slug}`
         );
 
         if (!response.ok) {
@@ -63,10 +65,12 @@ export default function Detail() {
 
         const result = await response.json();
 
+
         if (result.status) {
             setArtikel(result.data.artikel)
             setKomentar(result.data.artikel.komentar)
             setRekomendasiArtikel(result.data.rekomendasiArtikel)
+            setMessageArtikel(result.message)
         } else {
             setError(result.message); // Tangkap error jika ada
             console.error("Error fetching data:", error);
@@ -120,10 +124,11 @@ export default function Detail() {
             if (!komen.trim()) throw new Error("Komentar tidak boleh kosong.");
 
 
-            const response = await fetch('http://sanggar-nusantara.test/api/komen', {
+            const response = await fetch('/api/komen', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 },
                 //@ts-ignore
                 body: JSON.stringify({artikel_id:artikel?.id, nama, email, komentar:komen}),
@@ -149,12 +154,12 @@ export default function Detail() {
     }
 
   if (artikel !== null && rekomendasiArtikel?.length > 0) return (
-    <MainLayout title={`Detail ${artikel?.title} | Sanggar Nusantara`} >
+    <MainLayout title={`Artikel ${artikel?.title} | Sanggar Nusantara`} >
       <LightNavbar user={user} />
 
       <div className="pt-20 pb-10 md:px-20 px-5 mb-8 bg-gray-100 dark:bg-gray-950 relative">
         <div className="grid lg:grid-cols-5 items-center 2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">
-        
+
             <span className="h-full lg:w-[700px] w-full absolute right-0 lg:bg-gradient-to-l bg-gradient-to-b from-red-500/70 to-red-500/0"></span>
             <div className="lg:col-span-3 order-2 lg:order-1 relative z-10 lg:text-left text-center">
             <p className="font-semibold mb-2 text-red-500 md:md:text-base text-[13px] text-sm">
@@ -188,7 +193,7 @@ export default function Detail() {
       <main className="md:px-20 px-5 gap-20 mt-20 mb-20">
         <div className="grid lg:grid-cols-3 2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">
 
-            {artikel?.status_artikel !== "premium" ?(
+            {messageArtikel === "Artikel berhasil dimuat." ?(
                 <div className="lg:col-span-2 text-gray-800 dark:text-gray-200">
                     <ArticleContent
                         content={artikel?.content}
@@ -221,13 +226,13 @@ export default function Detail() {
                 </p>
 
             </div>
-        
+
         </div>
       </main>
 
       <div className="2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">
         <hr className="w-[90%] mx-auto border-slate-300" />
-        {artikel?.status_artikel !== "premium" && (
+        {messageArtikel === "Artikel berhasil dimuat." && (
             <div className="grid grid-cols-1 lg:gap-10 gap-4 md:px-20 px-5 mb-8 items-center mt-10">
                 <div className="mb-5">
                     <h2 className="text-2xl inline-block font-semibold transition-all hover:pr-3 border-b-4 border-red-500 dark:text-gray-200">
@@ -251,7 +256,7 @@ export default function Detail() {
                 ))}
 
                 {/* Form Komentar */}
-                <form onSubmit={handleSubmit} className="bg-gray-100 dark:bg-gray-800 p-5 rounded-lg">
+                <form onSubmit={handleSubmit} className="bg-white/70 dark:bg-gray-800 p-5 rounded-lg">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     {/* Nama */}
                         <div>
@@ -328,7 +333,7 @@ export default function Detail() {
 
       <section className="px-20 mt-10">
         <div className="lg:grid hidden grid-cols-3 gap-10 2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">
-        
+
             <div className="col-span-3">
             <h3 className="text-2xl inline-block font-semibold transition-all hover:pr-3 border-b-4 border-red-500 dark:text-gray-200">
                 BERITA LAINNYA

@@ -80,39 +80,34 @@ const ETiket = ({orders}) => {
                         {order.nama_event}
                         </h2>
                         <div className="flex flex-wrap md:flex-nowrap gap-5">
-                        <div className="w-full md:w-[45%]">
-                            <img
-                            src={order.image ? `../storage/${order.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
-                            alt="image event"
-                            className="w-[100%] h-48 rounded-lg object-cover shrink-0 bg-gray-500"
-                            />
-                        </div>
-                        <div className="md:mr-10">
-                            <div className="text-gray-500 flex items-center gap-5 mb-3">
-                            <Calendar />
-                            <p className="text-lg font-medium text-slate-800">
-                                {changeDate(new Date(order.tanggal_event ))}
-                            </p>
+                            <div className="w-full md:w-[45%]">
+                                <img
+                                src={order.image ? `../../storage/${order.image}` : "../images/NO IMAGE AVAILABLE.jpg"}
+                                alt="image event"
+                                className="w-[100%] h-48 rounded-lg object-cover shrink-0 bg-gray-500"
+                                />
                             </div>
-                            <div className="text-gray-500 flex items-center gap-5 mb-3">
-                            <MapPin />
-                            <p className="text-lg font-medium text-slate-800">
-                                {order.tempat}
-                            </p>
-                            </div>
-                            <div className="text-gray-500 flex items-center gap-5 mb-3">
-                            <Ticket />
-                            <p className="text-lg font-medium text-slate-800">
-                                Jenis Tiket: {order.jenis_tiket}
-                            </p>
+                            <div className="md:mr-10">
+                                <div className="text-gray-500 flex items-center gap-5 mb-3">
+                                <Calendar />
+                                <p className="text-lg font-medium text-slate-800">
+                                    {changeDate(new Date(order.tanggal_event ))}
+                                </p>
+                                </div>
+                                <div className="text-gray-500 flex items-center gap-5 mb-3">
+                                <MapPin />
+                                <p className="text-lg font-medium text-slate-800">
+                                    {order.tempat}
+                                </p>
+                                </div>
+                                <div className="text-gray-500 flex items-center gap-5 mb-3">
+                                <Ticket />
+                                <p className="text-lg font-medium text-slate-800">
+                                    Jenis Tiket: {order.jenis_tiket}
+                                </p>
+                                </div>
                             </div>
                         </div>
-                        </div>
-                        <img
-                        src="/logo.png"
-                        alt="logo sanggar nusantara"
-                        className="lg:absolute hidden top-0 right-0 w-32 h-32 rounded-full"
-                        />
                     </div>
 
                     <h2 className="lg:text-2xl text-lg font-bold mt-7 mb-4 text-slate-800">

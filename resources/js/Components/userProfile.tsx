@@ -1,8 +1,14 @@
 import { Link } from '@inertiajs/react';
 import { ArrowUpRightFromSquare, KeySquare, LayoutDashboard, LogOut, Pen, PenBox, Wallet2 } from 'lucide-react';
-import React from 'react'
+import React, { useState } from 'react'
 
 const UserProfile = ({isActive, user}) => {
+    const [showFullDescription, setShowFullDescription] = useState(false);
+
+    const toggleDescription = () => {
+        setShowFullDescription(prev => !prev);
+    };
+
     const handleLogout = (e) => {
         e.preventDefault();
         if (window.confirm("Apakah Anda yakin ingin logout?")) {
@@ -12,9 +18,11 @@ const UserProfile = ({isActive, user}) => {
 
   return (
     <div className="w-full lg:sticky top-36 p-5 bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl lg:w-[25%] h-full relative dark:bg-gray-800">
-        {/* <Link href="/profile/edit" className="absolute top-[10px] right-[10px] px-3 py-2 rounded-md border-2 border-[#e4e4e7]">
+        <Link href="/profile/edit" className={`absolute top-[10px] right-[10px] px-3 py-2 rounded-md border-2 border-[#e4e4e7]
+            ${isActive === "edit" ? "bg-blue-500 text-white font-semibold" : "font-medium hover:bg-gray-300 dark:hover:bg-gray-700"}
+        `}>
             <PenBox className="w-5 h-5"  />
-        </Link> */}
+        </Link>
 
       <img
         src={user.image ? `../storage/${user.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
@@ -26,9 +34,17 @@ const UserProfile = ({isActive, user}) => {
 
         <div className="mt-5">
             <h3 className="font-semibold text-slate-800 text-lg dark:text-gray-300">Tentang Saya</h3>
-            <p className="text-gray-700 mt-1 dark:text-gray-400 line-clamp-4">
-            {user.deskripsi}
+            <p className={`text-gray-700 mt-1 dark:text-gray-400 ${!showFullDescription ? "line-clamp-4" : ""}`}>
+                {user.deskripsi}
             </p>
+            {user.deskripsi?.length > 100 && (
+                <button
+                    onClick={toggleDescription}
+                    className="mt-1 text-blue-500 hover:text-blue-400 text-sm cursor-pointer"
+                >
+                    {showFullDescription ? "Sembunyikan" : "Lihat Selengkapnya"}
+                </button>
+            )}
         </div>
 
       <ul className="mt-5">

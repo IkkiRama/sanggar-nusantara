@@ -17,25 +17,34 @@ use Illuminate\Cache\RateLimiting\Limit;
 // });
 
 Route::post('/komen', [FrontController::class, 'storeKomenAPI']);
-Route::post('/diskon', [FrontController::class, 'showDiskonAPI']);
 Route::post('/kontak', [FrontController::class, 'submitKontak']);
-Route::post('/bayar', [TransaksiController::class, 'storeOrderAPI']);
-// Route::post('/updatePassword', [FrontController::class, 'updatePasswordAPI']);
-// Route::middleware('auth:sanctum')->get('/midtrans/token/{order_id}', [ProfileController::class, 'getSnapToken']);
-Route::post('/midtrans-callback', [TransaksiController::class, 'updateTransaction']); // Callback Midtrans
 
-Route::get('/midtrans/token/{order_id}', [ProfileController::class, 'getSnapToken']);
-Route::post('/event/batalkan/{orderId}', [ProfileController::class, 'batalkanTransaksi']);
+Route::get('/artikel/{slug}', [FrontController::class, 'showArtikel']);
+
+Route::middleware(['web'])->group(function () {
+    Route::post('/midtrans-callback', [TransaksiController::class, 'updateTransaction']); // Callback Midtrans
+
+    Route::get('/midtrans/token/{order_id}', [ProfileController::class, 'getSnapToken']);
+    Route::post('/event/batalkan/{orderId}', [ProfileController::class, 'batalkanTransaksi']);
+
+    Route::post('/diskon', [FrontController::class, 'showDiskonAPI']);
+    Route::post('/bayar', [TransaksiController::class, 'storeOrderAPI']);
+
+    Route::post('/profile/update', [ProfileController::class, 'updateProfileAPI']);
+    Route::post('/updatePassword', [FrontController::class, 'updatePasswordAPI']);
+
+});
 
 
 
-Route::post('/daftar', [AuthController::class, 'postRegister']);
+
+
+// Route::post('/daftar', [AuthController::class, 'postRegister']);
 // Route::post('/masuk', [AuthController::class, 'postLogin']);
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/artikel/{slug}', [FrontController::class, 'showArtikel']);
-});
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
 

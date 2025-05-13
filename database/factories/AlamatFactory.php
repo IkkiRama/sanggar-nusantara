@@ -22,6 +22,8 @@ class AlamatFactory extends Factory
             'alamat' => $this->faker->address(),
             'kabupaten' => $this->faker->city(),
             'provinsi' => $this->faker->state(),
+            'kecamatan' => $this->faker->city(),
+            'desa' => $this->faker->city(),
             'kode_pos' => $this->faker->postcode(),
         ];
     }

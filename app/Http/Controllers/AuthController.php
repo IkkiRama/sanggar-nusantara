@@ -94,6 +94,6 @@ class AuthController extends Controller
         $request->session()->invalidate(); // Hapus sesi pengguna
         $request->session()->regenerateToken(); // Regenerasi token CSRF untuk keamanan
 
-        return redirect('/masuk')->with('success', 'Anda telah logout.');
+        return redirect('/admin/login')->with('success', 'Anda telah logout.');
     }
 }

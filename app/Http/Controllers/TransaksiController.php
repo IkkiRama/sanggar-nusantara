@@ -358,6 +358,7 @@ class TransaksiController extends Controller
 
             return Inertia::render('SuccessPage', [
                 'order' => $order,
+                'user' => Auth::user(),
             ]);
 
         } catch (\Exception $e) {
@@ -367,8 +368,7 @@ class TransaksiController extends Controller
 
     function subscription() {
         return Inertia::render('Subscription', [
-            // 'events' => $events,
-            // 'artikels' => $artikels,
+            'user' => Auth::user()
         ]);
     }
 

@@ -75,7 +75,7 @@ export default function Transaksi({user, transaksi}) {
         <div className="bg-blue-500 h-[30vh]"></div>
 
         <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">
-            <div className="flex flex-wrap lg:flex-nowrap gap-5 2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">
+            <div className="flex flex-wrap lg:flex-nowrap gap-5 container mx-auto">
 
                 <UserProfile isActive="transaksi" user={user} />
                 <div className="p-5 mt-40 md:mt-0 relative bg-white shadow-lg rounded-xl w-full lg:w-[75%]">

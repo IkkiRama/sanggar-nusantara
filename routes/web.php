@@ -29,7 +29,7 @@ Route::get('/ragam-indonesia/seni-tari', [FrontController::class, 'seniTari']);
 Route::get('/ragam-indonesia/lagu-daerah', [FrontController::class, 'laguDaerah']);
 Route::get('/ragam-indonesia/makanan-khas', [FrontController::class, 'makananKhas']);
 
-Route::get('/masuk', [AuthController::class, 'login'])->name("login");
+// Route::get('/admin/login', [AuthController::class, 'login'])->name("login");
 Route::post('/masuk', [AuthController::class, 'loginWeb'])->name("loginWeb");
 Route::get('/daftar', [AuthController::class, 'register']);
 // Route::get('/login', function () {
@@ -41,18 +41,15 @@ Route::get('/daftar', [AuthController::class, 'register']);
 //     return dd(Auth::guard('sanctum')->user());
 // });
 
-Route::middleware(['auth:sanctum'])->get('/test-session', function () {
-    return response()->json(Auth::user()); // BENAR: pakai default guard (web)
-});
 
 // Route untuk user yang sudah login (auth)
-Route::middleware('auth')->group(function () {
+Route::middleware(['web'])->group(function () {
 // Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/profile/dashboard', [ProfileController::class, 'index']);
     Route::get('/profile/invoice/{orderId}', [ProfileController::class, 'invoice']);
-    Route::get('/etiket/{orderId}', [ProfileController::class, 'etiket']);
+    Route::get('/profile/etiket/{orderId}', [ProfileController::class, 'etiket']);
     Route::get('/profile/invoice/{orderId}', [ProfileController::class, 'invoice']);
     Route::get('/profile/edit', [ProfileController::class, 'profileEdit']);
     Route::get('/profile/transaksi', [ProfileController::class, 'transaksi']);

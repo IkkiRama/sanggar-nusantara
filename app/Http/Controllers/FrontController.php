@@ -293,8 +293,12 @@ class FrontController extends Controller
             $status = 'success';
             $message = 'Artikel berhasil dimuat.';
 
+
             // Cek jika artikel premium dan user bukan premium
-            if ($artikel->status_artikel === 'premium' && Auth::user()?->role !== 'premium') {
+            if (
+                $artikel->status_artikel === 'premium' &&
+                (!Auth::check() || !(Auth::user()->hasRole("premium") || Auth::user()->hasRole("super_admin")))
+            ) {
                 $artikelData['excerpt'] = "Konten ini eksklusif untuk pengguna premium!";
                 $artikelData['content'] = "
                     Anda sedang melihat cuplikan artikel premium.
@@ -406,6 +410,10 @@ class FrontController extends Controller
 
     public function storeKomenAPI(Request $request)
     {
+        // if (!Auth::check() || !Auth::user()->id) {
+        //     return redirect('/admin/login');
+        // }
+
         $headers = [
             'Content-Type' => 'application/json',
             'X-Powered-By' => 'Rifki Romadhan',

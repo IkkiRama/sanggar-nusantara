@@ -121,11 +121,11 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
         });
 
         try {
-            const response = await fetch("http://sanggar-nusantara.test/api/diskon", {
+            const response = await fetch("/api/diskon", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    // Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
                 body: JSON.stringify({
                     totalBiaya: totalBiaya,
@@ -193,11 +193,11 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
         setLoading({ diskon: false, bayar: true });
 
         try {
-            const response = await fetch("http://sanggar-nusantara.test/api/bayar", {
+            const response = await fetch("/api/bayar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    // Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
                 body: JSON.stringify({
                     user_id: user.id,
@@ -281,7 +281,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                 text: "Silahkan login terlebih dahulu",
                 type: "danger"
             });
-            return window.location.href = "/login";
+            return window.location.href = "/admin/login";
         }
 
         // Buka modal checkout

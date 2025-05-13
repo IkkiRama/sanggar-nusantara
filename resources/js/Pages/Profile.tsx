@@ -11,18 +11,16 @@ import { useAuth } from '../Hooks/useAuth';
 
 
 
-export default function Profile({pembelianEvents}) {
-    const { user, loading } = useAuth();
+export default function Profile({pembelianEvents, user}) {
+    // const { user, loading } = useAuth();
+
     const [isChecking, setIsChecking] = useState(true);
     const [activeTab, setActiveTab] = useState("event");
     const [snapToken, setSnapToken] = useState<string | null>(null);
 
-
-
-
     useEffect(() => {
         if (!user) {
-            window.location.href = '/masuk'; // Redirect ke halaman login jika belum login
+            window.location.href = '/admin/login'; // Redirect ke halaman login jika belum login
         } else {
             setIsChecking(false);
         }
@@ -36,7 +34,7 @@ export default function Profile({pembelianEvents}) {
         try {
             const token = localStorage.getItem("token"); // Ambil token dari localStorage atau session storage
 
-            const response = await fetch(`http://sanggar-nusantara.test/api/midtrans/token/${order_id}`, {
+            const response = await fetch(`/api/midtrans/token/${order_id}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -74,7 +72,7 @@ export default function Profile({pembelianEvents}) {
         if (!confirm("Apakah Anda yakin ingin membatalkan pesanan ini?")) return;
 
         try {
-            const response = await fetch(`http://sanggar-nusantara.test/api/event/batalkan/${orderId}`, {
+            const response = await fetch(`/api/event/batalkan/${orderId}`, {
                 method: "POST", // atau "PUT" tergantung API-mu
                 headers: {
                     "Content-Type": "application/json",
@@ -116,7 +114,7 @@ export default function Profile({pembelianEvents}) {
         <div className="bg-blue-500 h-[30vh]"></div>
 
         <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">
-            <div className="flex flex-wrap gap-5 lg:flex-nowrap 2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">
+            <div className="flex flex-wrap gap-5 lg:flex-nowrap container mx-auto">
 
                 <UserProfile isActive="dashboard" user={user} />
                 <div className="p-5 md:mt-0 mt-40 relative overflow-x-auto bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl w-full lg:w-[75%] table-scroll">
@@ -199,7 +197,7 @@ export default function Profile({pembelianEvents}) {
                                                 ) : event.status_pembelian === "sudah dibayar" ? (
                                                     <>
                                                         <Link
-                                                            href={`/etiket/${event.order_id}`}
+                                                            href={`/profile/etiket/${event.order_id}`}
                                                             className="px-5 text-white py-2 text-sm bg-blue-500 border-2 border-blue-500 hover:bg-blue-600 rounded-md font-semibold"
                                                         >
                                                             Lihat E-Tiket

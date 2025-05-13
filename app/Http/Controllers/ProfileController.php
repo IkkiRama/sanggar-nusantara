@@ -14,6 +14,7 @@ use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -25,23 +26,25 @@ class ProfileController extends Controller
     }
 
     function index() {
-        $userId = session('user_id'); // Mengambil ID user yang sedang login
+        // $userId = session('user_id'); // Mengambil ID user yang sedang login
 
-        dd($userId);
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
 
-            // Cek semua order pending milik user
-            $ordersPending = DB::table('orders')
-                ->where('user_id', $userId)
-                ->where('status_pembelian', 'pending')
-                ->where('created_at', '<', Carbon::now()->subHours(24))
-                ->get();
+        // Cek semua order pending milik user
+        $ordersPending = DB::table('orders')
+            ->where('user_id', Auth::user()->id)
+            ->where('status_pembelian', 'pending')
+            ->where('created_at', '<', Carbon::now()->subHours(24))
+            ->get();
 
-            // Update status jadi 'kadaluarsa' kalau sudah > 24 jam
-            foreach ($ordersPending as $order) {
-                DB::table('orders')
-                    ->where('id', $order->id)
-                    ->update(['status_pembelian' => 'kadaluarsa']);
-            }
+        // Update status jadi 'kadaluarsa' kalau sudah > 24 jam
+        foreach ($ordersPending as $order) {
+            DB::table('orders')
+                ->where('id', $order->id)
+                ->update(['status_pembelian' => 'kadaluarsa']);
+        }
 
         $pembelianEvents = DB::table('pembelian_events')
             ->join('orders', 'pembelian_events.order_id', '=', 'orders.id')
@@ -59,17 +62,23 @@ class ProfileController extends Controller
             )
             ->where('events.status_event', '!=', 'draft')
             ->whereIn('orders.status_pembelian', ['pending', 'sudah dibayar'])
-            ->where('orders.user_id', $userId) // Menggunakan user_id dari tabel order
+            ->where('orders.user_id', Auth::user()->id) // Menggunakan user_id dari tabel order
             ->orderBy("orders.created_at", "desc")
             ->get();
 
         return Inertia::render('Profile', [
+            "user"=> Auth::user(),
             "pembelianEvents" => $pembelianEvents
         ]);
     }
 
     public function batalkanTransaksi($orderId, Request $request)
     {
+
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
+
         $order = Order::where('order_id', $orderId)->first();
 
         if (!$order) {
@@ -88,6 +97,11 @@ class ProfileController extends Controller
     }
 
     function invoice($orderId) {
+
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
+
         // Ambil order dengan filter awal (hanya cek user_id dan status_pembelian)
         $order = Order::where('order_id', $orderId)
             ->where('user_id', Auth::id()) // Cek apakah order milik user yang login
@@ -104,12 +118,18 @@ class ProfileController extends Controller
             ->firstOrFail();
 
         return Inertia::render('Invoice', [
+            "user"=> Auth::user(),
             'order' => $order,
         ]);
     }
 
     public function getSnapToken($order_id)
     {
+
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
+
         // Validasi login
         if (Auth::check()) {
             return response()->json(['error' => 'User belum login'], 401);
@@ -138,6 +158,11 @@ class ProfileController extends Controller
 
 
     function etiket($orderId) {
+
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
+
         // Ambil user yang sedang login
         $user = auth()->user();
 
@@ -170,11 +195,17 @@ class ProfileController extends Controller
 
 
         return Inertia::render('Etiket', [
+            "user"=> Auth::user(),
             'orders' => $orders,
         ]);
     }
 
     function downloadEtiket($orderId) {
+
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
+
         // Ambil user yang sedang login
         $user = auth()->user();
 
@@ -206,12 +237,17 @@ class ProfileController extends Controller
 
 
         return Inertia::render('DownloadEtiket', [
+            "user"=> Auth::user(),
             'orders' => $orders,
         ]);
     }
 
     public function generateQr($orderId, $ticketNumber)
     {
+
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
 
         $writer = new PngWriter();
 
@@ -230,11 +266,84 @@ class ProfileController extends Controller
     }
 
     function profileEdit() {
+
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
+
         return Inertia::render('EditProfile', [
+            "user"=> Auth::user(),
         ]);
     }
 
+    function updateProfileAPI(Request $request) {
+        $user = Auth::user();
+
+        // Validasi
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'alamat' => 'nullable|string|max:500',
+            'provinsi' => 'nullable|string|max:100',
+            'kabupaten' => 'nullable|string|max:100',
+            'kecamatan' => 'nullable|string|max:100',
+            'desa' => 'nullable|string|max:100',
+            'kode_pos' => 'nullable|string|max:10',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        // Email tidak boleh diubah
+        if ($request->has('email') && $request->email !== $user->email) {
+            return response()->json(['error' => 'Email tidak boleh diubah.'], 422);
+        }
+
+        // Simpan foto jika ada
+        if ($request->hasFile('image')) {
+            // Hapus file lama jika ada
+            if ($user->image && Storage::exists('public/user/' . basename($user->image))) {
+                Storage::delete('public/user/' . basename($user->image));
+            }
+
+            // Ambil file
+            $file = $request->file('image');
+
+            // Generate nama acak + ekstensi asli
+            $filename =
+            Str::random(40) . '-' . Str::uuid() . '.' . $file->getClientOriginalExtension();
+
+            // Simpan ke folder 'user' di disk 'public'
+            $path = $file->storeAs('user', $filename, 'public');
+
+            // Simpan path ke database
+            $user->image = $path;
+        }
+
+
+        // Update data user
+        $user->name = $validated['name'];
+        $user->deskripsi = $validated['deskripsi'] ?? null;
+        $user->save();
+
+        // Simpan atau update alamat
+        $alamat = $user->alamat()->firstOrNew(); // get alamat if exists, or new one
+        $alamat->user_id = $user->id;
+        $alamat->alamat = $validated['alamat'] ?? '';
+        $alamat->provinsi = $validated['provinsi'] ?? '';
+        $alamat->kabupaten = $validated['kabupaten'] ?? '';
+        $alamat->kecamatan = $validated['kecamatan'] ?? '';
+        $alamat->desa = $validated['desa'] ?? '';
+        $alamat->kode_pos = $validated['kode_pos'] ?? '';
+        $alamat->save();
+
+        return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
+    }
+
     function transaksi() {
+
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
+
         // Ambil transaksi berdasarkan user yang sedang login
         $transaksi = Order::where('user_id', Auth::id())->latest()->get();
 
@@ -250,12 +359,19 @@ class ProfileController extends Controller
         }
 
         return Inertia::render('TransaksiProfile', [
+            "user"=> Auth::user(),
             'transaksi' => $transaksi,
         ]);
     }
 
     function ubahPassword() {
+
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
+
         return Inertia::render('UbahPassword', [
+            "user"=> Auth::user(),
         ]);
     }
 }
