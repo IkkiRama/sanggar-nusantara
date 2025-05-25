@@ -1,6 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from '@inertiajs/react';
 import { usePage } from "@inertiajs/react";
+
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -24,7 +27,6 @@ import {
 
 //
 import LightNavbar from "../layouts/lightNavbar";
-import React from "react";
 import MainLayout from './../Layouts/mainLayout';
 import { changeDate } from './../Utils/changeDate';
 import { BookOpen, Calendar, CheckCircle, MapPin } from "lucide-react";
@@ -72,10 +74,10 @@ interface PageProps {
 
 
 const Home = ({plans}) => {
-    const token = localStorage.getItem('token');
-    console.log("Token dari localStorage:", token);
 
     const { user } = usePage().props;
+    const navigate = useNavigate()
+
   const [open, setOpen] = useState(false);
   const [tabActive, setTabActive] = useState("news");
   const tabs = ["Bulanan", "Triwulanan", "Tahunan"];
@@ -96,6 +98,50 @@ const Home = ({plans}) => {
   const [email, setEmail] = useState("");
   const [pesan, setPesan] = useState("");
 
+  const handleSelectPlan = async (plan, user) => {
+    // Cek apakah user belum login
+    if (!user || !user.id) {
+        toast.info('🔒 Silakan login terlebih dahulu.')
+        navigate('/admin/login')
+        return
+    }
+
+    if (plan.price === 0) {
+      navigate('/admin/login')
+    } else {
+      try {
+        const response = await fetch('/api/addSubscription', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            user_id: user.id,
+            item_id: plan.id,
+            item_type: 'subscription',
+            jumlah: 1,
+          }),
+        })
+
+        const result = await response.json()
+
+
+        if (response.ok) {
+          toast.success('Paket berhasil ditambahkan ke keranjang!')
+        }else if (response.status === 409) {
+            toast.warning(result.message)
+        }else {
+          toast.error(result.message || '❌ Gagal menambahkan ke keranjang.')
+        }
+      } catch (error) {
+        console.error('Error:', error)
+        toast.error('⚠️ Terjadi kesalahan jaringan.')
+      }
+    }
+  }
+
 
 
     const handleSubmit = async (e : any) => {
@@ -106,10 +152,11 @@ const Home = ({plans}) => {
 
 
         try {
-            const response = await fetch('http://sanggar-nusantara.test/api/kontak', {
+            const response = await fetch('/api/kontak', {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 },
                 body: JSON.stringify({nama, email, pesan}),
             });
@@ -1139,6 +1186,7 @@ const Home = ({plans}) => {
                         )}
 
                         <button
+                            onClick={() => handleSelectPlan(plan, user)}
                             className={`w-full cursor-pointer font-semibold py-2 rounded-lg transition mb-4
                                 ${plan.highlight
                                 ? "bg-indigo-600 hover:bg-indigo-700 text-white"

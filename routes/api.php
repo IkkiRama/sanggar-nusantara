@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
@@ -29,6 +30,9 @@ Route::middleware(['web'])->group(function () {
 
     Route::post('/diskon', [FrontController::class, 'showDiskonAPI']);
     Route::post('/bayar', [TransaksiController::class, 'storeOrderAPI']);
+
+    Route::post('/cart/addEvent', [CartController::class, 'addEventToCart']);
+
 
     Route::post('/profile/update', [ProfileController::class, 'updateProfileAPI']);
     Route::post('/updatePassword', [FrontController::class, 'updatePasswordAPI']);

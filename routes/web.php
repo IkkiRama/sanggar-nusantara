@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransaksiController;
@@ -19,6 +20,9 @@ Route::get('/event/{slug}', [FrontController::class, 'showEvent']);
 
 Route::get('/artikel', [FrontController::class, 'artikel']);
 Route::get('/artikel/{slug}', [FrontController::class, 'detailArtikel']);
+
+
+Route::post('/api/addSubscription', [CartController::class, 'addSubscriptionToCart'])->middleware('auth');
 
 
 Route::get('/ragam-indonesia', [FrontController::class, 'ragamIndonesia']);
@@ -59,5 +63,6 @@ Route::middleware(['web'])->group(function () {
     Route::get('/qr/{orderId}/{ticketNo}', [ProfileController::class, 'generateQr']);
 
     Route::get('/keranjang', [FrontController::class, 'keranjang']);
+
     Route::get('/payment-status/{orderId}', [TransaksiController::class, 'paymentSuccess']);
 });

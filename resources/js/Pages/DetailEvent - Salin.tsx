@@ -25,6 +25,8 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
     const [orderId, setOrderId] = useState(null);
 
     const [expandedId, setExpandedId] = useState(null);
+    const [isChecked, setIsChecked] = useState(false);
+    const [isBayar, setIsBayar] = useState(false);
 
     const [showTooltipPPN, setShowTooltipPPN] = useState(false);
     const [showTooltipServiceFee, setShowTooltipServiceFee] = useState(false);
@@ -85,6 +87,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
             document.body.removeChild(script); // bersihkan saat komponen di-unmount
         };
     }, []);
+
 
     useEffect(() => {
         if (snapToken) {
@@ -169,12 +172,105 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
     };
 
 
-    const handleTambahkanKeKeranjang = async () => {
+    const handleBayar = async () => {
+        if (!isChecked) {
+            setAlertMessage({
+                text: "Anda harus menyetujui Terms & Conditions sebelum melanjutkan pembayaran.",
+                type: "danger",
+            });
+            setTimeout(() => setAlertMessage({ text: "", type: "" }), 5000);
+            return;
+        }
 
         if (selectedTickets.length === 0) {
             setAlertMessage({
-                text: "Pilih tiket terlebih dahulu dibagian tab menu tiket",
+                text: "Pilih tiket terlebih dahulu",
                 type: "danger",
+            });
+            setTimeout(() => setAlertMessage({ text: "", type: "" }), 5000);
+            return;
+        }
+
+        setLoading({ diskon: false, bayar: true });
+
+        try {
+            const response = await fetch("/api/bayar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    // Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    discount_id: diskon.id ? diskon.id : null,
+                    total_pembelian: totalPrice,
+                    discount_amount: diskon.nilai_diskon,
+                    total_akhir: totalBiaya,
+                    tickets: selectedTickets.map(st => ({
+                        event_id: event.id,
+                        jumlah_tiket: st.kuota,
+                        jenis_tiket: st.nama,
+                        nama_event: event.nama,
+                        harga: st.harga,
+                        total_harga: st.kuota * st.harga,
+                    })),
+                }),
+            });
+
+            const data = await response.json();
+            setLoading({ diskon: false, bayar: false });
+            setIsBayar(true)
+
+            if (response.ok && data.snap_token) {
+                setSnapToken(data.snap_token);
+                setOrderId(data.order_id);
+            } else {
+                setAlertMessage({
+                    text: data.message || "Terjadi kesalahan saat pembayaran.",
+                    type: "danger",
+                });
+            }
+        } catch (error) {
+            setLoading({ diskon: false, bayar: false });
+            setAlertMessage({
+                text: "Terjadi kesalahan saat menghubungi server.",
+                type: "danger",
+            });
+            setTimeout(() => setAlertMessage({ text: "", type: "" }), 5000);
+            return;
+        }
+    };
+
+    useEffect(() => {
+        const handleEscape = (event) => {
+            if (event.key === "Escape") {
+                setIsOpen(false)
+            }
+        };
+
+        document.addEventListener("keydown", handleEscape);
+
+        return () => {
+            document.removeEventListener("keydown", handleEscape);
+        };
+    }, [isOpen]);
+
+    const handleTiket = (tanggal:string) => {
+        const now = new Date();
+        const event = new Date(tanggal);
+
+        // Jika event sudah berakhir
+        if (event < now) {
+            setShowModal(true);
+            return;
+        }
+
+        // Tiket belum dipilih
+        if (totalTickets === 0) {
+            setAlertMessage({
+                text: "Pilih tiket terlebih dahulu dibagian tab menu tiket",
+                type: "danger"
             });
             setActiveTab("tiket");
             setTimeout(() => setAlertMessage({ text: "", type: "" }), 5000);
@@ -190,65 +286,9 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
             return window.location.href = "/admin/login";
         }
 
-        setLoading(prev => ({ ...prev, bayar: true }));
-
-        try {
-            const response = await fetch("/api/cart/addEvent", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                },
-                body: JSON.stringify({
-                    user_id: user.id,
-                    items: selectedTickets.map(ticket => ({
-                        item_id: ticket.id,
-                        item_type: 'event',
-                        jumlah: ticket.kuota,
-                    })),
-                }),
-            });
-
-            const data = await response.json();
-            setLoading(prev => ({ ...prev, bayar: false }));
-
-            if (response.ok) {
-                setAlertMessage({
-                    text: "Tiket berhasil ditambahkan ke keranjang.",
-                    type: "success",
-                });
-                setIsOpen(false); // tutup modal
-            } else {
-                setAlertMessage({
-                    text: data.message || "Gagal menambahkan ke keranjang.",
-                    type: "danger",
-                });
-            }
-        } catch (error) {
-            setLoading(prev => ({ ...prev, bayar: false }));
-            setAlertMessage({
-                text: "Terjadi kesalahan pada server.",
-                type: "danger",
-            });
-        }
-
-        setTimeout(() => setAlertMessage({ text: "", type: "" }), 5000);
+        // Buka modal checkout
+        setIsOpen(true);
     };
-
-
-    useEffect(() => {
-        const handleEscape = (event) => {
-            if (event.key === "Escape") {
-                setIsOpen(false)
-            }
-        };
-
-        document.addEventListener("keydown", handleEscape);
-
-        return () => {
-            document.removeEventListener("keydown", handleEscape);
-        };
-    }, [isOpen]);
 
 
     const formatTanggalPendek = (tanggal) => {
@@ -313,7 +353,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                         {alertMessage.text}
                     </div>
                 )}
-                <div className="grid container mx-auto px-4 lg:grid-cols-5 pt-10 md:pt-20 pb-5 md:px-20 mb-8 items-center bg-gray-100 dark:bg-gray-950 relative md:gap-6">
+                <div className="grid container mx-auto px-4 lg:grid-cols-5 pt-10 md:pt-20 pb-5 md:px-20 px-5 mb-8 items-center bg-gray-100 dark:bg-gray-950 relative md:gap-6">
                     <span className="h-full lg:w-[700px] w-full absolute right-0 lg:bg-gradient-to-l bg-gradient-to-b from-red-700/30 to-red-700/0"></span>
 
                     <div className="lg:col-span-3 order-2 lg:order-1 relative">
@@ -521,9 +561,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                                 </div>
 
 
-                                <button className="w-full bg-blue-600 focus:outline-2 outline-blue-300 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 rounded" onClick={() => handleTambahkanKeKeranjang()}>
-                                    {selectedTickets.length === 0 ? "Beli Tiket" : "Tambahkan"}
-                                </button>
+                                <button className="w-full bg-blue-600 focus:outline-2 outline-blue-300 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 rounded" onClick={() => handleTiket(event.tanggal)}>Beli TIket</button>
 
                             </div>
                         </div>
@@ -551,6 +589,145 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                 </div>
             )}
 
+            {/* Modal Bayar */}
+            {isOpen && (
+                <div className="fixed lg:z-30 z-99999 inset-0 bg-white/20 backdrop-blur-md bg-opacity-50 flex justify-center items-center py-[100px] h-screen max-h-screen">
+                    <div className="mt-[5%] bg-white dark:bg-gray-950 lg:p-6 p-4 rounded-lg shadow-lg w-[95%] lg:w-[40%] flex-col overflow-y-hidden max-h-[90vh]">
+                        <div className="flex justify-between items-center border-b border-gray-300 pb-4">
+                            <h2 className="text-lg font-semibold dark:text-gray-200">Checkout Event</h2>
+                            <button className="cursor-pointer" onClick={() => setIsOpen(false)}>
+                                <X className="w-5 h-5 text-gray-600 dark:text-gray-200" />
+                            </button>
+                        </div>
+
+                        <div className={`overflow-y-auto p-4 space-y-4 max-h-[70vh] ${isBayar ? "pb-5" : ""}`}>
+                            <label className="block font-semibold text-lg text-slate-800 dark:text-gray-200">Kode Promo</label>
+                            <div className="flex gap-3 mt-2 mb-1">
+                                <input
+                                    type="text"
+                                    placeholder="Masukkan kode promo agar lebih hemat"
+                                    className="w-full ml-2 lg:px-4 px-3 py-2 border-2 border-gray-300 rounded-lg text-gray-700 focus:ring-1 focus:ring-blue-300 outline-1 focus:outline-2 outline-gray-200 focus:outline-secondary focus:outline-blue-500 dark:text-gray-400"
+                                    value={kodePromo}
+                                    onChange={(e) => setKodePromo(e.target.value)}
+                                    onKeyDown={(e) => e.key === "Enter" && cekDiskon()}
+                                    disabled={diskon.kode !== ""}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={cekDiskon}
+                                    disabled={loading.diskon || diskon.kode !== ""}
+                                    className={`lg:px-4 px-2 py-1 rounded-md font-semibold cursor-pointer whitespace-nowrap text-[14px] lg:text-base ${
+                                        diskon.kode ? "bg-gray-400 text-white" : "bg-red-500 text-white"
+                                    }`}
+                                >
+                                    {loading.diskon ? "Memeriksa..." : diskon.kode ? "Kode Diterapkan" : "Tambahkan"}
+                                </button>
+                            </div>
+                            {pesan.text && (
+                                <span className={`text-sm ${pesan.isSuccess ? "text-green-600" : "text-red-600"}`}>
+                                    {pesan.text}
+                                </span>
+                            )}
+                            <div className="mt-3">
+                                <h3 className="block mb-3 font-semibold text-lg text-slate-800 dark:text-gray-200">Payment details</h3>
+                                <div className="text-base font-medium text-slate-500 flex flex-col gap-3">
+                                    <div className="flex justify-between gap-2">
+                                        <span className="dark:text-gray-300 text-sm md:text-base">Total harga tiket</span>
+                                        <span className="dark:text-gray-300 text-sm md:text-base">{`Rp ${totalPrice.toLocaleString("id-ID")}`}</span>
+                                    </div>
+
+                                    {diskon.nilai_diskon !== 0 && (
+                                        <div className="flex justify-between gap-2 text-green-600">
+                                            <span className="text-sm md:text-base">Diskon</span>
+                                            <span className="text-sm md:text-base">- Rp {diskon.nilai_diskon.toLocaleString("id-ID")}</span>
+                                        </div>
+                                    )}
+
+                                    <div className="flex justify-between items-center gap-2 text-red-600 relative">
+                                        <span className="flex items-center gap-1 text-sm md:text-base">
+                                            Pajak PPN
+                                            {/* Icon tanda tanya dengan tooltip */}
+                                            <span className="relative">
+                                                <button
+                                                    onClick={() => setShowTooltipPPN(!showTooltipPPN)}
+                                                    className="cursor-pointer text-blue-500 text-sm font-bold border border-blue-400 bg-blue-100 rounded-full w-5 h-5 flex items-center justify-center"
+                                                >
+                                                    ?
+                                                </button>
+                                                {/* Tooltip PPN */}
+                                                {showTooltipPPN && (
+                                                    <span className="absolute left-0 bottom-full mb-2 w-48 p-2 text-xs text-white bg-gray-700 rounded shadow-lg">
+                                                        Pajak Pertambahan Nilai (PPN) sebesar 11% dikenakan sesuai dengan ketentuan perpajakan yang berlaku. Pajak ini diterapkan pada total transaksi dan akan disetorkan kepada pemerintah sebagai kewajiban perpajakan.
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </span>
+                                        <span className="text-sm md:text-base whitespace-nowrap">+ Rp {totalPrice > 0 ?
+                                        pajakPPN.toLocaleString("id-ID") : 0}</span>
+                                    </div>
+
+                                    {/* Service Fee */}
+                                    <div className="flex justify-between items-center gap-2 text-red-600 relative">
+                                        <span className="flex items-center gap-1 text-sm md:text-base">
+                                            Biaya servis per pembelian
+                                            {/* Icon tanda tanya dengan tooltip */}
+                                            <span className="relative">
+                                                <button
+                                                    onClick={() => setShowTooltipServiceFee(!showTooltipServiceFee)}
+                                                    className="cursor-pointer text-blue-500 text-sm font-bold border border-blue-400 bg-blue-100 rounded-full w-5 h-5 flex items-center justify-center"
+                                                >
+                                                    ?
+                                                </button>
+                                                {/* Tooltip Service Fee */}
+                                                {showTooltipServiceFee && (
+                                                    <span className="absolute left-0 bottom-full mb-2 w-48 p-2 text-xs text-white bg-gray-700 rounded shadow-lg">
+                                                        Biaya untuk fee payment gateway dan platform services lainnya.
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </span>
+                                        <span className="text-sm md:text-base whitespace-nowrap">+ Rp 15.000</span>
+                                    </div>
+
+                                    <div className="flex justify-between font-semibold mt-4 text-slate-700">
+                                        <span className="dark:text-gray-300">Total transfer</span>
+                                        <span className="text-black">{`Rp ${totalBiaya.toLocaleString("id-ID")}`}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {!isBayar && (
+                                <>
+                                    <div className="mt-4 flex items-center">
+                                        <input type="checkbox" id="terms" className="mr-2"
+                                            checked={isChecked}
+                                            onChange={() => setIsChecked(!isChecked)}
+                                        />
+                                        <label htmlFor="terms" className="text-sm cursor-pointer text-gray-700 dark:text-gray-400">
+                                            Saya setuju dengan <span className="text-blue-600 font-semibold">Terms & Conditions</span>
+                                        </label>
+                                    </div>
+
+                                    <button
+                                        className={`w-full mt-4 py-2 rounded-lg font-semibold ${
+                                                        isChecked ? "bg-blue-600 text-white cursor-pointer" : "bg-gray-300 text-slate-700 cursor-default"
+                                                    }`}
+                                        onClick={handleBayar}
+                                        disabled={!isChecked}
+                                    >
+                                    {loading.bayar ? "Proses Bayar..." : "Bayar"}
+                                    </button>
+                                </>
+                            )}
+
+                            <div id="snap-container" className="w-full">
+                            {/* <div id="snap-container" className="w-full px-4 py-7"> */}
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+            )}
         </MainLayout>
     )
 }

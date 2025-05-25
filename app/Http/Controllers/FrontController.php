@@ -100,6 +100,7 @@ class FrontController extends Controller
             ];
 
             return [
+                "id" => $plan->id,
                 "name" => $plan->nama,
                 "description" => $description,
                 "specialNote" => $specialNote,

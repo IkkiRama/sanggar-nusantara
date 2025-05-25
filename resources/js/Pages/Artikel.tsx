@@ -98,7 +98,7 @@ export default function Artikel() {
     <MainLayout title="Artikel | Sanggar Nusantara">
         <LightNavbar user={user} />
 
-      <header className="mx-auto pt-30 lg:px-20 md:px-5 px-3">
+      <header className="mx-auto pt-30 lg:px-20 md:px-5 px-4">
         <div className="grid lg:grid-cols-4 gap-10 2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">
 
             <span
@@ -171,7 +171,7 @@ export default function Artikel() {
 
       <main className="mx-auto mt-20 lg:px-20 md:px-10 px-3">
         <div className="2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">
-        
+
             <section>
             <div className="grid lg:grid-cols-4 md:gap-10">
                 <div className="lg:col-span-3">

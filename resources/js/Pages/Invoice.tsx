@@ -80,7 +80,7 @@ const Invoice = ({ order, user }) => {
             </Head>
 
             <LightNavbar user={user}  />
-            <div className="2xl:max-w-[2000px] mx-auto px-4 2xl:px-10 lg:py-0 py-20 px-2 lg:px-14 relative lg:pt-28 lg:pb-20">
+            <div className="2xl:max-w-[2000px] mx-auto px-4 2xl:px-10 lg:py-0 py-20 lg:px-14 relative lg:pt-28 lg:pb-20">
                 <div className="p-6 ">
                     <h2 className="text-3xl font-semibold mb-4 text-slate-600">Invoice</h2>
                     <div className="flex flex-wrap-reverse md:flex-nowrap justify-between items-center mb-10">
