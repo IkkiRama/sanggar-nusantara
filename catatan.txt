@@ -3,9 +3,8 @@ ubah foto di admin panel
 data provinsi dll ngga masu berubah meskipun ada di database datanya
 data selected desa belum bisa masuk ke db
 
-ketika di add ke cart eventnya itu selectedEvent di kosongkan lagi dan ketika mau diadd lagi ke cart, maka cek dulu di controlernya apakah jumlahnya sudah 5 belum event ini dengan id user ini
 
-kalau sudah 5 maka ngga boleh add lagi
+cek per ragam, apakah ada data yang belum ditampilkan, kaya vidio di ragam tari
 
 
 MOHON DIPERHATIKAN DULU REQUIREMENT NODE JS DAN PHP NYA SUPAYA TIDAK EROR DALAM MENG INSTALL DEPENDENSI NYA

@@ -27,4 +27,9 @@ class Event extends Model
     {
         return $this->hasMany(DiscountEvent::class);
     }
+
+    public function pembelianEvents()
+    {
+        return $this->hasMany(PembelianEvent::class, 'event_id');
+    }
 }

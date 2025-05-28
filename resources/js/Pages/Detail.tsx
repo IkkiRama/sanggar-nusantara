@@ -26,7 +26,7 @@ interface PageProps {
 
 export default function Detail() {
     // const { artikel = {}, rekomendasiArtikel = [] } = usePage<PageProps>().props;
-    const { user, slug } = usePage().props;
+    const { user, slug, cartCount } = usePage().props;
     const [artikel, setArtikel] = useState<ArtikelType | null>(null);
     const [messageArtikel, setMessageArtikel] = useState("");
 
@@ -155,7 +155,7 @@ export default function Detail() {
 
   if (artikel !== null && rekomendasiArtikel?.length > 0) return (
     <MainLayout title={`Artikel ${artikel?.title} | Sanggar Nusantara`} >
-      <LightNavbar user={user} />
+      <LightNavbar user={user} cartCount={cartCount} />
 
       <div className="pt-20 pb-10 md:px-20 px-5 mb-8 bg-gray-100 dark:bg-gray-950 relative">
         <div className="grid lg:grid-cols-5 items-center 2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">

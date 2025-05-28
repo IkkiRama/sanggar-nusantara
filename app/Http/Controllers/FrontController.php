@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AlatMusik;
 use App\Models\Artikel;
 use App\Models\BahasaDaerah;
+use App\Models\Cart;
 use App\Models\Discount;
 use App\Models\DiscountUser;
 use App\Models\Event;
@@ -114,16 +115,11 @@ class FrontController extends Controller
         });
 
         return Inertia::render('Home', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'events' => $events,
             'artikels' => $artikels,
             "plans" => $response,
-        ]);
-    }
-
-    public function keranjang(){
-        return Inertia::render('Cart', [
-            "user" => Auth::user(),
         ]);
     }
 
@@ -167,7 +163,8 @@ class FrontController extends Controller
         }
 
         return Inertia::render('Event', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'events' => $events,
             'totalPages' => $totalPages,
         ]);
@@ -199,7 +196,8 @@ class FrontController extends Controller
             $message = 'Event ini hanya tersedia penuh untuk pengguna premium.';
 
             return Inertia::render('DetailEvent', [
-                "user" => Auth::user(),
+                "user" => $user = Auth::user(),
+                'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
                 'event' => $eventPreview,
                 'hargaTiket' => [],
                 'events' => [],
@@ -226,7 +224,8 @@ class FrontController extends Controller
         }
 
         return Inertia::render('DetailEvent', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'event' => $event,
             'hargaTiket' => $event->harga,
             'events' => $events,
@@ -265,7 +264,8 @@ class FrontController extends Controller
             ->get();
 
         return Inertia::render('Artikel', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'artikelTerbaru' => $dataArtikel->first(),
             'artikelBerikutnya' => $dataArtikel->slice(1, 2)->values(),
             'artikels' => $dataArtikel->slice(3)->values(),
@@ -381,6 +381,7 @@ class FrontController extends Controller
             ];
 
             return [
+                "id" => $plan->id,
                 "name" => $plan->nama,
                 "description" => $description,
                 "specialNote" => $specialNote,
@@ -394,7 +395,8 @@ class FrontController extends Controller
         });
 
         return Inertia::render('Subscription', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             "plans" => $response
         ]);
     }
@@ -403,8 +405,9 @@ class FrontController extends Controller
 
     public function detailArtikel($slug){
         return Inertia::render('Detail', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
             'slug' => $slug,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
         ]);
     }
 
@@ -450,7 +453,8 @@ class FrontController extends Controller
         $seniTari = SeniTari::latest()->get();
 
         return Inertia::render('Map', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'foods' => $foods,
             'alatMusik' => $alatMusik,
             'rumahAdat' => $rumahAdat,
@@ -462,7 +466,8 @@ class FrontController extends Controller
 
     function ragamIndonesia() {
         return Inertia::render('RagamIndonesia', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
         ]);
     }
 
@@ -470,7 +475,8 @@ class FrontController extends Controller
         $foods = MakananKhas::latest()->get();
 
         return Inertia::render('RagamMakanan', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'foods' => $foods,
         ]);
     }
@@ -479,7 +485,8 @@ class FrontController extends Controller
         $alatMusik = AlatMusik::latest()->get();
 
         return Inertia::render('RagamAlatMusik', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'alatMusik' => $alatMusik,
         ]);
     }
@@ -488,7 +495,8 @@ class FrontController extends Controller
         $rumahAdat = RumahAdat::latest()->get();
 
         return Inertia::render('RagamRumahAdat', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'rumahAdat' => $rumahAdat,
         ]);
     }
@@ -498,7 +506,8 @@ class FrontController extends Controller
         $laguDaerah = LaguDaerah::latest()->get();
 
         return Inertia::render('RagamLaguDaerah', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'laguDaerah' => $laguDaerah,
         ]);
     }
@@ -507,7 +516,8 @@ class FrontController extends Controller
         $bahasaDaerah = BahasaDaerah::latest()->get();
 
         return Inertia::render('RagamBahasadaerah', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'bahasaDaerah' => $bahasaDaerah,
         ]);
     }
@@ -516,7 +526,8 @@ class FrontController extends Controller
         $seniTari = SeniTari::latest()->get();
 
         return Inertia::render('RagamSeniTari', [
-            "user" => Auth::user(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
             'seniTari' => $seniTari,
         ]);
     }

@@ -3,7 +3,7 @@ import LightNavbar from "../layouts/lightNavbar";
 import MainLayout from "../Layouts/mainLayout";
 import { Head } from "@inertiajs/react";
 
-const Invoice = ({ order, user }) => {
+const Invoice = ({ order, user, cartCount }) => {
     // useEffect(() => {
     //     if (!order || order.status_pembelian !== "sudah dibayar" || order.user_id !== user.id) {
     //         window.location.href = "/profile"; // Redirect ke halaman profile
@@ -79,7 +79,7 @@ const Invoice = ({ order, user }) => {
                 ></script>
             </Head>
 
-            <LightNavbar user={user}  />
+            <LightNavbar user={user} cartCount={cartCount} />
             <div className="2xl:max-w-[2000px] mx-auto px-4 2xl:px-10 lg:py-0 py-20 lg:px-14 relative lg:pt-28 lg:pb-20">
                 <div className="p-6 ">
                     <h2 className="text-3xl font-semibold mb-4 text-slate-600">Invoice</h2>

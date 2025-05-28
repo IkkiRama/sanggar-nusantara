@@ -23,6 +23,7 @@ Route::get('/artikel/{slug}', [FrontController::class, 'detailArtikel']);
 
 
 Route::post('/api/addSubscription', [CartController::class, 'addSubscriptionToCart'])->middleware('auth');
+Route::post('/api/cart/addEvent', [CartController::class, 'addEventToCart'])->middleware('auth');
 
 
 Route::get('/ragam-indonesia', [FrontController::class, 'ragamIndonesia']);
@@ -62,7 +63,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/download-etiket/{orderId}', [ProfileController::class, 'downloadEtiket']);
     Route::get('/qr/{orderId}/{ticketNo}', [ProfileController::class, 'generateQr']);
 
-    Route::get('/keranjang', [FrontController::class, 'keranjang']);
+    Route::get('/keranjang', [CartController::class, 'index']);
 
     Route::get('/payment-status/{orderId}', [TransaksiController::class, 'paymentSuccess']);
 });

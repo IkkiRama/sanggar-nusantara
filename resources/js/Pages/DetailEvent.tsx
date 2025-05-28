@@ -8,16 +8,18 @@ import MainLayout from '../Layouts/mainLayout';
 import { FaCalendar } from 'react-icons/fa';
 import { changeDate } from '../Utils/changeDate';
 import formatTanggal from './../Utils/formatTanggal';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
+import { toast } from 'react-toastify';
 
 interface Ticket {
+    event_id: any;
     id: number;
     nama: string;
     harga: number;
     kuota: number;
 }
 
-export default function DetailEvent({user, event, hargaTiket, events}) {
+export default function DetailEvent({user, event, hargaTiket, events, cartCount}) {
     const [isOpen, setIsOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
@@ -38,10 +40,6 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
         "type": "",
         "amount": 0,
         "nilai_diskon": 0,
-    });
-    const [loading, setLoading] = useState({
-        "diskon":false,
-        "bayar":false
     });
 
     const [activeTab, setActiveTab] = useState("deskripsi");
@@ -112,10 +110,10 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
         }
 
         setPesan({ text: "", isSuccess: false });
-        setLoading({
-            "diskon":true,
-            "bayar":false
-        });
+        // setLoading({
+        //     "diskon":true,
+        //     "bayar":false
+        // });
 
         try {
             const response = await fetch("/api/diskon", {
@@ -132,10 +130,10 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
             });
 
             const data = await response.json();
-            setLoading({
-                "diskon":false,
-                "bayar":false
-            });
+            // setLoading({
+            //     "diskon":false,
+            //     "bayar":false
+            // });
 
             if (response.ok) {
                 setDiskon({
@@ -157,10 +155,10 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                 });
             }
         } catch (error) {
-            setLoading({
-                "diskon":false,
-                "bayar":false
-            });
+            // setLoading({
+            //     "diskon":false,
+            //     "bayar":false
+            // });
             setPesan({
                 text: "Terjadi kesalahan saat memproses permintaan.",
                 isSuccess: false,
@@ -168,29 +166,19 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
         }
     };
 
-
     const handleTambahkanKeKeranjang = async () => {
 
         if (selectedTickets.length === 0) {
-            setAlertMessage({
-                text: "Pilih tiket terlebih dahulu dibagian tab menu tiket",
-                type: "danger",
-            });
+            toast.error('Pilih tiket terlebih dahulu dibagian tab menu tiket')
             setActiveTab("tiket");
-            setTimeout(() => setAlertMessage({ text: "", type: "" }), 5000);
             return;
         }
 
         // Belum login
         if (user === null) {
-            setAlertMessage({
-                text: "Silahkan login terlebih dahulu",
-                type: "danger"
-            });
+            toast.error("Silahkan login terlebih dahulu")
             return window.location.href = "/admin/login";
         }
-
-        setLoading(prev => ({ ...prev, bayar: true }));
 
         try {
             const response = await fetch("/api/cart/addEvent", {
@@ -199,40 +187,33 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                     "Content-Type": "application/json",
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 },
+                credentials: 'same-origin',
                 body: JSON.stringify({
                     user_id: user.id,
                     items: selectedTickets.map(ticket => ({
-                        item_id: ticket.id,
+                        item_id: ticket.event_id,
                         item_type: 'event',
                         jumlah: ticket.kuota,
+                        variasi: ticket.nama,
                     })),
                 }),
             });
 
             const data = await response.json();
-            setLoading(prev => ({ ...prev, bayar: false }));
 
             if (response.ok) {
-                setAlertMessage({
-                    text: "Tiket berhasil ditambahkan ke keranjang.",
-                    type: "success",
-                });
-                setIsOpen(false); // tutup modal
+                toast.success("Tiket berhasil ditambahkan ke keranjang.")
+                setSelectedTickets([]);
+
+                // Redirect ke /keranjang tanpa reload
+                router.visit('/keranjang');
             } else {
-                setAlertMessage({
-                    text: data.message || "Gagal menambahkan ke keranjang.",
-                    type: "danger",
-                });
+                toast.error(data.message || "Gagal menambahkan ke keranjang.")
             }
         } catch (error) {
-            setLoading(prev => ({ ...prev, bayar: false }));
-            setAlertMessage({
-                text: "Terjadi kesalahan pada server.",
-                type: "danger",
-            });
+            toast.error("Terjadi kesalahan pada server.")
         }
 
-        setTimeout(() => setAlertMessage({ text: "", type: "" }), 5000);
     };
 
 
@@ -268,17 +249,14 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
 
         // Cek batas maksimal 5 tiket
         if (totalSelected >= 5 && change > 0) {
-            setAlertMessage({
-                "text" : "Maksimal pembelian tiket dalam 1 transaksi adalah 5 tiket",
-                "type" : "danger"
-            });
-            setTimeout(() => setAlertMessage({"text" : "","type" : ""}), 5000);
+            toast.error("Maksimal pembelian tiket dalam 1 transaksi adalah 5 tiket")
             return;
         }
 
         setSelectedTickets(prevTickets => {
             // Cari tiket berdasarkan ID
             const ticketIndex = prevTickets.findIndex(t => t.id === ticketId);
+
 
             if (ticketIndex !== -1) {
                 // Jika tiket sudah ada, update kuota
@@ -301,18 +279,10 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
     return (
         <MainLayout title={`${event.nama} | Sanggar Nusantara`} >
 
-              <LightNavbar user={user} />
+              <LightNavbar user={user} cartCount={cartCount} />
 
             <div className="bg-gray-100 dark:bg-gray-950 leading-normal tracking-normal pb-10 md:pb-20">
 
-                {alertMessage.text !== "" && (
-                    <div className={`fixed top-5 left-1/2 w-[90%] lg:w-fit transform -translate-x-1/2 text-white py-2 px-4 rounded-lg shadow-lg animate-fade-in-out z-999999 flex gap-4 ${
-                        alertMessage.type === "danger" ? "bg-red-500" : "bg-green-600"
-                    }`}>
-                        <InfoIcon />
-                        {alertMessage.text}
-                    </div>
-                )}
                 <div className="grid container mx-auto px-4 lg:grid-cols-5 pt-10 md:pt-20 pb-5 md:px-20 mb-8 items-center bg-gray-100 dark:bg-gray-950 relative md:gap-6">
                     <span className="h-full lg:w-[700px] w-full absolute right-0 lg:bg-gradient-to-l bg-gradient-to-b from-red-700/30 to-red-700/0"></span>
 
@@ -461,7 +431,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
 
                         </div>
 
-                        <div className="w-full lg:w-[30%] self-start lg:sticky md:mt-5 top-28">
+                        <div className="w-full lg:w-[30%] self-start lg:sticky md:mt-0 mt-5 top-28">
                             <div className="bg-white dark:bg-gray-950 md:shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] md:rounded-lg md:border-2 md:border-gray-200 px-4 py-7">
 
                                 <div className="border-b-2 border-b-gray-200 px-3 pb-5 flex  gap-4">

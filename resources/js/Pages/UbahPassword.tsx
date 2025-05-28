@@ -4,7 +4,7 @@ import LightNavbar from '../layouts/lightNavbar';
 import UserProfile from '../Components/userProfile';
 import axios from 'axios';
 
-const UbahPassword = ({ user }) => {
+const UbahPassword = ({ user, cartCount }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -33,7 +33,7 @@ const UbahPassword = ({ user }) => {
 
     return (
         <ProfileLayout>
-            <LightNavbar user={user} />
+            <LightNavbar user={user} cartCount={cartCount} />
 
             <div className="bg-blue-500 h-[30vh]"></div>
 

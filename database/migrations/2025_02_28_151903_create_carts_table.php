@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('item_id');
             $table->enum('item_type', ['subscription', 'product', 'event', 'course']);
             $table->integer('jumlah')->default(1);
+            $table->string('variasi');
             $table->timestamps();
         });
     }

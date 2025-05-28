@@ -4,11 +4,11 @@ import React from "react";
 import LightNavbar from "../layouts/lightNavbar";
 import ProfileLayout from './../Layouts/profileLayout';
 
-function WaitingPage({ order, user, status }) {
+function WaitingPage({ user, status, cartCount }) {
 
   return (
     <ProfileLayout>
-      <LightNavbar user={user} />
+      <LightNavbar user={user} cartCount={cartCount} />
 
       <div className="flex px-4 flex-col items-center justify-center min-h-screen bg-gray-100 text-center">
         <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md">

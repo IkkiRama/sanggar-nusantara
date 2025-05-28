@@ -4,7 +4,7 @@ import LightNavbar from '../layouts/lightNavbar';
 import UserProfile from '../Components/userProfile';
 import ProfileLayout from '../Layouts/profileLayout';
 
-export default function EditProfile({ pembelianEvents, user }) {
+export default function EditProfile({ user, cartCount }) {
     const fileInputRef = useRef();
   const [nama, setNama] = useState(user.name || '');
   const [email, setEmail] = useState(user.email || '');
@@ -92,7 +92,7 @@ export default function EditProfile({ pembelianEvents, user }) {
 
   return (
     <ProfileLayout title={`Edit Profile ${user.name} | Sanggar Nusantara`}>
-      <LightNavbar user={user} />
+      <LightNavbar user={user} cartCount={cartCount} />
       <div className="bg-blue-500 h-[30vh]"></div>
 
       <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">

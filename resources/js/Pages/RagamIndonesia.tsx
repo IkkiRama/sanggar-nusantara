@@ -42,7 +42,7 @@ import MainLayout from "../Layouts/mainLayout";
 import LightNavbar from "../layouts/lightNavbar";
 
 export default function RagamIndonesia() {
-    const { user } = usePage().props;
+    const { user, cartCount } = usePage().props;
 
     const foodList = [
         {
@@ -333,7 +333,7 @@ export default function RagamIndonesia() {
 
   return (
     <MainLayout title="Ragam Indonesia | Sanggar Nusantara">
-        <LightNavbar user={user} />
+        <LightNavbar user={user} cartCount={cartCount} />
 
       <header className="relative grid lg:grid-cols-2 pt-10 lg:px-10 px-5 lg:max-h-[830px] max-h-screen overflow-y-hidden after:absolute after:bg-gradient-to-t dark:after:from-black dark:after:to-black/10 after:from-white after:to-white/10 after:w-full after:h-[130px] after:bottom-0 container mx-auto">
         {/* <div className="grid lg:grid-cols-2 max-w-[1600px] 3xl:h-[60vh] h-full 3xl:max-w-[2000px] mx-auto px-4 3xl:px-10 after:absolute after:bg-gradient-to-t dark:after:from-black dark:after:to-black/10 after:from-white after:to-white/10 relative"> */}
@@ -839,44 +839,51 @@ export default function RagamIndonesia() {
             {modalDetail ? (
             <section className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
                 <div className="bg-white dark:bg-gray-950 md:w-[500px] w-[95%] md:mx-0 mx-auto p-7 rounded relative">
-                <button
-                    className="absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-orange-500 cursor-pointer"
-                    onClick={() => {
-                    setModalDetail(false);
-                    }}
-                >
-                    <FaTimes />
-                </button>
-                <h1 className="text-3xl font-bold dark:text-gray-200">
-                    {" "}
-                    {contentModal.title}
-                </h1>
-                <hr className="my-3 dark:border-gray-700" />
-                <div>
-                    <img
-                    src={contentModal.img}
-                    className="rounded h-[200px] object-cover w-full"
-                    />
-                    <p className="md:text-sm text-[13px] mt-5 dark:text-gray-300">
-                    {contentModal.body}
-                    </p>
-                    <p className="md:text-sm text-[13px] mt-5 dark:text-gray-300">
-                    <b className="text-orange-500">Bahan utama:</b>{" "}
-                    {contentModal.resep}
-                    </p>
+                    <button
+                        className="absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-orange-500 cursor-pointer"
+                        onClick={() => {
+                        setModalDetail(false);
+                        }}
+                    >
+                        <FaTimes />
+                    </button>
 
-                    <hr className="my-5 dark:border-gray-700" />
-                    <div className="flex items-center justify-between">
-                    <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
-                        <FaMapLocation />
-                        {contentModal.location}
-                    </p>
-                    <Link href="/ragam-indonesia/makanan-khas" className="text-sm text-orange-500 flex items-center gap-2">
-                        Detail Lainnya
-                        <FaArrowRight />
-                    </Link>
+                    <h1 className="text-3xl font-bold dark:text-gray-200">
+                        {" "}
+                        {contentModal.title}
+                    </h1>
+
+                    <hr className="my-3 dark:border-gray-700" />
+
+                    <div>
+                        <img
+                        src={contentModal.img}
+                        className="rounded h-[200px] object-cover w-full"
+                        />
+
+                        <p className="md:text-sm text-[13px] mt-5 dark:text-gray-300">
+                        {contentModal.body}
+                        </p>
+
+                        <p className="md:text-sm text-[13px] mt-5 dark:text-gray-300">
+                            <b className="text-orange-500">Bahan utama:</b>{" "}
+                            {contentModal.resep}
+                        </p>
+
+                        <hr className="my-5 dark:border-gray-700" />
+
+                        <div className="flex items-center justify-between">
+                            <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
+                                <FaMapLocation />
+                                {contentModal.location}
+                            </p>
+                            <Link href="/ragam-indonesia/makanan-khas" className="text-sm text-orange-500 flex items-center gap-2">
+                                Detail Lainnya
+                                <FaArrowRight />
+                            </Link>
+                        </div>
+
                     </div>
-                </div>
                 </div>
             </section>
             ) : (

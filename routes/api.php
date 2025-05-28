@@ -31,7 +31,6 @@ Route::middleware(['web'])->group(function () {
     Route::post('/diskon', [FrontController::class, 'showDiskonAPI']);
     Route::post('/bayar', [TransaksiController::class, 'storeOrderAPI']);
 
-    Route::post('/cart/addEvent', [CartController::class, 'addEventToCart']);
 
 
     Route::post('/profile/update', [ProfileController::class, 'updateProfileAPI']);

@@ -3,7 +3,7 @@ import LightNavbar from "../layouts/lightNavbar";
 import MainLayout from "../Layouts/mainLayout";
 import { Minus, Plus, Trash2 } from "lucide-react";
 
-export default function Cart({user}) {
+export default function Cart({user, keranjang, cartCount}) {
     const [showVoucherModal, setShowVoucherModal] = useState(false);
 
 
@@ -21,126 +21,94 @@ export default function Cart({user}) {
   return (
 
     <MainLayout title="Keranjang | Sanggar Nusantara">
-        <LightNavbar user={user} />
+        <LightNavbar user={user} cartCount={cartCount} />
         <div className="min-h-screen bg-[#F5F6FF] container mx-auto py-20 px-4 lg:px-20 md:px-5 lg:py-36">
             {/* Cart */}
             <div className="grid grid-cols-1 relative">
                 <div className="bg-white p-6 rounded-xl shadow">
                     <h1 className="text-2xl font-bold mb-4">Keranjang Anda</h1>
 
-                    <div>
-                        <h2 className="text-xl font-semibold">Event</h2>
+                    {keranjang.length !== 0 && (
+                        <div>
+                            <h2 className="text-xl font-semibold">Event</h2>
 
-                        <div className="mt-3 mb-7">
+                            <div className="mt-3 mb-7">
+                            {keranjang.filter(item => item.item_type === 'event').map((item, index) => (
+                                <div key={index} className="flex flex-wrap md:flex-nowrap items-center gap-4 justify-between border-b border-gray-300 py-4">
+                                    <div className="flex md:w-1/2 w-full">
+                                        <img
+                                        // src={item.data?.image || "/images/NO IMAGE AVAILABLE.jpg"}
+                                        src={
+                                            item.data?.image ? `./../storage/${item.data?.image}` : "/images/NO IMAGE AVAILABLE.jpg"
+                                        }
+                                        alt={item.data?.nama}
+                                        className="bg-gray-600 object-cover rounded-md w-20 h-20 md:mr-4 mr-2" />
 
-                            <div className="flex flex-wrap md:flex-nowrap items-center gap-4 justify-between border-b border-gray-300 py-4">
-                                <div className="flex md:w-1/2 w-full">
-                                    <img
-                                    src="/images/NO IMAGE AVAILABLE.jpg"
-                                    alt="Event"
-                                    className="bg-gray-600 object-cover rounded-md w-20 h-20 md:mr-4 mr-2" />
+                                        <div className="">
+                                            <p className="font-semibold md:text-lg text-base text-slate-700 line-clamp-2">
+                                                {item.data?.nama}
+                                            </p>
 
-                                    <div className="">
-                                        <p className="font-semibold md:text-lg text-base text-slate-700 line-clamp-2">Festival Gunung Slamet Lorem ipsum dolor sit amet.</p>
-                                        <p className="font-medium md:text-base text-sm text-slate-500">Jenis Tiket : VIP</p>
-                                        <p className="font-medium md:text-base text-sm text-slate-500">Harga Tiket : Rp 30000</p>
-                                        <p className="font-medium md:text-base text-sm text-slate-500 block md:hidden">
-                                            Subtotal :
-                                            <span className="font-bold text-gray-700">Rp 30000</span>
-                                        </p>
-                                    </div>
-                                </div>
+                                            <p className="font-medium md:text-base text-sm text-slate-500">
+                                                Jenis Tiket: {item.data?.pembelian_events?.jenis_tiket}
+                                            </p>
 
-                                {/* TEMPAT BUAT UBAH QUANTITY */}
-                                <div className="flex justify-center w-full md:w-1/2">
+                                            <p className="font-medium md:text-base text-sm text-slate-500">
+                                                Harga Tiket: {item.data?.tanggal}
+                                            </p>
 
-                                    <div className="flex w-full justify-between items-center">
-                                        <div className="flex md:justify-center w-full">
-                                            <div className="border-2 border-gray-300 border-r-1 md:p-2 p-1 rounded-tl-md rounded-bl-md flex justify-center items-center">
-                                                <Plus className="md:w-[20px] w-[15px] font-bold"></Plus>
-                                            </div>
-
-                                            <input type="text" className="border-2 border-gray-300 border-r-1 border-l-1 md:px-5 px-3 md:w-[60px] w-[40px] font-semibold md:text-base text-sm" value={1} />
-
-                                            <div className="border-2 border-gray-300 border-l-1 md:p-2 p-1 rounded-tr-md rounded-br-md flex justify-center items-center">
-                                                <Minus className="md:w-[20px] w-[15px] font-bold"></Minus>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex md:hidden">
-                                            <Trash2 className="cursor-pointer text-red-500 md:w-[25px] w-[20px]"></Trash2>
+                                            <p className="font-medium md:text-base text-sm text-slate-500 block md:hidden">
+                                                Subtotal:
+                                                <span className="font-bold text-gray-700">
+                                                    Rp {item.data?.harga ?? 0 * item.jumlah}
+                                                </span>
+                                            </p>
                                         </div>
                                     </div>
 
-                                </div>
+                                    {/* TEMPAT BUAT UBAH QUANTITY */}
+                                    <div className="flex justify-center w-full md:w-1/2">
 
-                                <div className="md:flex justify-center hidden w-1/2">
-                                    <div className="flex flex-col gap-1 ">
-                                        <p className="text-[16px] text-gray-600 font-medium ">Subtotal</p>
-                                        <p className="font-bold text-gray-700">Rp 20000</p>
+                                        <div className="flex w-full justify-between items-center">
+                                            <div className="flex md:justify-center w-full">
+                                                <div className="border-2 border-gray-300 border-r-1 md:p-2 p-1 rounded-tl-md rounded-bl-md flex justify-center items-center">
+                                                    <Plus className="md:w-[20px] w-[15px] font-bold"></Plus>
+                                                </div>
+
+                                                <input
+                                                    value={item.jumlah}
+                                                    type="text"
+                                                    className="border-2 border-gray-300 border-r-1 border-l-1 md:px-5 px-3 md:w-[60px] w-[40px] font-semibold md:text-base text-sm"
+                                                />
+
+                                                <div className="border-2 border-gray-300 border-l-1 md:p-2 p-1 rounded-tr-md rounded-br-md flex justify-center items-center">
+                                                    <Minus className="md:w-[20px] w-[15px] font-bold"></Minus>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex md:hidden">
+                                                <Trash2 className="cursor-pointer text-red-500 md:w-[25px] w-[20px]"></Trash2>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div className="md:flex justify-center hidden w-1/2">
+                                        <div className="flex flex-col gap-1 ">
+                                            <p className="text-[16px] text-gray-600 font-medium ">Subtotal</p>
+                                            <p className="font-bold text-gray-700">Rp {item.data?.harga ?? 0 * item.jumlah}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="md:flex justify-center hidden flex-[10%]">
+                                        <Trash2 className="cursor-pointer text-red-500"></Trash2>
                                     </div>
                                 </div>
-
-                                <div className="md:flex justify-center hidden flex-[10%]">
-                                    <Trash2 className="cursor-pointer text-red-500"></Trash2>
-                                </div>
+                            ))}
                             </div>
 
-                            <div className="flex flex-wrap md:flex-nowrap items-center gap-4 justify-between border-b border-gray-300 py-4">
-                                <div className="flex md:w-1/2 w-full">
-                                    <img
-                                    src="/images/NO IMAGE AVAILABLE.jpg"
-                                    alt="Event"
-                                    className="bg-gray-600 object-cover rounded-md w-20 h-20 md:mr-4 mr-2" />
-
-                                    <div className="">
-                                        <p className="font-semibold md:text-lg text-base text-slate-700 line-clamp-2">Festival Gunung Slamet Lorem ipsum dolor sit amet.</p>
-                                        <p className="font-medium md:text-base text-sm text-slate-500">Jenis Tiket : VIP</p>
-                                        <p className="font-medium md:text-base text-sm text-slate-500">Harga Tiket : Rp 30000</p>
-                                        <p className="font-medium md:text-base text-sm text-slate-500 block md:hidden">
-                                            Subtotal :
-                                            <span className="font-bold text-gray-700">Rp 30000</span>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* TEMPAT BUAT UBAH QUANTITY */}
-                                <div className="flex justify-center w-full md:w-1/2">
-
-                                    <div className="flex w-full justify-between items-center">
-                                        <div className="flex md:justify-center w-full">
-                                            <div className="border-2 border-gray-300 border-r-1 md:p-2 p-1 rounded-tl-md rounded-bl-md flex justify-center items-center">
-                                                <Plus className="md:w-[20px] w-[15px] font-bold"></Plus>
-                                            </div>
-
-                                            <input type="text" className="border-2 border-gray-300 border-r-1 border-l-1 md:px-5 px-3 md:w-[60px] w-[40px] font-semibold md:text-base text-sm" value={1} />
-
-                                            <div className="border-2 border-gray-300 border-l-1 md:p-2 p-1 rounded-tr-md rounded-br-md flex justify-center items-center">
-                                                <Minus className="md:w-[20px] w-[15px] font-bold"></Minus>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex md:hidden">
-                                            <Trash2 className="cursor-pointer text-red-500 md:w-[25px] w-[20px]"></Trash2>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div className="md:flex justify-center hidden w-1/2">
-                                    <div className="flex flex-col gap-1 ">
-                                        <p className="text-[16px] text-gray-600 font-medium ">Subtotal</p>
-                                        <p className="font-bold text-gray-700">Rp 20000</p>
-                                    </div>
-                                </div>
-
-                                <div className="md:flex justify-center hidden flex-[10%]">
-                                    <Trash2 className="cursor-pointer text-red-500"></Trash2>
-                                </div>
-                            </div>
                         </div>
-
-                    </div>
+                    )}
 
                     <div>
                         <h2 className="text-xl font-semibold">Paket Langganan</h2>

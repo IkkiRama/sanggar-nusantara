@@ -147,7 +147,7 @@ const DesktopNavItem = memo(({ item, isActive, isDark, activeDropdown, onDropdow
 });
 
 
-const Navbar = ({user}) => {
+const Navbar = ({user, cartCount}) => {
     // const { user, loading } = useAuth();
 
     const { url } = usePage();
@@ -265,7 +265,7 @@ const Navbar = ({user}) => {
                                             <FaShoppingBag className="w-[20px] h-[20px]" />
 
                                             <span className="absolute -top-1 right-[-10px] bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
-                                                99+
+                                                {cartCount ? cartCount : 0}
                                             </span>
                                         </Link>
                                         <button

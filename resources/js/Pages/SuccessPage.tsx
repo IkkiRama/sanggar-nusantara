@@ -4,13 +4,13 @@ import React from "react";
 import LightNavbar from "../layouts/lightNavbar";
 import ProfileLayout from './../Layouts/profileLayout';
 
-function SuccessPage({order, user}) {
+function SuccessPage({order, user, cartCount}) {
 //   const { order } = usePage().props; // Ambil order langsung dari Laravel
 
   return (
     <ProfileLayout>
 
-        <LightNavbar user={user} />
+        <LightNavbar user={user} cartCount={cartCount} />
 
         <div className="flex px-4 flex-col items-center justify-center min-h-screen bg-gray-100 text-center">
             <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md">

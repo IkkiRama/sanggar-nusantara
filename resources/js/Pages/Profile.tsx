@@ -11,7 +11,7 @@ import { useAuth } from '../Hooks/useAuth';
 
 
 
-export default function Profile({pembelianEvents, user}) {
+export default function Profile({pembelianEvents, user, cartCount}) {
     // const { user, loading } = useAuth();
 
     const [isChecking, setIsChecking] = useState(true);
@@ -110,7 +110,7 @@ export default function Profile({pembelianEvents, user}) {
             ></script>
         </Head>
 
-        <LightNavbar user={user} />
+        <LightNavbar user={user} cartCount={cartCount} />
         <div className="bg-blue-500 h-[30vh]"></div>
 
         <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">

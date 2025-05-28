@@ -73,7 +73,7 @@ interface PageProps {
 
 
 
-export default function Artikel() {
+export default function Artikel({cartCount}) {
     const { artikelTerbaru, artikelBerikutnya = [], artikels = [], trendingArtikel = [], artikelRekomendasi = []} = usePage<PageProps>().props;
     const { user } = usePage().props;
 
@@ -96,7 +96,7 @@ export default function Artikel() {
 
   return (
     <MainLayout title="Artikel | Sanggar Nusantara">
-        <LightNavbar user={user} />
+        <LightNavbar user={user} cartCount={cartCount} />
 
       <header className="mx-auto pt-30 lg:px-20 md:px-5 px-4">
         <div className="grid lg:grid-cols-4 gap-10 2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">

@@ -42,7 +42,7 @@ interface PageProps {
 export default function Event() {
     const [error, setError] = useState(null);
     const { events: initialEvents = [], totalPages: initialTotalPages } = usePage<PageProps>().props;
-    const { user } = usePage().props;
+    const { user, cartCount } = usePage().props;
 
     const [events, setEvents] = useState<Event[]>(initialEvents);
     const [page, setPage] = useState(1);
@@ -146,7 +146,7 @@ export default function Event() {
 
   if (events.length > 0) return (
     <MainLayout title="Event | Sanggar Nusantara">
-        <LightNavbar user={user} />
+        <LightNavbar user={user} cartCount={cartCount} />
         <div className="lg:py-0 py-20 px-4 relative min-h-screen lg:pt-28 lg:pb-20">
             <div className="container mx-auto relative z-10">
                 <motion.div {...fadeInUpAnimation} className="text-center mb-8">

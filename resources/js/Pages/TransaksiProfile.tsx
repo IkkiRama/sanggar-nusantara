@@ -6,7 +6,7 @@ import UserProfile from '../Components/userProfile';
 import ProfileLayout from '../Layouts/profileLayout';
 
 
-export default function Transaksi({user, transaksi}) {
+export default function Transaksi({user, transaksi, cartCount}) {
     const [isChecking, setIsChecking] = useState(true);
 
     const handleBayar = async (order_id: string) => {
@@ -71,7 +71,7 @@ export default function Transaksi({user, transaksi}) {
             ></script>
         </Head>
 
-        <LightNavbar user={user} />
+        <LightNavbar user={user} cartCount={cartCount} />
         <div className="bg-blue-500 h-[30vh]"></div>
 
         <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">
@@ -100,13 +100,13 @@ export default function Transaksi({user, transaksi}) {
                                     <td className="p-3">{new Date(trx.created_at).toLocaleDateString()}</td>
                                     <td className="p-3">
                                         <span
-                                            className={`px-3 py-1 rounded-full text-xs font-semibold 
+                                            className={`px-3 py-1 rounded-full text-xs font-semibold
                                             ${trx.status_pembelian === "pending" ? "bg-yellow-100 text-yellow-700" : ""}
                                             ${trx.status_pembelian === "sudah dibayar" ? "bg-blue-100 text-blue-600" : ""}
-                                            ${trx.status_pembelian === "dibatalkan" || 
+                                            ${trx.status_pembelian === "dibatalkan" ||
                                                 trx.status_pembelian === "gagal" ||
                                                 trx.status_pembelian === "kadaluarsa" ||
-                                                trx.status_pembelian === "dikembalikan" 
+                                                trx.status_pembelian === "dikembalikan"
                                                 ? "bg-red-100 text-red-600" : ""}
                                             `}
                                         >

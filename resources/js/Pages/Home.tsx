@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import { usePage } from "@inertiajs/react";
 
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
 
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -75,8 +74,7 @@ interface PageProps {
 
 const Home = ({plans}) => {
 
-    const { user } = usePage().props;
-    const navigate = useNavigate()
+    const { user, cartCount } = usePage().props;
 
   const [open, setOpen] = useState(false);
   const [tabActive, setTabActive] = useState("news");
@@ -102,12 +100,12 @@ const Home = ({plans}) => {
     // Cek apakah user belum login
     if (!user || !user.id) {
         toast.info('🔒 Silakan login terlebih dahulu.')
-        navigate('/admin/login')
+        window.location.href = '/admin/login'
         return
     }
 
     if (plan.price === 0) {
-      navigate('/admin/login')
+      window.location.href = '/admin/login'
     } else {
       try {
         const response = await fetch('/api/addSubscription', {
@@ -130,10 +128,13 @@ const Home = ({plans}) => {
 
         if (response.ok) {
           toast.success('Paket berhasil ditambahkan ke keranjang!')
+
+            // Redirect ke /keranjang tanpa reload
+            router.visit('/keranjang');
         }else if (response.status === 409) {
             toast.warning(result.message)
         }else {
-          toast.error(result.message || '❌ Gagal menambahkan ke keranjang.')
+          toast.error(result.message || 'Gagal menambahkan ke keranjang.')
         }
       } catch (error) {
         console.error('Error:', error)
@@ -220,7 +221,7 @@ const Home = ({plans}) => {
 
   return (
     <MainLayout title="Sanggar Nusantara | Eksplorasi Budaya & Kekayaan Alam Indonesia">
-      <LightNavbar user={user} />
+      <LightNavbar user={user} cartCount={cartCount} />
 
       <section className="bg-white dark:bg-gray-950 max-h-[100vh]  relative z-10 overflow-hidden">
         <div className="grid lg:grid-cols-2 max-w-[1600px] h-full mx-auto px-4">

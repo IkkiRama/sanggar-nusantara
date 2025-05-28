@@ -17,7 +17,7 @@ interface Ticket {
     kuota: number;
 }
 
-export default function DetailEvent({user, event, hargaTiket, events}) {
+export default function DetailEventDulu({user, event, hargaTiket, events}) {
     const [isOpen, setIsOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
@@ -353,7 +353,7 @@ export default function DetailEvent({user, event, hargaTiket, events}) {
                         {alertMessage.text}
                     </div>
                 )}
-                <div className="grid container mx-auto px-4 lg:grid-cols-5 pt-10 md:pt-20 pb-5 md:px-20 px-5 mb-8 items-center bg-gray-100 dark:bg-gray-950 relative md:gap-6">
+                <div className="grid container mx-auto px-4 lg:grid-cols-5 pt-10 md:pt-20 pb-5 md:px-20 mb-8 items-center bg-gray-100 dark:bg-gray-950 relative md:gap-6">
                     <span className="h-full lg:w-[700px] w-full absolute right-0 lg:bg-gradient-to-l bg-gradient-to-b from-red-700/30 to-red-700/0"></span>
 
                     <div className="lg:col-span-3 order-2 lg:order-1 relative">

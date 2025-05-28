@@ -20,7 +20,7 @@ interface AlatMusikItem {
     excerpt:string;
 }
 
-export default function RagamAlatMusik({user, alatMusik}) {
+export default function RagamAlatMusik({user, alatMusik, cartCount}) {
 
   const [filterSearch, setFilterSearch] = useState("");
   const [filteredData, setFilteredData] = useState<AlatMusikItem[]>([]);
@@ -58,7 +58,7 @@ export default function RagamAlatMusik({user, alatMusik}) {
 
   return (
     <MainLayout title="Ragam Makanan | Sanggar Nusantara">
-        <LightNavbar user={user} />
+        <LightNavbar user={user} cartCount={cartCount} />
       <main className="pt-44 lg:px-20 md:px-10 px-5 dark:bg-black container mx-auto">
         <h1 className="md:flex gap-3 text-center justify-center items-center font-bold md:text-3xl text-2xl dark:text-gray-200">
           <span className="shadow text-center bg-indigo-500 w-[50px] h-[50px] flex items-center justify-center text-white rounded-full md:mx-0 mx-auto">

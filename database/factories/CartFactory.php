@@ -21,6 +21,7 @@ class CartFactory extends Factory
             'item_id' => $this->faker->randomNumber(),
             'item_type' => $this->faker->randomElement(['event', 'produk']),
             'jumlah' => $this->faker->numberBetween(1, 10),
+            'variasi' => $this->faker->numberBetween(1, 10),
         ];
     }
 }
