@@ -1,34 +1,241 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LightNavbar from "../layouts/lightNavbar";
 import MainLayout from "../Layouts/mainLayout";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { CreditCard, Loader, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import { Link, router } from "@inertiajs/react";
+import { toast } from "react-toastify";
 
 export default function Cart({user, keranjang, cartCount}) {
-    const [showVoucherModal, setShowVoucherModal] = useState(false);
-
-
-    const [expandedId, setExpandedId] = useState(null);
     const [isChecked, setIsChecked] = useState(false);
     const [isBayar, setIsBayar] = useState(false);
     const [showTooltipPPN, setShowTooltipPPN] = useState(false);
     const [showTooltipServiceFee, setShowTooltipServiceFee] = useState(false);
+    const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+    const [disabledIds, setDisabledIds] = useState([]);
+
+    const [quantities, setQuantities] = useState(() => {
+        const map = {};
+        keranjang.forEach(item => {
+            map[item.id] = item.jumlah;
+        });
+        return map;
+    });
+
+    const [lastSavedQuantities, setLastSavedQuantities] = useState(() => {
+        const map = {};
+        keranjang.forEach(item => {
+            map[item.id] = item.jumlah;
+        });
+        return map;
+    });
+
+    const [subtotals, setSubtotals] = useState(() => {
+        const map = {};
+        keranjang.forEach(item => {
+            map[item.id] = item.subtotal;
+        });
+        return map;
+    });
+
+    const [loadingButton, setLoadingButton] = useState({
+        type: null, // "plus" | "minus"
+        id: null,   // cartId
+      });
 
     const [loading, setLoading] = useState({
         "diskon":false,
         "bayar":false
     });
 
+    const totalHarga = keranjang.reduce((acc, item) => {
+        const subtotal = subtotals[item.id] ?? item.subtotal;
+        return acc + subtotal;
+    }, 0);
+
+    const diskon = 20000; // nanti bisa dibuat dinamis dari promo
+    const pajakPPN = Math.round(totalHarga * 0.11); // 11%
+    const biayaServis = 15000; // bisa juga dibuat dinamis
+    const totalTransfer = totalHarga - diskon + pajakPPN + biayaServis;
+
+
+
+
+    const updateBackendQuantity = async (cartId, newJumlah) => {
+        const totalEventTickets = keranjang
+            .filter(i => i.item_type === 'event' && i.id !== cartId)
+            .reduce((sum, i) => {
+                const qty = parseInt(quantities[i.id]) || lastSavedQuantities[i.id] || i.jumlah;
+                return sum + qty;
+            }, 0) + newJumlah;
+
+        if (totalEventTickets > 5) {
+            toast.warning("Maksimal total 5 tiket event dalam keranjang.");
+            const original = lastSavedQuantities[cartId] || 1;
+            setQuantities(prev => ({ ...prev, [cartId]: original }));
+            return false;
+        }
+
+        try {
+            const res = await fetch("/api/cart/update-quantity", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                },
+                body: JSON.stringify({ cart_id: cartId, jumlah: newJumlah }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                toast.error(data.message || "Gagal update jumlah");
+                const original = lastSavedQuantities[cartId] || 1;
+                setQuantities(prev => ({ ...prev, [cartId]: original }));
+                return false;
+            }
+
+            // Sync semua state
+            setQuantities(prev => ({ ...prev, [cartId]: data.jumlah }));
+            setLastSavedQuantities(prev => ({ ...prev, [cartId]: data.jumlah }));
+            setSubtotals(prev => ({ ...prev, [cartId]: data.subtotal }));
+            return true;
+
+        } catch (error) {
+            console.error("Gagal menghubungi server:", error);
+            const original = lastSavedQuantities[cartId] || 1;
+            setQuantities(prev => ({ ...prev, [cartId]: original }));
+            return false;
+        }
+    };
+
+
+    const handleInputChange = (cartId, value) => {
+        const raw = typeof value === "string" ? value : String(value);
+
+        // biarkan kosong selama masih diketik
+        if (raw === "") {
+            setQuantities(prev => ({ ...prev, [cartId]: "" }));
+            return;
+        }
+
+        const numeric = parseInt(raw, 10);
+        if (isNaN(numeric) || numeric < 1 || numeric > 5) return;
+
+        setQuantities(prev => ({ ...prev, [cartId]: numeric }));
+    };
+
+
+    const handleInputBlur = (cartId) => {
+        const value = quantities[cartId];
+        const numeric = parseInt(value, 10);
+
+        if (isNaN(numeric) || numeric < 1 || numeric > 5) {
+            const original = keranjang.find(i => i.id === cartId)?.jumlah || 1;
+            setQuantities(prev => ({ ...prev, [cartId]: original }));
+            return;
+        }
+
+        updateBackendQuantity(cartId, numeric);
+    };
+
+    const handlePlus = async (item) => {
+        const cartId = item.id;
+        if (disabledIds.includes(cartId)) return;
+
+        setDisabledIds(prev => [...prev, cartId]);
+        setLoadingButton({ type: "plus", id: cartId });
+
+        const currentQty = parseInt(quantities[cartId]) || item.jumlah;
+        const newQty = currentQty + 1;
+
+        const success = await updateBackendQuantity(cartId, newQty);
+
+        setDisabledIds(prev => prev.filter(id => id !== cartId));
+        setLoadingButton({ type: null, id: null });
+    };
+
+
+    const handleMinus = async (item) => {
+        const cartId = item.id;
+        if (disabledIds.includes(cartId)) return;
+
+        setDisabledIds(prev => [...prev, cartId]);
+        setLoadingButton({ type: "minus", id: cartId });
+
+        const currentQty = parseInt(quantities[cartId]) || item.jumlah;
+
+        if (currentQty === 1) {
+            setConfirmDeleteId(cartId);
+            setDisabledIds(prev => prev.filter(id => id !== cartId));
+            setLoadingButton({ type: null, id: null });
+            return;
+        }
+
+        const newQty = currentQty - 1;
+        const success = await updateBackendQuantity(cartId, newQty);
+
+        setDisabledIds(prev => prev.filter(id => id !== cartId));
+        setLoadingButton({ type: null, id: null });
+    };
+
+    const handleDeleteItem = async (cartId) => {
+        try {
+            const res = await fetch("/api/cart/delete-item", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                },
+                body: JSON.stringify({ cart_id: cartId }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                toast.error(data.message || "Gagal menghapus item");
+                return;
+            }
+
+            // Hapus item dari state lokal
+            router.visit('/keranjang');
+        } catch (error) {
+            console.error("Gagal menghapus item:", error);
+            toast.warning("Terjadi kesalahan saat menghapus item");
+        }
+    };
+
+    useEffect(() => {
+        const handleEsc = (e) => {
+          if (e.key === "Escape") {
+            setConfirmDeleteId(null);
+          }
+        };
+
+        if (confirmDeleteId !== null) {
+          document.addEventListener("keydown", handleEsc);
+        }
+
+        return () => {
+          document.removeEventListener("keydown", handleEsc);
+        };
+      }, [confirmDeleteId]);
+
+
+
+
+
+
   return (
 
     <MainLayout title="Keranjang | Sanggar Nusantara">
         <LightNavbar user={user} cartCount={cartCount} />
-        <div className="min-h-screen bg-[#F5F6FF] container mx-auto py-20 px-4 lg:px-20 md:px-5 lg:py-36">
+        <div className="min-h-screen container mx-auto py-20 px-4 lg:px-5 xl:px-20 lg:py-36">
             {/* Cart */}
             <div className="grid grid-cols-1 relative">
                 <div className="bg-white p-6 rounded-xl shadow">
                     <h1 className="text-2xl font-bold mb-4">Keranjang Anda</h1>
 
-                    {keranjang.length !== 0 && (
+                    {keranjang.filter(item => item.item_type === 'event').length !== 0 && (
                         <div>
                             <h2 className="text-xl font-semibold">Event</h2>
 
@@ -37,7 +244,6 @@ export default function Cart({user, keranjang, cartCount}) {
                                 <div key={index} className="flex flex-wrap md:flex-nowrap items-center gap-4 justify-between border-b border-gray-300 py-4">
                                     <div className="flex md:w-1/2 w-full">
                                         <img
-                                        // src={item.data?.image || "/images/NO IMAGE AVAILABLE.jpg"}
                                         src={
                                             item.data?.image ? `./../storage/${item.data?.image}` : "/images/NO IMAGE AVAILABLE.jpg"
                                         }
@@ -50,17 +256,17 @@ export default function Cart({user, keranjang, cartCount}) {
                                             </p>
 
                                             <p className="font-medium md:text-base text-sm text-slate-500">
-                                                Jenis Tiket: {item.data?.pembelian_events?.jenis_tiket}
+                                                Jenis Tiket: {item?.variasi}
                                             </p>
 
                                             <p className="font-medium md:text-base text-sm text-slate-500">
-                                                Harga Tiket: {item.data?.tanggal}
+                                                Harga Tiket: Rp {item?.harga.toLocaleString("id-ID")}
                                             </p>
 
                                             <p className="font-medium md:text-base text-sm text-slate-500 block md:hidden">
                                                 Subtotal:
                                                 <span className="font-bold text-gray-700">
-                                                    Rp {item.data?.harga ?? 0 * item.jumlah}
+                                                    Rp {(subtotals[item.id] ?? item.subtotal).toLocaleString("id-ID")}
                                                 </span>
                                             </p>
                                         </div>
@@ -71,23 +277,57 @@ export default function Cart({user, keranjang, cartCount}) {
 
                                         <div className="flex w-full justify-between items-center">
                                             <div className="flex md:justify-center w-full">
-                                                <div className="border-2 border-gray-300 border-r-1 md:p-2 p-1 rounded-tl-md rounded-bl-md flex justify-center items-center">
-                                                    <Plus className="md:w-[20px] w-[15px] font-bold"></Plus>
-                                                </div>
+                                                <button
+                                                    onClick={() => handleMinus(item)}
+                                                    disabled={disabledIds.includes(item.id)}
+                                                    className={`border-2 border-gray-300 border-r-1 md:p-2 p-1 rounded-tl-md rounded-bl-md flex justify-center items-center
+                                                        ${disabledIds.includes(item.id) ? "bg-gray-200 opacity-70 cursor-not-allowed" : "cursor-pointer"}
+                                                    `}
+                                                    >
+                                                    {loadingButton.type === "minus" && loadingButton.id === item.id ? (
+                                                        <Loader className="animate-spin w-4 h-4" />
+                                                    ) : (
+                                                        <Minus className="md:w-[20px] w-[15px] font-bold" />
+                                                    )}
+                                                </button>
 
                                                 <input
-                                                    value={item.jumlah}
-                                                    type="text"
-                                                    className="border-2 border-gray-300 border-r-1 border-l-1 md:px-5 px-3 md:w-[60px] w-[40px] font-semibold md:text-base text-sm"
+                                                    value={quantities[item.id] ?? item.jumlah}
+                                                    onChange={(e) => handleInputChange(item.id, e.target.value)}
+                                                    onBlur={() => handleInputBlur(item.id)}
+                                                    disabled={disabledIds.includes(item.id)}
+                                                    type="number"
+                                                    min="1"
+                                                    max="5"
+                                                    className={`border-2 border-gray-300 border-r-1 border-l-1 md:px-5 px-3 md:w-[60px] w-[40px] font-semibold md:text-base text-sm
+                                                        text-center ${disabledIds.includes(item.id) ? "bg-gray-200 opacity-70" : ""}
+                                                    `}
                                                 />
 
-                                                <div className="border-2 border-gray-300 border-l-1 md:p-2 p-1 rounded-tr-md rounded-br-md flex justify-center items-center">
-                                                    <Minus className="md:w-[20px] w-[15px] font-bold"></Minus>
-                                                </div>
+
+                                                <button
+                                                    onClick={() => handlePlus(item)}
+                                                    disabled={disabledIds.includes(item.id)}
+                                                    className={`border-2 border-gray-300 border-l-1 md:p-2 p-1 rounded-tr-md rounded-br-md flex justify-center items-center
+                                                        ${disabledIds.includes(item.id) ? "bg-gray-200 opacity-70 cursor-not-allowed" : "cursor-pointer"}
+                                                    `}
+                                                    >
+                                                    {loadingButton.type === "plus" && loadingButton.id === item.id ? (
+                                                        <Loader className="animate-spin w-4 h-4" />
+                                                    ) : (
+                                                        <Plus className="md:w-[20px] w-[15px] font-bold" />
+                                                    )}
+                                                </button>
+
+
                                             </div>
 
                                             <div className="flex md:hidden">
-                                                <Trash2 className="cursor-pointer text-red-500 md:w-[25px] w-[20px]"></Trash2>
+                                            <Trash2
+                                                onClick={() => setConfirmDeleteId(item.id)}
+                                                className="cursor-pointer text-red-500 hover:text-red-700"
+                                            />
+
                                             </div>
                                         </div>
 
@@ -96,12 +336,16 @@ export default function Cart({user, keranjang, cartCount}) {
                                     <div className="md:flex justify-center hidden w-1/2">
                                         <div className="flex flex-col gap-1 ">
                                             <p className="text-[16px] text-gray-600 font-medium ">Subtotal</p>
-                                            <p className="font-bold text-gray-700">Rp {item.data?.harga ?? 0 * item.jumlah}</p>
+                                            <p className="font-bold text-gray-700">Rp {(subtotals[item.id] ?? item.subtotal).toLocaleString("id-ID")}</p>
                                         </div>
                                     </div>
 
                                     <div className="md:flex justify-center hidden flex-[10%]">
-                                        <Trash2 className="cursor-pointer text-red-500"></Trash2>
+                                    <Trash2
+                                        onClick={() => setConfirmDeleteId(item.id)}
+                                        className="cursor-pointer text-red-500 hover:text-red-700"
+                                    />
+
                                     </div>
                                 </div>
                             ))}
@@ -110,43 +354,79 @@ export default function Cart({user, keranjang, cartCount}) {
                         </div>
                     )}
 
-                    <div>
-                        <h2 className="text-xl font-semibold">Paket Langganan</h2>
+                    {keranjang.filter(item => item.item_type === 'subscription').length !== 0 && (
+                        <div>
+                            <h2 className="text-xl font-semibold">Paket Langganan</h2>
+                            {keranjang.filter(item => item.item_type === 'subscription').map((item, index) => (
+                                <div className="mt-3 mb-7" key={index}>
+                                    <div className="flex flex-wrap md:flex-nowrap items-center gap-4 justify-between border-b border-gray-300 py-4">
+                                        <div className="flex md:w-[95%] w-full">
 
-                        <div className="mt-3 mb-7">
-                            <div className="flex flex-wrap md:flex-nowrap items-center gap-4 justify-between border-b border-gray-300 py-4">
-                                <div className="flex md:w-[95%] w-full">
-                                    <img
-                                    src="/images/NO IMAGE AVAILABLE.jpg"
-                                    alt="Event"
-                                    className="bg-gray-600 object-cover rounded-md w-20 h-20 md:mr-4 mr-2" />
+                                            <div className="md:mr-4 mr-2 flex justify-center items-center">
+                                                <CreditCard className="text-gray-200 bg-gray-500 w-20 h-20 rounded-md p-3" />
+                                            </div>
 
-                                    <div className="">
-                                        <p className="font-semibold md:text-lg text-base text-slate-700 line-clamp-2">Festival Gunung Slamet Lorem ipsum dolor sit amet.</p>
-                                        <p className="font-medium md:text-base text-sm text-slate-500">Harga Tiket : Rp 30000</p>
-                                        <Trash2 className="md:hidden flex cursor-pointer text-red-500 w-[20px] mt-3"></Trash2>
+                                            <div className="">
+                                                <p className="font-semibold md:text-lg text-base text-slate-700 line-clamp-2">Paket Langganan {item.data.nama} {item.data.durasi} Hari</p>
+                                                <p className="font-medium md:text-base text-sm text-slate-500">Harga : Rp {item.harga.toLocaleString("id-ID")}</p>
+                                                <Trash2
+                                                    onClick={() => setConfirmDeleteId(item.id)}
+                                                    className="md:hidden flex cursor-pointer text-red-500 w-[20px] mt-3"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* TEMPAT BUAT UBAH QUANTITY */}
+                                        <div className="md:flex justify-center hidden w-[7%]">
+                                            <Trash2
+                                                onClick={() => setConfirmDeleteId(item.id)}
+                                                className="cursor-pointer text-red-500 hover:text-red-700"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* TEMPAT BUAT UBAH QUANTITY */}
-                                <div className="md:flex justify-center hidden w-[7%]">
-                                    <Trash2 className="cursor-pointer text-red-500 ml-2"></Trash2>
                                 </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {keranjang.length === 0 && (
+                        <div className="flex flex-col items-center justify-center h-[60vh] text-center px-4">
+                            <div className="bg-gray-100 rounded-full p-6 mb-4">
+                                <ShoppingCart size={48} className="text-gray-500" />
                             </div>
 
-                        </div>
+                            <h2 className="text-xl font-semibold text-gray-700">Keranjangmu Kosong</h2>
 
-                    </div>
+                            <p className="text-gray-500 mb-6">Yuk, tambahkan paket langganan atau tiket event ke keranjangmu!</p>
+
+                            <div className="flex gap-6 flex-col md:flex-row w-full md:w-auto">
+                                <Link
+                                    href="/subscription"
+                                    className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition"
+                                >
+                                    Jelajahi Paket
+                                </Link>
+
+                                <Link
+                                    href="/event"
+                                    className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition"
+                                >
+                                    Jelajahi Event
+                                </Link>
+                            </div>
+                        </div>
+                    )}
 
                 </div>
 
                 {/* Summary */}
-                <div className="z-[9999999] w-full flex gap-10 mt-10">
-                    <div id="snap-container" className="w-1/2"></div>
-                    <div className="container mx-auto bg-white w-1/2 p-6 rounded-tl-xl rounded-tr-xl">
+                <div className="w-full flex flex-wrap-reverse xl:flex-nowrap gap-10 mt-10">
+                    <div id="snap-container" className="w-full xl:w-1/2"></div>
+                    <div className="container mx-auto bg-white w-full xl:w-1/2 p-2 rounded-tl-xl rounded-tr-xl">
 
                         <div className={`p-4`}>
-                            <label className="block font-semibold text-lg text-slate-800 dark:text-gray-200">Kode Promo</label>
+                            <h2 className="md:text-xl font-bold mb-4 text-lg text-slate-800 dark:text-gray-200">Kode Promo</h2>
                             <div className="flex gap-3 mt-2 mb-1">
                                 <input
                                     type="text"
@@ -174,17 +454,17 @@ export default function Cart({user, keranjang, cartCount}) {
                                 Selamat! Anda dapat domain <strong>GRATIS</strong> dan 3 bulan <strong>GRATIS</strong> di paket ini.
                             </p>
 
-                            <div className="mt-3">
-                                <h3 className="block mb-3 font-semibold text-lg text-slate-800 dark:text-gray-200">Payment details</h3>
+                            <div className="mt-7">
+                                <h2 className="md:text-xl font-bold mb-4 text-lg text-slate-800 dark:text-gray-200">Detail Pembayaran</h2>
                                 <div className="text-base font-medium text-slate-500 flex flex-col gap-3">
                                     <div className="flex justify-between gap-2">
                                         <span className="dark:text-gray-300 text-sm md:text-base">Total harga </span>
-                                        <span className="dark:text-gray-300 text-sm md:text-base">Rp 90000</span>
+                                        <span className="dark:text-gray-300 text-sm md:text-base">Rp {totalHarga.toLocaleString("id-ID")}</span>
                                     </div>
 
                                     <div className="flex justify-between gap-2 text-green-600">
                                         <span className="text-sm md:text-base">Diskon</span>
-                                        <span className="text-sm md:text-base">- Rp 20000</span>
+                                        <span className="text-sm md:text-base">- Rp {diskon.toLocaleString("id-ID")}</span>
                                     </div>
 
                                     <div className="flex justify-between items-center gap-2 text-red-600 relative">
@@ -206,7 +486,7 @@ export default function Cart({user, keranjang, cartCount}) {
                                                 )}
                                             </span>
                                         </span>
-                                        <span className="text-sm md:text-base whitespace-nowrap">+ Rp 0</span>
+                                        <span className="text-sm md:text-base whitespace-nowrap">+ Rp {pajakPPN.toLocaleString("id-ID")}</span>
                                     </div>
 
                                     {/* Service Fee */}
@@ -229,12 +509,12 @@ export default function Cart({user, keranjang, cartCount}) {
                                                 )}
                                             </span>
                                         </span>
-                                        <span className="text-sm md:text-base whitespace-nowrap">+ Rp 15.000</span>
+                                        <span className="text-sm md:text-base whitespace-nowrap">+ Rp {biayaServis.toLocaleString("id-ID")}</span>
                                     </div>
 
                                     <div className="flex justify-between font-semibold mt-4 text-slate-700">
                                         <span className="dark:text-gray-300">Total transfer</span>
-                                        <span className="text-black">Rp 30000</span>
+                                        <span className="text-black">Rp {totalTransfer.toLocaleString("id-ID")}</span>
                                     </div>
                                 </div>
                             </div>
@@ -266,6 +546,51 @@ export default function Cart({user, keranjang, cartCount}) {
                     </div>
                 </div>
             </div>
+
+            {/* MODAL HAPUS CART */}
+            {confirmDeleteId !== null && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/30 px-4"
+                    onClick={() => setConfirmDeleteId(null)}
+                >
+                    <div
+                        className="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full transform transition-all duration-300 scale-100"
+                        onClick={(e) => e.stopPropagation()} // biar klik di dalam modal tidak ikut close
+                    >
+                        <div className="flex flex-col items-center text-center">
+                            <Trash2 className="w-12 h-12 text-red-500 mb-3" />
+
+                            <h2 className="text-lg font-semibold text-gray-800 mb-2">
+                            Hapus Item dari Keranjang?
+                            </h2>
+
+                            <p className="text-sm text-gray-600 mb-6">
+                            Apakah kamu yakin ingin menghapus item ini dari keranjangmu?
+                            </p>
+
+                            <div className="flex gap-4 w-full">
+                                <button
+                                    onClick={() => {
+                                    handleDeleteItem(confirmDeleteId);
+                                    setConfirmDeleteId(null);
+                                    }}
+                                    className="cursor-pointer flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition"
+                                >
+                                    Ya, Hapus
+                                </button>
+                                <button
+                                    onClick={() => setConfirmDeleteId(null)}
+                                    className="cursor-pointer flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-semibold transition"
+                                >
+                                    Batal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
         </div>
     </MainLayout>
   );

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -55,6 +56,9 @@ class CartController extends Controller
             $result[] = [
                 'id' => $item->id,
                 'item_type' => $item->item_type,
+                'variasi' => $item->variasi,
+                'harga' => $item->harga,
+                'subtotal' => $item->subtotal,
                 'jumlah' => $item->jumlah,
                 'data' => $itemDetails,
             ];
@@ -62,7 +66,7 @@ class CartController extends Controller
 
         return Inertia::render('Cart', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
             'keranjang' => $result,
         ]);
     }
@@ -76,14 +80,26 @@ class CartController extends Controller
             ], 401);
         }
 
-        $validated = $request->validate([
+        // Manual validator
+        $validator = Validator::make($request->all(), [
             'user_id' => 'required|exists:users,id',
             'item_id' => 'required|integer',
-            'item_type' => 'required|string',
+            'item_type' => 'required|string|in:subscription',
             'jumlah' => 'required|integer|min:1',
+            'variasi' => 'required|string',
+            'harga' => 'required|integer|min:0',
+            'subtotal' => 'required|integer|min:0',
         ]);
 
-        $validated['user_id'] = Auth::id();
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Ambil data tervalidasi
+        $validated = $validator->validated();
+        $validated['user_id'] = Auth::id(); // paksa user ID dari auth
 
         // Cek apakah user sudah punya item subscription lain di keranjang
         if ($validated['item_type'] === 'subscription') {
@@ -118,6 +134,22 @@ class CartController extends Controller
     {
         $userId = $request->user_id;
 
+        // Validasi awal untuk user_id dan items
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer|exists:users,id',
+            'items' => 'required|array|min:1',
+            'items.*.item_id' => 'required|integer',
+            'items.*.item_type' => 'required|string|in:subscription,product,event,course',
+            'items.*.jumlah' => 'required|integer|min:1|max:5',
+            'items.*.variasi' => 'required|string',
+            'items.*.harga' => 'required|numeric|min:0',
+            'items.*.subtotal' => 'required|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
         foreach ($request->items as $item) {
             // Hitung total jumlah semua baris untuk event yang sama
             $existingJumlah = Cart::where('user_id', $userId)
@@ -128,17 +160,23 @@ class CartController extends Controller
             $jumlahBaru = $item['jumlah'];
 
             if ($existingJumlah >= 5) {
+
                 return response()->json([
                     'message' => 'Sudah ada ' . $existingJumlah . ' tiket dalam keranjang anda',
                 ], 422);
+
             } elseif (($existingJumlah + $jumlahBaru) > 5) {
+
                 return response()->json([
                     'message' => 'Sudah ada ' . $existingJumlah . ' tiket dalam keranjang anda. Anda hanya bisa membeli ' . (5 - $existingJumlah) . ' tiket tambahan',
                 ], 422);
+
             } elseif ($jumlahBaru > 5) {
+
                 return response()->json([
                     'message' => 'Maksimal pembelian tiket untuk event ini adalah 5 tiket.',
                 ], 422);
+
             }
 
             // Tambahkan atau update jumlah di cart untuk kombinasi variasi yang unik
@@ -149,12 +187,55 @@ class CartController extends Controller
                 'variasi' => $item['variasi'],
             ]);
 
+            $cartItem->harga = $item['harga'];
+            $cartItem->subtotal = $item['subtotal'];
             $cartItem->jumlah += $jumlahBaru;
             $cartItem->save();
         }
 
         return response()->json(['message' => 'Tiket berhasil ditambahkan ke keranjang.'], 200);
     }
+
+    public function updateCartQuantity(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'cart_id' => 'required|exists:carts,id',
+            'jumlah' => 'required|integer|min:1|max:5',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $cart = Cart::find($request->cart_id);
+        $cart->jumlah = $request->jumlah;
+        $cart->subtotal = $cart->harga * $cart->jumlah;
+        $cart->save();
+
+        return response()->json([
+            'message' => 'Jumlah berhasil diperbarui',
+            'jumlah' => $cart->jumlah,
+            'subtotal' => $cart->subtotal,
+        ]);
+    }
+
+
+    public function deleteCartItem(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'cart_id' => 'required|exists:carts,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        Cart::destroy($request->cart_id);
+
+        return response()->json(['message' => 'Item berhasil dihapus dari keranjang']);
+    }
+
+
 
 
 

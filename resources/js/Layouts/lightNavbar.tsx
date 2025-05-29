@@ -260,11 +260,11 @@ const Navbar = ({user, cartCount}) => {
                                     <div className="flex items-center space-x-2">
                                         <Link
                                             href="/keranjang"
-                                            className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center bg-white/80 text-gray-700 hover:bg-gray-100 shadow-lg`}
+                                            className={`relative px-3 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center bg-white/80 text-gray-700 hover:bg-gray-100 shadow-lg`}
                                         >
                                             <FaShoppingBag className="w-[20px] h-[20px]" />
 
-                                            <span className="absolute -top-1 right-[-10px] bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+                                            <span className="absolute -top-1 right-[-5px] bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
                                                 {cartCount ? cartCount : 0}
                                             </span>
                                         </Link>
@@ -348,12 +348,12 @@ const Navbar = ({user, cartCount}) => {
 
                             <Link
                                 href="/keranjang"
-                                className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center text-gray-700`}
+                                className={`relative px-3 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center bg-white/80 text-gray-700 hover:bg-gray-100 shadow-lg`}
                             >
                                 <FaShoppingBag className="w-[20px] h-[20px]" />
 
-                                <span className="absolute -top-1 right-[-10px] bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
-                                    99+
+                                <span className="absolute -top-1 right-[-5px] bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+                                    {cartCount ? cartCount : 0}
                                 </span>
                             </Link>
 

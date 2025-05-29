@@ -17,7 +17,7 @@ export default function SubscriptionPlans({plans,user, cartCount}) {
             return
         }
 
-        if (plan.price === 0) {
+        if (plan.harga_diskon === 0) {
             window.location.href = '/admin/login'
         } else {
             try {
@@ -33,6 +33,9 @@ export default function SubscriptionPlans({plans,user, cartCount}) {
                         item_id: plan.id,
                         item_type: 'subscription',
                         jumlah: 1,
+                        variasi: plan.durasi,
+                        harga: plan.harga_diskon,
+                        subtotal: plan.harga_diskon,
                     }),
                 })
 
@@ -112,22 +115,22 @@ export default function SubscriptionPlans({plans,user, cartCount}) {
                             <p className="text-xs text-gray-500 italic mb-2">{plan.specialNote}</p>
                         )}
                         {/* Harga */}
-                        {plan.price === 0 ? (
+                        {plan.harga_diskon === 0 ? (
                             <p className="text-2xl font-bold text-indigo-700 mb-1">Gratis</p>
                         ) :  (
                             <>
                                 <div className="text-2xl font-bold text-indigo-700 mb-3">
-                                    Rp{plan.price.toLocaleString()}/{plan.durasi}
+                                    Rp{plan.harga_diskon.toLocaleString()}/{plan.durasi}
                                 </div>
 
                                 <div className="flex gap-5 mb-5 items-center">
-                                    {plan.price < plan.originalPrice && (
+                                    {plan.harga_diskon < plan.harga && (
                                         <div className="text-sm text-gray-500 line-through">
-                                            Rp{plan.originalPrice.toLocaleString()}/{plan.durasi}
+                                            Rp{plan.harga.toLocaleString()}/{plan.durasi}
                                         </div>
                                     )}
                                     <p className="text-sm font-medium text-white bg-emerald-600 inline-block px-3 py-1 rounded-full">
-                                        Hemat {Math.round(((plan.originalPrice - plan.price) / plan.originalPrice) * 100)}%
+                                        Hemat {Math.round(((plan.harga - plan.harga_diskon) / plan.harga) * 100)}%
                                     </p>
                                 </div>
                             </>

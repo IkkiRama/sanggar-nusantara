@@ -16,6 +16,34 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+* {
+    font-family: "figtree", "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+}
+
+*::-webkit-scrollbar {
+    width: 7px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #dc213e;
+    /* border-radius: 5px; */
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 .font-dancing-script {
     font-family: "Dancing Script", cursive !important;
 }
@@ -343,25 +371,6 @@ html.dark .MuiAccordionDetails-root.css-15v22id-MuiAccordionDetails-root {
         max-width: 1320px;
         margin: 0 auto;
     }
-}
-
-
-* {
-    font-family: "figtree", "DM Sans", sans-serif;
-    font-optical-sizing: auto;
-}
-
-*::-webkit-scrollbar {
-    width: 7px;
-}
-
-*::-webkit-scrollbar-track {
-    background: #fff;
-}
-
-*::-webkit-scrollbar-thumb {
-    background-color: #dc213e;
-    /* border-radius: 5px; */
 }
 
 

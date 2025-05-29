@@ -28,7 +28,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/midtrans/token/{order_id}', [ProfileController::class, 'getSnapToken']);
     Route::post('/event/batalkan/{orderId}', [ProfileController::class, 'batalkanTransaksi']);
 
-    Route::post('/diskon', [FrontController::class, 'showDiskonAPI']);
+    Route::post('/diskon', [TransaksiController::class, 'showDiskonAPI']);
     Route::post('/bayar', [TransaksiController::class, 'storeOrderAPI']);
 
 

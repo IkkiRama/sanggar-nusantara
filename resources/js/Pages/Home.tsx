@@ -104,7 +104,7 @@ const Home = ({plans}) => {
         return
     }
 
-    if (plan.price === 0) {
+    if (plan.harga === 0) {
       window.location.href = '/admin/login'
     } else {
       try {
@@ -120,6 +120,9 @@ const Home = ({plans}) => {
             item_id: plan.id,
             item_type: 'subscription',
             jumlah: 1,
+            variasi: plan.durasi,
+            harga: plan.harga_diskon,
+            subtotal: plan.harga_diskon,
           }),
         })
 
@@ -223,7 +226,7 @@ const Home = ({plans}) => {
     <MainLayout title="Sanggar Nusantara | Eksplorasi Budaya & Kekayaan Alam Indonesia">
       <LightNavbar user={user} cartCount={cartCount} />
 
-      <section className="bg-white dark:bg-gray-950 max-h-[100vh]  relative z-10 overflow-hidden">
+      <section className="bg-white dark:bg-gray-950 md:max-h-[100vh] max-h-full relative z-10 overflow-hidden">
         <div className="grid lg:grid-cols-2 max-w-[1600px] h-full mx-auto px-4">
             {/* Background Gradient Circle */}
             <span
@@ -237,100 +240,94 @@ const Home = ({plans}) => {
             {/* Left Section */}
             <section className="md:pl-24 px-5 md:px-0 flex lg:flex-col sm:flex-row flex-col lg:items-start items-center lg:justify-center justify-between lg:order-1 order-2 lg:gap-0 gap-10 mb-10">
 
-            {/* Big Title */}
-            <div className="sm:hidden md:hidden flex mt-5 justify-center w-full sm:order-1 order-1 lg:mb-10">
-                <h1
-                className="lg:text-8xl md:text-5xl sm:text-7xl text-3xl text-center font-semibold text-red-500"
-                data-aos="fade-right"
-                >
-                SANGGAR NUSANTARA
-                </h1>
-            </div>
+                {/* Big Title */}
+                <div className="sm:hidden md:hidden flex mt-5 justify-center w-full sm:order-1 order-1 lg:mb-10">
+                    <h1
+                    className="lg:text-8xl md:text-5xl sm:text-7xl text-3xl text-center font-semibold text-red-500"
+                    data-aos="fade-right"
+                    >
+                    SANGGAR NUSANTARA
+                    </h1>
+                </div>
 
-            <div className="hidden lg:flex w-full sm:order-1 order-1 lg:mb-10">
-                <h1
-                className="lg:text-8xl md:text-5xl sm:text-7xl text-3xl font-semibold text-red-500"
-                data-aos="fade-right"
-                >
-                SANGGAR <br /> NUSANTARA
-                </h1>
-            </div>
+                <div className="hidden lg:flex w-full sm:order-1 order-1 lg:mb-10">
+                    <h1
+                    className="lg:text-8xl md:text-5xl sm:text-7xl text-3xl font-semibold text-red-500"
+                    data-aos="fade-right"
+                    >
+                    SANGGAR <br /> NUSANTARA
+                    </h1>
+                </div>
 
-            {/* Description Text */}
-            <div className="w-full sm:order-1 order-2 lg:mb-32">
+                {/* Description Text */}
+                <div className="w-full sm:order-1 order-2 lg:mb-32">
 
-                <p
-                className="text-sm lg:text-[16px] text-gray-800 dark:text-gray-200 animate-slide-right leading-6"
-                data-aos-delay="100"
-                >
-                {content.header.id}
-                </p>
-            </div>
+                    <p
+                    className="text-sm lg:text-[16px] text-gray-800 dark:text-gray-200 animate-slide-right leading-6"
+                    data-aos-delay="100"
+                    >
+                    {content.header.id}
+                    </p>
+                </div>
 
-            {/* Thumbnails Grid */}
-            <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-2 lg:gap-5 gap-3 sm:order-2 order-1 md:mr-24 lg:mr-0">
-                {[
-                { img: "/images/header/subheader2_thumb.jpg", delay: 900 },
-                { img: "/images/header/subheader1_thumb.jpg", delay: 600 },
-                { img: "/images/header/subheader3_thumb.jpg", delay: 300 },
-                { img: "/images/header/subheader4_thumb.jpg", delay: 200 },
-                ].map((thumb, idx) => (
-                <div
-                    key={idx}
-                    className="cursor-pointer transition-transform hover:scale-110 after:transition-all relative after:content-[''] after:inset-0 after:absolute after:bg-black/30 after:rounded-md hover:after:scale-0 after:scale-100 lg:col-span-1 sm:col-span-2"
-                    onClick={() => setOpen(true)}
-                    data-aos="fade-left"
-                    data-aos-delay={thumb.delay}
-                >
-                    <img
-                    src={thumb.img}
-                    alt={`subheader${idx + 1}`}
-                    className="lg:w-[120px] sm:w-[200px] w-full sm:h-[120px] h-[100%] rounded-md object-cover"
+                {/* Thumbnails Grid */}
+                <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-2 lg:gap-5 gap-3 sm:order-2 order-1 md:mr-24 lg:mr-0">
+                    {[
+                    { img: "/images/header/subheader2_thumb.jpg", delay: 900 },
+                    { img: "/images/header/subheader1_thumb.jpg", delay: 600 },
+                    { img: "/images/header/subheader3_thumb.jpg", delay: 300 },
+                    { img: "/images/header/subheader4_thumb.jpg", delay: 200 },
+                    ].map((thumb, idx) => (
+                    <div
+                        key={idx}
+                        className="cursor-pointer transition-transform hover:scale-110 after:transition-all relative after:content-[''] after:inset-0 after:absolute after:bg-black/30 after:rounded-md hover:after:scale-0 after:scale-100 lg:col-span-1 sm:col-span-2"
+                        onClick={() => setOpen(true)}
+                        data-aos="fade-left"
+                        data-aos-delay={thumb.delay}
+                    >
+                        <img
+                        src={thumb.img}
+                        alt={`subheader${idx + 1}`}
+                        className="lg:w-[120px] sm:w-[200px] w-full sm:h-[120px] h-[100%] rounded-md object-cover"
+                        />
+                    </div>
+                    ))}
+                    <Lightbox
+                    open={open}
+                    close={() => setOpen(false)}
+                    slides={[
+                        { src: "/images/header/subheader1.jpg" },
+                        { src: "/images/header/subheader2.jpg" },
+                        { src: "/images/header/subheader3.jpg" },
+                        { src: "/images/header/subheader4.jpg" },
+                    ]}
                     />
                 </div>
-                ))}
-                <Lightbox
-                open={open}
-                close={() => setOpen(false)}
-                slides={[
-                    { src: "/images/header/subheader1.jpg" },
-                    { src: "/images/header/subheader2.jpg" },
-                    { src: "/images/header/subheader3.jpg" },
-                    { src: "/images/header/subheader4.jpg" },
-                ]}
-                />
-            </div>
 
             </section>
 
             {/* Right Section with Image Background */}
             <section className="lg:h-[800px] text-center items-center flex justify-center flex-wrap w-full h-[300px] sm:h-full mt-12 lg:order-2 order-1">
-            <img
-                id="headerImg"
-                src="/images/header/header.png"
-                alt="headerImg"
-                className="h-full w-full object-cover"
-            />
+                <img
+                    id="headerImg"
+                    src="/images/header/header.png"
+                    alt="headerImg"
+                    className="h-full w-full object-cover"
+                />
 
 
-            {/* Large Title */}
-            {/* <div className="lg:hidden w-full mb-10 flex justify-center text-center z-10">
-                <h1
-                className="lg:text-8xl sm:text-7xl text-4xl font-semibold text-red-500"
-                data-aos="fade-left"
-                >SANGGAR NUSANTARA</h1>
-            </div> */}
-
+                {/* Large Title */}
+                {/* <div className="lg:hidden w-full mb-10 flex justify-center text-center z-10">
+                    <h1
+                    className="lg:text-8xl sm:text-7xl text-4xl font-semibold text-red-500"
+                    data-aos="fade-left"
+                    >SANGGAR NUSANTARA</h1>
+                </div> */}
             </section>
         </div>
       </section>
 
-      <br />
-      <br />
-      <br />
-      <br />
-
-      <section className="overflow-hidden lg:px-20 md:px-14 sm:px-12 px-8 gap-28 items-center lg:mt-20 mt-10 relative">
+      <section className="overflow-hidden lg:px-20 md:px-14 sm:px-12 px-8 gap-28 items-center lg:pt-[150px] pt-0 pb-10 lg:pb-0 relative">
         <div className="grid lg:grid-cols-2 max-w-[1600px] h-full mx-auto px-4 ">
             <span
             className="lg:w-[1000px] lg:h-[1000px] w-[500px] h-[500px] lg:rounded-full absolute lg:-right-[250px] lg:-top-[500px] lg:-rotate-[0deg] -right-[200px] rotate-90"
@@ -346,7 +343,7 @@ const Home = ({plans}) => {
             className="absolute w-[200px] lg:-top-[100px] -top-[150px]"
             />
 
-            <div className="md:text-left text-center ">
+            <div className="md:text-left text-center pt-10 lg:pt-0 ">
             <h2
                 className="font-bold md:text-3xl text-2xl mb-5 dark:text-gray-200"
                 data-aos="fade-right"
@@ -1158,29 +1155,29 @@ const Home = ({plans}) => {
                             </div>
                         )}
                         <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                            {plan.name}
+                            {plan.nama}
                         </h3>
                         <p className="text-sm text-gray-600 mb-3">{plan.description}</p>
                         {plan.specialNote && (
                             <p className="text-xs text-gray-500 italic mb-2">{plan.specialNote}</p>
                         )}
                         {/* Harga */}
-                        {plan.price === 0 ? (
+                        {plan.harga_diskon === 0 ? (
                             <p className="text-2xl font-bold text-indigo-700 mb-1">Gratis</p>
                         ) :  (
                             <>
                                 <div className="text-2xl font-bold text-indigo-700 mb-3">
-                                    Rp{plan.price.toLocaleString()}/{plan.durasi}
+                                    Rp{plan.harga_diskon.toLocaleString()}/{plan.durasi}
                                 </div>
 
                                 <div className="flex gap-5 mb-5 items-center">
-                                    {plan.price < plan.originalPrice && (
+                                    {plan.harga_diskon < plan.harga && (
                                         <div className="text-sm text-gray-500 line-through">
-                                            Rp{plan.originalPrice.toLocaleString()}/{plan.durasi}
+                                            Rp{plan.harga.toLocaleString()}/{plan.durasi}
                                         </div>
                                     )}
                                     <p className="text-sm font-medium text-white bg-emerald-600 inline-block px-3 py-1 rounded-full">
-                                        Hemat {Math.round(((plan.originalPrice - plan.price) / plan.originalPrice) * 100)}%
+                                        Hemat {Math.round(((plan.harga - plan.harga_diskon) / plan.harga) * 100)}%
                                     </p>
                                 </div>
                             </>

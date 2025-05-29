@@ -68,7 +68,7 @@ class ProfileController extends Controller
 
         return Inertia::render('Profile', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
             "pembelianEvents" => $pembelianEvents
         ]);
     }
@@ -120,7 +120,7 @@ class ProfileController extends Controller
 
         return Inertia::render('Invoice', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
             'order' => $order,
         ]);
     }
@@ -198,7 +198,7 @@ class ProfileController extends Controller
 
         return Inertia::render('Etiket', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
             'orders' => $orders,
         ]);
     }
@@ -241,7 +241,7 @@ class ProfileController extends Controller
 
         return Inertia::render('DownloadEtiket', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
             'orders' => $orders,
         ]);
     }
@@ -277,7 +277,7 @@ class ProfileController extends Controller
 
         return Inertia::render('EditProfile', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
         ]);
     }
 
@@ -365,7 +365,7 @@ class ProfileController extends Controller
 
         return Inertia::render('TransaksiProfile', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
             'transaksi' => $transaksi,
         ]);
     }
@@ -378,7 +378,7 @@ class ProfileController extends Controller
 
         return Inertia::render('UbahPassword', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->count() : 0,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
         ]);
     }
 }

@@ -24,6 +24,8 @@ Route::get('/artikel/{slug}', [FrontController::class, 'detailArtikel']);
 
 Route::post('/api/addSubscription', [CartController::class, 'addSubscriptionToCart'])->middleware('auth');
 Route::post('/api/cart/addEvent', [CartController::class, 'addEventToCart'])->middleware('auth');
+Route::post('/api/cart/update-quantity', [CartController::class, 'updateCartQuantity'])->middleware('auth');
+Route::post('/api/cart/delete-item', [CartController::class, 'deleteCartItem'])->middleware('auth');
 
 
 Route::get('/ragam-indonesia', [FrontController::class, 'ragamIndonesia']);

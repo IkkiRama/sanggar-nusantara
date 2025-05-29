@@ -18,6 +18,8 @@ return new class extends Migration
             $table->enum('item_type', ['subscription', 'product', 'event', 'course']);
             $table->integer('jumlah')->default(1);
             $table->string('variasi');
+            $table->integer('harga')->default(1);
+            $table->integer('subtotal')->default(1);
             $table->timestamps();
         });
     }

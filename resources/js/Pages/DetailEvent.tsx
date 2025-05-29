@@ -195,6 +195,8 @@ export default function DetailEvent({user, event, hargaTiket, events, cartCount}
                         item_type: 'event',
                         jumlah: ticket.kuota,
                         variasi: ticket.nama,
+                        harga: ticket.harga,
+                        subtotal: ticket.kuota * ticket.harga,
                     })),
                 }),
             });
@@ -332,7 +334,7 @@ export default function DetailEvent({user, event, hargaTiket, events, cartCount}
                 ) : (
                     <div className="container mx-auto sm:px-6 px-0 md:justify-center flex-wrap lg:flex-nowrap relative mt-10 flex-grow flex justify-between lg:gap-10 h-full">
 
-                        <div className="w-full dark:bg-gray-950 lg:w-2/3 bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] md:rounded-lg md:border-2 md:border-gray-200 dark:border-gray-900">
+                        <div className="w-full dark:bg-gray-950 lg:w-2/3 bg-white md:shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] md:rounded-lg md:border-2 md:border-gray-200 dark:border-gray-900">
 
                             {/* Sticky Tabs */}
                             <div className="sticky dark:bg-gray-950 bg-white/80 backdrop-blur-md md:rounded-tl-lg md:rounded-tr-lg md:top-20 top-15 z-10 shadow-sm flex">
@@ -431,7 +433,7 @@ export default function DetailEvent({user, event, hargaTiket, events, cartCount}
 
                         </div>
 
-                        <div className="w-full lg:w-[30%] self-start lg:sticky md:mt-0 mt-5 top-28">
+                        <div className="w-full lg:w-[30%] self-start lg:sticky md:mt-0 md:mt-5 top-28">
                             <div className="bg-white dark:bg-gray-950 md:shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] md:rounded-lg md:border-2 md:border-gray-200 px-4 py-7">
 
                                 <div className="border-b-2 border-b-gray-200 px-3 pb-5 flex  gap-4">
@@ -492,7 +494,7 @@ export default function DetailEvent({user, event, hargaTiket, events, cartCount}
 
 
                                 <button className="w-full bg-blue-600 focus:outline-2 outline-blue-300 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 rounded" onClick={() => handleTambahkanKeKeranjang()}>
-                                    {selectedTickets.length === 0 ? "Beli Tiket" : "Tambahkan"}
+                                    {selectedTickets.length === 0 ? "Beli Tiket" : "Tambahkan ke Keranjang"}
                                 </button>
 
                             </div>
