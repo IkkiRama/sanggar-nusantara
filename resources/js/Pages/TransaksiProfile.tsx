@@ -1,23 +1,23 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react'
 import MainLayout from '../Layouts/mainLayout';
 import LightNavbar from '../layouts/lightNavbar';
 import UserProfile from '../Components/userProfile';
 import ProfileLayout from '../Layouts/profileLayout';
+import { toast } from 'react-toastify';
 
 
-export default function Transaksi({user, transaksi, cartCount}) {
+export default function Transaksi({user, transaksi, cartCount, role}) {
     const [isChecking, setIsChecking] = useState(true);
 
     const handleBayar = async (order_id: string) => {
         try {
-            const token = localStorage.getItem("token"); // Ambil token dari localStorage atau session storage
 
-            const response = await fetch(`http://sanggar-nusantara.test/api/midtrans/token/${order_id}`, {
+            const response = await fetch(`/api/midtrans/token/${order_id}`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Accept": "application/json"
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 }
             });
 
@@ -26,30 +26,36 @@ export default function Transaksi({user, transaksi, cartCount}) {
             if (data.token) {
                 window.snap.pay(data.token, {
                     onSuccess: function (result) {
+                        toast.success("Pembayaran sukses");
                         console.log("Pembayaran sukses");
-                        window.location.href = `/payment-status/${order_id}`;
+                        router.visit(`/payment-status/${order_id}`);
                     },
                     onPending: function (result) {
+                        toast.warning("Pembayaran tertunda");
                         console.log("Pembayaran tertunda");
                     },
                     onError: function (error) {
+                        toast.error("Pembayaran gagal", error);
                         console.log("Pembayaran gagal", error);
                     },
                     onClose: function () {
+                        toast.error("Popup ditutup tanpa transaksi");
                         console.log("Popup ditutup tanpa transaksi");
                     }
                 });
             } else {
+                toast.error("Token Midtrans tidak ditemukan", data);
                 console.error("Token Midtrans tidak ditemukan", data);
             }
         } catch (error) {
+            toast.error("Gagal mendapatkan token Midtrans", error);
             console.error("Gagal mendapatkan token Midtrans", error);
         }
     };
 
     useEffect(() => {
         if (!user) {
-            window.location.href = '/login'; // Redirect ke halaman login jika belum login
+            window.location.href = '/admin/login'; // Redirect ke halaman login jika belum login
         } else {
             setIsChecking(false);
         }
@@ -77,7 +83,7 @@ export default function Transaksi({user, transaksi, cartCount}) {
         <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">
             <div className="flex flex-wrap lg:flex-nowrap gap-5 container mx-auto">
 
-                <UserProfile isActive="transaksi" user={user} />
+                <UserProfile isActive="transaksi" user={user} role={role} />
                 <div className="p-5 mt-40 md:mt-0 relative bg-white shadow-lg rounded-xl w-full lg:w-[75%]">
                     <h2 className="text-xl font-semibold mb-4">Transaksi</h2>
                     <div className="table-scroll overflow-x-auto">

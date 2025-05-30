@@ -1,10 +1,12 @@
 <?php
 
+use Inertia\Inertia;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransaksiController;
+use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
 use Endroid\QrCode\Builder\Builder;
 
@@ -13,6 +15,12 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', [FrontController::class, 'index']);
 Route::get('/subscription', [FrontController::class, 'subscription']);
 Route::get('/peta-interaktif', [FrontController::class, 'petaInteraktif']);
+Route::get('/terms', function () {
+    return Inertia::render('TermsAndConditions', [
+        "user" => $user = Auth::user(),
+        'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
+    ]);
+})->name('terms');
 
 
 Route::get('/event', [FrontController::class, 'event']);
@@ -26,6 +34,7 @@ Route::post('/api/addSubscription', [CartController::class, 'addSubscriptionToCa
 Route::post('/api/cart/addEvent', [CartController::class, 'addEventToCart'])->middleware('auth');
 Route::post('/api/cart/update-quantity', [CartController::class, 'updateCartQuantity'])->middleware('auth');
 Route::post('/api/cart/delete-item', [CartController::class, 'deleteCartItem'])->middleware('auth');
+Route::post('/api/diskon', [TransaksiController::class, 'showDiskonAPI'])->middleware('auth');
 
 
 Route::get('/ragam-indonesia', [FrontController::class, 'ragamIndonesia']);

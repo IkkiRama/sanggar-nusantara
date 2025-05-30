@@ -9,8 +9,6 @@ use App\Models\Discount;
 use App\Models\DiscountUser;
 use App\Models\Order;
 use App\Models\PembelianEvent;
-use App\Models\Plan;
-use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -112,20 +110,18 @@ class TransaksiController extends Controller
             'total_pembelian' => 'required|numeric',
             'discount_amount' => 'nullable|numeric',
             'total_akhir' => 'required|numeric',
-            'items' => 'required|array',
-            'items.*.id' => 'required|integer',
-            'items.*.item_type' => 'required|string|in:subscription,event',
-            'items.*.jumlah' => 'required|integer|min:1',
-            'items.*.nama' => 'required|string',
-            'items.*.harga' => 'required|numeric',
-            'items.*.subtotal' => 'required|numeric',
-            'items.*.variasi' => 'nullable|string'
+            'tickets' => 'required|array',
+            'tickets.*.event_id' => 'required|exists:events,id',
+            'tickets.*.jumlah_tiket' => 'required|integer|min:1',
+            'tickets.*.jenis_tiket' => 'required|string',
+            'tickets.*.nama_event' => 'required|string',
+            'tickets.*.harga' => 'required|numeric',
+            'tickets.*.total_harga' => 'required|numeric',
         ]);
 
         return DB::transaction(function () use ($request) {
             $discountId = $request->discount_amount > 0 ? $request->discount_id : null;
 
-            // Handle diskon
             if ($discountId) {
                 $discount = Discount::lockForUpdate()->find($discountId);
                 if ($discount) {
@@ -139,7 +135,6 @@ class TransaksiController extends Controller
                 }
             }
 
-            // Buat order
             $order = Order::create([
                 'user_id' => $request->user_id,
                 'discount_id' => $discountId,
@@ -151,81 +146,45 @@ class TransaksiController extends Controller
                 'metode_pembayaran' => 'midtrans',
             ]);
 
-            $itemDetails = [];
-            foreach ($request->items as $item) {
-                if ($item['item_type'] === 'event') {
-                    // Kurangi kuota event
-                    $hargaEvent = DB::table('harga_events')
-                        ->where([
-                            ['event_id', '=', $item['id']],
-                            ['nama', '=', $item['variasi']],
-                        ])
-                        ->lockForUpdate()
-                        ->first();
+            foreach ($request->tickets as $ticket) {
+                // Kurangi kuota tiket di harga_events
+                $hargaEvent = DB::table('harga_events')
+                            ->where([
+                                ['event_id', '=', $ticket['event_id']],
+                                ['nama', '=', $ticket['jenis_tiket']],
+                            ])
+                            ->lockForUpdate()
+                            ->first();
 
-                    if (!$hargaEvent || $hargaEvent->kuota < $item['jumlah']) {
-                        return response()->json(['message' => 'Kuota tiket tidak mencukupi'], 400);
-                    }
+                if ($hargaEvent && $hargaEvent->kuota >= $ticket['jumlah_tiket']) {
 
-                    // Tambah pembelian event
                     PembelianEvent::create([
-                        'event_id' => $item['id'],
+                        'event_id' => $ticket['event_id'],
                         'order_id' => $order->id,
-                        'jumlah_tiket' => $item['jumlah'],
-                        'jenis_tiket' => $item['variasi'],
-                        'nama' => $item['nama'],
-                        'harga' => $item['harga'],
-                        'total_harga' => $item['subtotal'],
+                        'jumlah_tiket' => $ticket['jumlah_tiket'],
+                        'jenis_tiket' => $ticket['jenis_tiket'],
+                        'nama' => $ticket['nama_event'],
+                        'harga' => $ticket['harga'],
+                        'total_harga' => $ticket['total_harga'],
                         'tanggal' => now(),
                     ]);
 
-                    $itemDetails[] = [
-                        'id' => $item['id'],
-                        'price' => (float) $item['harga'],
-                        'quantity' => $item['jumlah'],
-                        'name' => $item['nama'],
-                    ];
-
-                } elseif ($item['item_type'] === 'subscription') {
-                    if (!Auth::user()->hasRole('super_admin')) {
-                        // Cek apakah user sudah punya subscription aktif
-                        $existingActiveSubscription = Subscription::where('user_id', $request->user_id)
-                            ->where('status', 'aktif')
-                            ->where('plan_id', $item['id'])
-                            ->first();
-
-                        if ($existingActiveSubscription) {
-                            return response()->json([
-                                'message' => 'Kamu sudah memiliki langganan yang aktif untuk paket ini.'
-                            ], 400);
-                        }
-                    }
-
-                    // Insert ke subscriptions
-                    $plan = Plan::find($item['id']);
-                    if (!$plan) {
-                        return response()->json(['message' => 'Paket langganan tidak ditemukan'], 400);
-                    }
-
-                    Subscription::create([
-                        'user_id' => $request->user_id,
-                        'plan_id' => $plan->id,
-                        'status' => 'cancelled',
-                        'payment_status' => 'pending',
-                        'transaction_id' => $order->order_id,
-                    ]);
-
-                    $itemDetails[] = [
-                        'id' => $item['id'],
-                        'price' => (float) $item['harga'],
-                        'quantity' => 1,
-                        'name' => $item['nama'],
-                    ];
+                } else {
+                    return response()->json(['message' => 'Kuota tiket tidak mencukupi'], 400);
                 }
             }
 
-            // Tambah pajak dan biaya layanan
-            $pajak = 0.11 * $request->total_pembelian;
+            $itemDetails = array_map(function ($ticket) {
+                return [
+                    'id' => $ticket['event_id'],
+                    'price' => (float) $ticket['harga'],
+                    'quantity' => $ticket['jumlah_tiket'],
+                    'name' => $ticket['nama_event'],
+                ];
+            }, $request->tickets);
+
+            // Tambahkan pajak dan biaya layanan
+            $pajak = 11/100 * $request->total_pembelian;
             $biayaLayanan = 15000;
             $diskon = $request->discount_amount ?? 0;
 
@@ -233,7 +192,7 @@ class TransaksiController extends Controller
                 'id' => 'PAJAK',
                 'price' => (float) $pajak,
                 'quantity' => 1,
-                'name' => 'Pajak (11%)'
+                'name' => 'Pajak (10%)'
             ];
 
             $itemDetails[] = [
@@ -243,19 +202,16 @@ class TransaksiController extends Controller
                 'name' => 'Biaya Layanan'
             ];
 
-            if ($diskon > 0) {
-                $itemDetails[] = [
-                    'id' => 'DISKON',
-                    'price' => - (float) $diskon,
-                    'quantity' => 1,
-                    'name' => 'Diskon'
-                ];
-            }
+            $itemDetails[] = [
+                'id' => 'DISKON',
+                'price' => - (float) $diskon,
+                'quantity' => 1,
+                'name' => 'Diskon'
+            ];
 
-            // Hitung ulang total
+            // Pastikan totalnya sesuai dengan total_akhir
             $totalAkhirDihitung = array_sum(array_column($itemDetails, 'price'));
 
-            // Buat Snap Token
             $payload = [
                 'transaction_details' => [
                     'order_id' => $order->order_id,
@@ -272,20 +228,15 @@ class TransaksiController extends Controller
 
             try {
                 $snapToken = Snap::getSnapToken($payload);
-
-                // Hapus cart user setelah sukses membuat snap token
-                \App\Models\Cart::where('user_id', $request->user_id)->delete();
-
                 return response()->json([
                     'snap_token' => $snapToken,
                     'order_id' => $order->order_id,
                 ], 201);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return response()->json(['message' => 'Gagal membuat transaksi', 'error' => $e->getMessage()], 500);
             }
         });
     }
-
 
 
     public function updateTransaction(Request $request)
@@ -340,8 +291,9 @@ class TransaksiController extends Controller
         $order = Order::where('order_id', $orderId)->firstOrFail();
 
         try {
-            // Ambil status dari Midtrans via MidtransService
+            // Ambil status dari Midtrans melalui service
             $paymentStatus = $this->midtrans->getTransactionStatus($orderId);
+
             $transactionStatus = $paymentStatus['transaction_status'] ?? null;
             $transactionId = $paymentStatus['transaction_id'] ?? null;
 
@@ -349,7 +301,7 @@ class TransaksiController extends Controller
                 abort(500, "Format respons dari Midtrans tidak valid.");
             }
 
-            // Kalau belum settlement, redirect ke halaman menunggu pembayaran
+            // Jika status pembayaran belum berhasil, arahkan ke halaman menunggu pembayaran
             if (!in_array($transactionStatus, ['settlement', 'capture'])) {
                 return Inertia::render('WaitingPage', [
                     'status' => $transactionStatus,
@@ -358,16 +310,16 @@ class TransaksiController extends Controller
                 ]);
             }
 
-            // Kalau order sudah terbayar, pastikan status up-to-date
+            // Kalau status sudah dibayar tapi belum update di DB
             if ($order->status_pembelian !== 'sudah dibayar') {
                 DB::beginTransaction();
+
                 try {
                     $order->update([
-                        'status_pembelian' => 'sudah dibayar',
-                        'transaction_id' => $transactionId,
+                        "status_pembelian" => "sudah dibayar",
+                        "transaction_id" => $transactionId,
                     ]);
 
-                    // Update kuota tiket (kalau ada event)
                     $tickets = DB::table('pembelian_events')
                         ->where('order_id', $order->id)
                         ->get();
@@ -386,60 +338,16 @@ class TransaksiController extends Controller
                             return response()->json(['message' => 'Kuota tiket tidak mencukupi'], 400);
                         }
 
-                        // Kurangi kuota
+                        // Update kuota
                         DB::table('harga_events')
                             ->where('id', $hargaEvent->id)
                             ->update(['kuota' => $hargaEvent->kuota - $ticket->jumlah_tiket]);
                     }
 
-                    // Update status subscription (kalau beli subscription)
-                    $subscription = Subscription::where('transaction_id', $order->order_id)->first();
-                    if ($subscription) {
-                        $plan = Plan::find($subscription->plan_id);
-                        $duration = $plan ? intval($plan->durasi) : 30;
-
-                        $user = $order->user;
-
-                        // Cek apakah user punya subscription aktif
-                        $existingActive = Subscription::where('user_id', $user->id)
-                            ->where('status', 'aktif')
-                            ->orderByDesc('tanggal_berakhir')
-                            ->first();
-
-                        if ($existingActive) {
-                            // Extend dari tanggal_berakhir terakhir
-                            $tanggalMulaiBaru = \Carbon\Carbon::parse($existingActive->tanggal_berakhir)->greaterThan(now())
-                                ? \Carbon\Carbon::parse($existingActive->tanggal_berakhir)
-                                : now();
-
-                            $tanggalBerakhirBaru = $tanggalMulaiBaru->copy()->addDays($duration);
-
-                            $subscription->update([
-                                'status' => 'aktif',
-                                'payment_status' => 'paid',
-                                'tanggal_mulai' => $tanggalMulaiBaru,
-                                'tanggal_berakhir' => $tanggalBerakhirBaru,
-                            ]);
-                        } else {
-                            // Tidak ada yang aktif, mulai dari sekarang
-                            $subscription->update([
-                                'status' => 'aktif',
-                                'payment_status' => 'paid',
-                                'tanggal_mulai' => now(),
-                                'tanggal_berakhir' => now()->addDays($duration),
-                            ]);
-                        }
-
-                        // Ubah role ke premium, kecuali super_admin
-                        if (!$user->hasRole('super_admin') && $user && !$user->hasRole('premium')) {
-                            $user->syncRoles(['premium']);
-                        }
-                    }
-
                     DB::commit();
                 } catch (\Exception $e) {
                     DB::rollBack();
-                    return response()->json(['message' => 'Terjadi kesalahan saat memproses: ' . $e->getMessage()], 500);
+                    return response()->json(['message' => 'Terjadi kesalahan saat memproses tiket: ' . $e->getMessage()], 500);
                 }
             }
 
@@ -452,6 +360,5 @@ class TransaksiController extends Controller
             return response()->json(['message' => 'Gagal mengambil status pembayaran: ' . $e->getMessage()], 500);
         }
     }
-
 
 }

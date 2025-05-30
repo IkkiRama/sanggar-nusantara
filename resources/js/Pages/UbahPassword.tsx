@@ -4,7 +4,7 @@ import LightNavbar from '../layouts/lightNavbar';
 import UserProfile from '../Components/userProfile';
 import axios from 'axios';
 
-const UbahPassword = ({ user, cartCount }) => {
+const UbahPassword = ({ user, cartCount, role }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -16,7 +16,7 @@ const UbahPassword = ({ user, cartCount }) => {
         setSuccess('');
 
         try {
-            const response = await axios.post('https://sanggar-nusantara.genbipurwokerto.com/api/updatePassword', {
+            const response = await axios.post('/api/updatePassword', {
                 new_password: newPassword,
                 confirm_password: confirmPassword,
             });
@@ -24,7 +24,7 @@ const UbahPassword = ({ user, cartCount }) => {
             setNewPassword('');
             setConfirmPassword('');
             setTimeout(() => {
-                window.location.href = '/login';
+                window.location.href = '/admin/login';
             }, 2000);
         } catch (error) {
             setError(error.response?.data?.message || 'Terjadi kesalahan');
@@ -38,7 +38,7 @@ const UbahPassword = ({ user, cartCount }) => {
             <div className="bg-blue-500 h-[30vh]"></div>
 
             <div className="flex flex-wrap lg:flex-nowrap lg:-mt-[10vh] -mt-[30vh] gap-5 pb-20 px-4 min-h-screen">
-                <UserProfile isActive="ubahPasword" user={user} />
+                <UserProfile isActive="ubahPasword" user={user} role={role} />
 
                 <div className="p-5 mt-40 md:mt-0 relative overflow-x-auto bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl w-full lg:w-[75%] table-scroll">
                     <h2 className="text-xl font-semibold mb-4">Ubah Password</h2>

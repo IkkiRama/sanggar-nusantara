@@ -27,4 +27,9 @@ class Order extends Model
     {
         return $this->belongsTo(Discount::class);
     }
+
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class, 'transaction_id', 'order_id');
+    }
 }

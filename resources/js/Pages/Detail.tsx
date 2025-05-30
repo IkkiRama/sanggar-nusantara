@@ -208,7 +208,7 @@ export default function Detail() {
                     <p>{artikel?.content}</p>
                 </div>
             )}
-            <div className="sticky md:top-30 self-start bg-gray-50 lg:p-10 p-5 rounded shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] border-2 border-gray-100 border-2 dark:border-gray-900 dark:bg-gray-800">
+            <div className="sticky md:top-30 self-start bg-gray-50 lg:p-10 p-5 rounded shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] border-gray-100 border-2 dark:border-gray-900 dark:bg-gray-800">
                 <img
                 src={
                     //@ts-ignore

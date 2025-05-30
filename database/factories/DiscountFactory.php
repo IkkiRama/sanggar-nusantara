@@ -18,7 +18,7 @@ class DiscountFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'type' => $this->faker->randomElement(['percentage', 'fixed', 'voucher']),
+            'type' => $this->faker->randomElement(['percentage', 'fixed']),
             'amount' => $this->faker->randomFloat(2, 5, 50),
             'code' => $this->faker->bothify('DISC-####'),
             'min_purchase' => $this->faker->randomFloat(2, 50, 500),

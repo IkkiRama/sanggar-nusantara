@@ -1,9 +1,3 @@
-ngga kehapus fotonya
-ubah foto di admin panel
-data provinsi dll ngga masu berubah meskipun ada di database datanya
-data selected desa belum bisa masuk ke db
-
-
 cek per ragam, apakah ada data yang belum ditampilkan, kaya vidio di ragam tari
 
 

@@ -38,7 +38,6 @@ class DiscountResource extends Resource
                     ->options([
                         "percentage" => "Percentage",
                         "fixed" => "Fixed",
-                        "voucher" => "Voucher",
                     ])
                     ->preload()
                     ->required(),

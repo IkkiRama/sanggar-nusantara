@@ -433,7 +433,7 @@ export default function DetailEvent({user, event, hargaTiket, events, cartCount}
 
                         </div>
 
-                        <div className="w-full lg:w-[30%] self-start lg:sticky md:mt-0 md:mt-5 top-28">
+                        <div className="w-full lg:w-[30%] self-start lg:sticky md:mt-0 top-28">
                             <div className="bg-white dark:bg-gray-950 md:shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] md:rounded-lg md:border-2 md:border-gray-200 px-4 py-7">
 
                                 <div className="border-b-2 border-b-gray-200 px-3 pb-5 flex  gap-4">

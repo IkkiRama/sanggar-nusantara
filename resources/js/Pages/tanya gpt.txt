@@ -1,9 +1,38 @@
+ProfileController
+
+    function invoice($orderId) {
+
+        if (!Auth::check() || !Auth::user()->id) {
+            return redirect('/admin/login');
+        }
+
+        // Ambil order dengan filter awal (hanya cek user_id dan status_pembelian)
+        $order = Order::where('order_id', $orderId)
+            ->where('user_id', Auth::id()) // Cek apakah order milik user yang login
+            ->first();
+
+        // Jika order tidak ditemukan, bukan milik user, atau belum dibayar → Tampilkan error 403
+        // if (!$order || $order->status_pembelian !== 'sudah dibayar') {
+        //     return abort(403, 'Anda tidak memiliki akses ke invoice ini.');
+        // }
+
+        // Ambil order lengkap dengan relasi jika lolos filter
+        $order = Order::with(['pembelianEvent', 'pembelianEvent.event', 'discount'])
+            ->where('order_id', $orderId)
+            ->firstOrFail();
+
+        return Inertia::render('Invoice', [
+            "user" => $user = Auth::user(),
+            'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
+            'order' => $order,
+        ]);
+    }
+
 import React, { useEffect, useState } from "react";
 import LightNavbar from "../layouts/lightNavbar";
 import MainLayout from "../Layouts/mainLayout";
 import { Head } from "@inertiajs/react";
-import { toast } from "react-toastify";
-import { CreditCard } from "lucide-react";
 
 const Invoice = ({ order, user, cartCount }) => {
     // useEffect(() => {
@@ -32,29 +61,23 @@ const Invoice = ({ order, user, cartCount }) => {
             if (data.token) {
                 window.snap.pay(data.token, {
                     onSuccess: function (result) {
-                        toast.success("Pembayaran sukses");
                         console.log("Pembayaran sukses");
                         window.location.href = `/payment-status/${order_id}`;
                     },
                     onPending: function (result) {
-                        toast.warning("Pembayaran tertunda");
                         console.log("Pembayaran tertunda");
                     },
                     onError: function (error) {
-                        toast.error("Pembayaran gagal", error);
                         console.log("Pembayaran gagal", error);
                     },
                     onClose: function () {
-                        toast.info("Popup ditutup tanpa transaksi");
                         console.log("Popup ditutup tanpa transaksi");
                     }
                 });
             } else {
-                toast.error("Token Midtrans tidak ditemukan", data);
                 console.error("Token Midtrans tidak ditemukan", data);
             }
         } catch (error) {
-            toast.error("Gagal mendapatkan token Midtrans", error);
             console.error("Gagal mendapatkan token Midtrans", error);
         }
     };
@@ -77,7 +100,6 @@ const Invoice = ({ order, user, cartCount }) => {
     const totalSetelahDiskon = order.total_pembelian - discount;
     const totalAkhir = totalSetelahDiskon + ppn + serviceFee;
 
-
     return (
         <MainLayout title="Invoice | Sanggar Nusantara" >
             <Head>
@@ -89,8 +111,8 @@ const Invoice = ({ order, user, cartCount }) => {
             </Head>
 
             <LightNavbar user={user} cartCount={cartCount} />
-            <div className="container mx-auto px-4 lg:py-0 py-20 lg:px-14 relative lg:pt-28 lg:pb-20">
-                <div className="lg:p-6">
+            <div className="2xl:max-w-[2000px] mx-auto px-4 2xl:px-10 lg:py-0 py-20 lg:px-14 relative lg:pt-28 lg:pb-20">
+                <div className="p-6 ">
                     <h2 className="text-3xl font-semibold mb-4 text-slate-600">Invoice</h2>
                     <div className="flex flex-wrap-reverse md:flex-nowrap justify-between items-center mb-10">
                         <div className="flex flex-col gap-3">
@@ -124,84 +146,69 @@ const Invoice = ({ order, user, cartCount }) => {
 
                     <div className="border-2 bg-white border-gray-200 shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-lg p-4 mb:p-6 mb-4">
                         <h3 className="text-xl font-semibold mb-4 text-slate-600">Daftar Produk</h3>
-
-                        {/* EVENT */}
-                        {order.pembelian_event && order.pembelian_event.length > 0 && (
+                        {order.pembelian_event && order.pembelian_event.length > 0 ? (
                             <>
                                 {order.pembelian_event.map((event, index) => (
                                     <div key={index} className="flex items-center gap-4 border-b border-gray-300 py-4 px-4">
-                                        <div className="flex flex-wrap lg:flex-nowrap lg:w-1/2 w-full lg:border-r-2 border-gray-200">
+                                        <div className="flex lg:w-1/2 w-full lg:border-r-2 border-gray-200">
                                             <img
-                                                src={event.event?.image ? `/storage/${event.event.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
-                                                alt="Event"
-                                                className="bg-gray-600 object-cover lg:w-20 lg:h-20 h-36 mb-5 lg:mb-0 w-full rounded-lg"
-                                            />
+                                            src={event.event.image ? `./../../../storage/${event.event.image}` :
+                                                "/images/NO IMAGE AVAILABLE.jpg"}
+                                            alt="Event"
+                                            className="bg-gray-600 w-20 object-cover h-20 rounded-lg mr-4" />
 
-                                            <div>
+                                            <div className="">
                                                 <p className="font-semibold text-lg text-slate-700">{event.nama}</p>
                                                 <p className="font-medium text-slate-500">Jenis Tiket : {event.jenis_tiket}</p>
 
-                                                <div className="mt-3 flex lg:hidden flex-col gap-2">
-                                                    <p className="text-[16px] text-gray-600 font-medium">Harga Tiket</p>
-                                                    <p className="font-bold text-gray-700">
-                                                        {event.harga > 0 ? `Rp${event.harga.toLocaleString()}` : "GRATIS"}
-                                                    </p>
+                                                <div className="mt-3 flex lg:hidden flex-col gap-2 ">
+                                                    <p className="text-[16px] text-gray-600 font-medium ">Harga Tiket</p>
+                                                    <p className="font-bold text-gray-700">{event.harga > 0 ? `Rp${event.harga.toLocaleString()}` : "GRATIS"}</p>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div className="lg:flex hidden flex-col gap-2 w-1/2 pl-3">
                                             <p className="text-[16px] text-gray-600 font-medium">Harga Tiket</p>
-                                            <p className="font-bold text-gray-700">
-                                                {event.harga > 0 ? `Rp${event.harga.toLocaleString()}` : "GRATIS"}
-                                            </p>
+                                            <p className="font-bold text-gray-700">{event.harga > 0 ? `Rp${event.harga.toLocaleString()}` : "GRATIS"}</p>
                                         </div>
                                     </div>
                                 ))}
+
+                                <div className="p-4 mt-3 w-full lg:w-1/2">
+                                    <h3 className="text-xl font-semibold mb-4 text-slate-600">Detail Pembayaran</h3>
+                                    <div className="flex flex-col gap-3">
+                                        <p className="flex justify-between">
+                                            <span className="text-slate-700">Subtotal Harga Produk ({order.pembelian_event ? order.pembelian_event.length : 0})</span>
+                                            <span className="font-bold text-slate-700">{order.total_pembelian > 0 ? `Rp${order.total_pembelian.toLocaleString()}` : "GRATIS"}</span>
+                                        </p>
+
+                                        <p className="flex justify-between">
+                                            <span className="text-green-500">Diskon</span>
+                                            <span className="font-bold text-green-500">-Rp{discount.toLocaleString()}</span>
+                                        </p>
+
+                                        <p className="flex justify-between">
+                                            <span className="text-red-500">PPN (11%)</span>
+                                            <span className="font-bold text-red-500">Rp{ppn.toLocaleString()}</span>
+                                        </p>
+
+                                        <p className="flex justify-between">
+                                            <span className="text-red-500">Biaya Layanan</span>
+                                            <span className="font-bold text-red-500">Rp{serviceFee.toLocaleString()}</span>
+                                        </p>
+
+                                        <p className="flex justify-between text-red-500 font-bold text-lg">
+                                            <span className="text-slate-700 font-semibold">Total Pembayaran</span>
+                                            <span className="text-black font-semibold">{totalAkhir > 0 ? `Rp${totalAkhir.toLocaleString()}` : "GRATIS"}</span>
+                                        </p>
+
+                                    </div>
+                                </div>
                             </>
-                        )}
-
-                        {/* SUBSCRIPTION */}
-                        {order.subscription && order.subscription.plan && (
-                            <div className="flex items-center gap-4 border-b border-gray-300 py-4 px-4">
-                                <div className="flex flex-wrap lg:flex-nowrap lg:w-1/2 w-full lg:border-r-2 border-gray-200">
-                                    <div className="md:mr-4 w-full lg:mr-2 flex justify-center items-center">
-                                        <CreditCard className="text-gray-200 bg-gray-400 lg:w-20 lg:h-20 h-36 mb-5 lg:mb-0 rounded-md p-3 w-full" />
-                                    </div>
-
-                                    <div>
-                                        <p className="font-semibold text-lg text-slate-700">{order.subscription.plan.nama}</p>
-                                        <p className="text-slate-500 text-sm">Durasi: {order.subscription.plan.durasi} hari</p>
-                                        <p className="text-slate-500 text-sm mt-1">{order.subscription.plan.deskripsi}</p>
-
-                                        <div className="mt-3 flex lg:hidden flex-col gap-2">
-                                            <p className="text-[16px] text-gray-600 font-medium">Harga Langganan</p>
-                                            <p className="font-bold text-gray-700">
-                                                {order.subscription.plan.harga_diskon
-                                                    ? `Rp${order.subscription.plan.harga_diskon.toLocaleString()}`
-                                                    : `Rp${order.subscription.plan.harga.toLocaleString()}`}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="lg:flex hidden flex-col gap-2 w-1/2 pl-3">
-                                    <p className="text-[16px] text-gray-600 font-medium">Harga Langganan</p>
-                                    <p className="font-bold text-gray-700">
-                                        {order.subscription.plan.harga_diskon
-                                            ? `Rp${order.subscription.plan.harga_diskon.toLocaleString()}`
-                                            : `Rp${order.subscription.plan.harga.toLocaleString()}`}
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* KOSONG */}
-                        {!order.pembelian_event?.length && !order.subscription && (
+                        ) : (
                             <p className="text-gray-500">Tidak ada produk dalam pembelian ini.</p>
                         )}
                     </div>
-
 
                     { order.status_pembelian === "pending" && (
                         <div className="mt-5">
@@ -222,3 +229,76 @@ const Invoice = ({ order, user, cartCount }) => {
 };
 
 export default Invoice;
+
+
+coba tolong update in dong itu invoice nya, soalnya itu baru yang event doang, yang subscription nya belum masuk
+
+
+cart
+    id
+    user_id
+    item id
+    item_type => 'subscription','product','event','course'
+    jumlah
+    vanasi
+    harga
+    subtotal
+    created at
+    updated_at
+
+
+orders
+    id
+    user id
+    discount_id
+    total_pembelian
+    discount_amount
+    total akhir
+    status_pembelian => 'pending','sudah dibayar','kadaluarsa','gagal','dibatalkan','dikembalikan'
+    order id
+    metode_pembayaran => 'midtrans','qris','ewallet','manual_transfer'
+    transaction id
+    payment_url
+    midtrans_response
+    created_at
+    updated_at
+    deleted_at
+
+plans
+    id
+    nama
+    harga
+    harga_diskon
+    durasi => '30','90','365'
+    deskripsi
+    fitur
+    created at
+    updated_at
+    deleted at
+
+subscriptions
+    id
+    user_id
+    plan_id
+    status => 'aktif','expired','cancelled'
+    tanggal_mulai
+    tanggal_berakhir
+    transaction id
+    payment_status => 'pending','paid','failed','refunded'
+    created at
+    updated_at
+    deleted at
+
+pembelian_events
+    id
+    event id
+    order_id
+    jumlah_tiket
+    jenis_tiket
+    nama
+    harga
+    total_harga
+    tanggal
+    created at
+    updated_at
+    deleted at

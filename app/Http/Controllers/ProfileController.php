@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Order;
 use App\Models\PembelianEvent;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -26,26 +28,24 @@ class ProfileController extends Controller
     }
 
     function index() {
-        // $userId = session('user_id'); // Mengambil ID user yang sedang login
-
         if (!Auth::check() || !Auth::user()->id) {
             return redirect('/admin/login');
         }
 
-        // Cek semua order pending milik user
+        // Ubah status order "pending" yang sudah lebih dari 24 jam jadi "kadaluarsa"
         $ordersPending = DB::table('orders')
             ->where('user_id', Auth::user()->id)
             ->where('status_pembelian', 'pending')
             ->where('created_at', '<', Carbon::now()->subHours(24))
             ->get();
 
-        // Update status jadi 'kadaluarsa' kalau sudah > 24 jam
         foreach ($ordersPending as $order) {
             DB::table('orders')
                 ->where('id', $order->id)
                 ->update(['status_pembelian' => 'kadaluarsa']);
         }
 
+        // Ambil data pembelian event
         $pembelianEvents = DB::table('pembelian_events')
             ->join('orders', 'pembelian_events.order_id', '=', 'orders.id')
             ->join('events', 'pembelian_events.event_id', '=', 'events.id')
@@ -61,17 +61,41 @@ class ProfileController extends Controller
                 'events.tanggal as event_tanggal'
             )
             ->where('events.status_event', '!=', 'draft')
-            ->whereIn('orders.status_pembelian', ['pending', 'sudah dibayar'])
-            ->where('orders.user_id', Auth::user()->id) // Menggunakan user_id dari tabel order
-            ->orderBy("orders.created_at", "desc")
+            ->where('orders.status_pembelian', 'sudah dibayar')
+            ->where('orders.user_id', Auth::user()->id)
+            ->orderBy('orders.created_at', 'desc')
             ->get();
 
+        // Ambil data subscription milik user
+        $subscriptions = DB::table('subscriptions')
+            ->join('plans', 'subscriptions.plan_id', '=', 'plans.id')
+            ->select(
+                'subscriptions.id',
+                'subscriptions.status',
+                'subscriptions.tanggal_mulai',
+                'subscriptions.tanggal_berakhir',
+                'subscriptions.payment_status',
+                'plans.nama as plan_nama',
+                'plans.harga',
+                'plans.harga_diskon',
+                'plans.durasi',
+                'plans.fitur'
+            )
+            ->where('subscriptions.user_id', Auth::user()->id)
+            ->orderBy('subscriptions.created_at', 'desc')
+            ->get();
+
+        $user = Auth::user();
+
         return Inertia::render('Profile', [
-            "user" => $user = Auth::user(),
+            'user' => $user,
+            'role' => $user->getRoleNames()->first(), // Ambil satu role
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
-            "pembelianEvents" => $pembelianEvents
+            'pembelianEvents' => $pembelianEvents,
+            'subscription' => $subscriptions, // Tambahkan subscriptions ke props
         ]);
     }
+
 
     public function batalkanTransaksi($orderId, Request $request)
     {
@@ -96,45 +120,53 @@ class ProfileController extends Controller
 
         return response()->json(['message' => 'Pesanan berhasil dibatalkan.']);
     }
-
-    function invoice($orderId) {
-
+    
+    public function invoice($orderId)
+    {
+        // Pastikan user terautentikasi
         if (!Auth::check() || !Auth::user()->id) {
             return redirect('/admin/login');
         }
 
-        // Ambil order dengan filter awal (hanya cek user_id dan status_pembelian)
+        $user = Auth::user();
+
+        // Ambil order milik user yang sedang login
         $order = Order::where('order_id', $orderId)
-            ->where('user_id', Auth::id()) // Cek apakah order milik user yang login
+            ->where('user_id', $user->id)
             ->first();
 
-        // Jika order tidak ditemukan, bukan milik user, atau belum dibayar → Tampilkan error 403
-        // if (!$order || $order->status_pembelian !== 'sudah dibayar') {
-        //     return abort(403, 'Anda tidak memiliki akses ke invoice ini.');
-        // }
+        // Jika order tidak ditemukan atau bukan milik user, tampilkan 403
+        if (!$order) {
+            return abort(403, 'Anda tidak memiliki akses ke invoice ini.');
+        }
 
-        // Ambil order lengkap dengan relasi jika lolos filter
-        $order = Order::with(['pembelianEvent', 'pembelianEvent.event', 'discount'])
+        // Ambil order lengkap dengan relasi
+        $order = Order::with([
+                'pembelianEvent',
+                'pembelianEvent.event',
+                'discount',
+                'subscription.plan'
+            ])
             ->where('order_id', $orderId)
             ->firstOrFail();
 
+        // Hitung jumlah item di keranjang user
+        $cartCount = Cart::where('user_id', $user->id)->sum('jumlah');
+
         return Inertia::render('Invoice', [
-            "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
+            'user' => $user,
+            'role' => $user->getRoleNames()->first(),
+            'cartCount' => $cartCount,
             'order' => $order,
         ]);
     }
+
 
     public function getSnapToken($order_id)
     {
 
         if (!Auth::check() || !Auth::user()->id) {
             return redirect('/admin/login');
-        }
-
-        // Validasi login
-        if (Auth::check()) {
-            return response()->json(['error' => 'User belum login'], 401);
         }
 
         // Cari order milik user login
@@ -198,7 +230,8 @@ class ProfileController extends Controller
 
         return Inertia::render('Etiket', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
+            'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'orders' => $orders,
         ]);
     }
@@ -241,7 +274,8 @@ class ProfileController extends Controller
 
         return Inertia::render('DownloadEtiket', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
+            'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'orders' => $orders,
         ]);
     }
@@ -275,9 +309,12 @@ class ProfileController extends Controller
             return redirect('/admin/login');
         }
 
+        $user = User::with('alamat')->find(Auth::id());
+
         return Inertia::render('EditProfile', [
-            "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
+            "user" => $user,
+            'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
         ]);
     }
 
@@ -305,8 +342,8 @@ class ProfileController extends Controller
         // Simpan foto jika ada
         if ($request->hasFile('image')) {
             // Hapus file lama jika ada
-            if ($user->image && Storage::exists('public/user/' . basename($user->image))) {
-                Storage::delete('public/user/' . basename($user->image));
+            if ($user->image && Storage::disk('public')->exists($user->image)) {
+                Storage::disk('public')->delete($user->image);
             }
 
             // Ambil file
@@ -365,7 +402,8 @@ class ProfileController extends Controller
 
         return Inertia::render('TransaksiProfile', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
+            'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'transaksi' => $transaksi,
         ]);
     }
@@ -378,7 +416,8 @@ class ProfileController extends Controller
 
         return Inertia::render('UbahPassword', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
+            'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
         ]);
     }
 }

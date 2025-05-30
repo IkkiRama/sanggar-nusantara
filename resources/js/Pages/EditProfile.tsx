@@ -4,14 +4,15 @@ import LightNavbar from '../layouts/lightNavbar';
 import UserProfile from '../Components/userProfile';
 import ProfileLayout from '../Layouts/profileLayout';
 
-export default function EditProfile({ user, cartCount }) {
+export default function EditProfile({ user, cartCount, role }) {
     const fileInputRef = useRef();
   const [nama, setNama] = useState(user.name || '');
   const [email, setEmail] = useState(user.email || '');
   const [komen, setKomen] = useState(user.deskripsi || '');
   const [image, setImage] = useState(null);
   const [alamat, setAlamat] = useState(user.alamat?.alamat || '');
-  const [loadingKomen, setLoadingKomen] = useState(false);
+  const [kodepos, setKodepos] = useState(user.alamat?.kode_pos || '');
+  const [loading, setLoading] = useState(false);
 
   const [provinsiList, setProvinsiList] = useState([]);
   const [kabupatenList, setKabupatenList] = useState([]);
@@ -28,6 +29,44 @@ export default function EditProfile({ user, cartCount }) {
   const [kabupatenName, setKabupatenName] = useState('');
   const [kecamatanName, setKecamatanName] = useState('');
   const [desaName, setDesaName] = useState('');
+
+
+  useEffect(() => {
+    if (user.alamat) {
+      setSelectedProvinsi(user.alamat.provinsi || '');
+      setSelectedKabupaten(user.alamat.kabupaten || '');
+      setSelectedKecamatan(user.alamat.kecamatan || '');
+      setSelectedDesa(user.alamat.desa || '');
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user.alamat && provinsiList.length > 0) {
+      const prov = provinsiList.find(p => p.id === user.alamat.provinsi || p.name === user.alamat.provinsi);
+      setSelectedProvinsi(prov?.id || '');
+    }
+  }, [user, provinsiList]);
+
+  useEffect(() => {
+    if (selectedProvinsi && kabupatenList.length > 0) {
+      const kab = kabupatenList.find(k => k.id === user.alamat.kabupaten || k.name === user.alamat.kabupaten);
+      setSelectedKabupaten(kab?.id || '');
+    }
+  }, [kabupatenList]);
+
+  useEffect(() => {
+    if (selectedKabupaten && kecamatanList.length > 0) {
+      const kec = kecamatanList.find(k => k.id === user.alamat.kecamatan || k.name === user.alamat.kecamatan);
+      setSelectedKecamatan(kec?.id || '');
+    }
+  }, [kecamatanList]);
+
+  useEffect(() => {
+    if (selectedKecamatan && desaList.length > 0) {
+      const des = desaList.find(k => k.id === user.alamat.desa || k.name === user.alamat.desa);
+      setSelectedDesa(des?.id || '');
+    }
+  }, [desaList]);
 
   useEffect(() => {
     fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json')
@@ -72,7 +111,7 @@ export default function EditProfile({ user, cartCount }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoadingKomen(true);
+    setLoading(true);
 
     const formData = new FormData();
     formData.append('name', nama);
@@ -82,11 +121,14 @@ export default function EditProfile({ user, cartCount }) {
     formData.append('provinsi', provinsiName);
     formData.append('kabupaten', kabupatenName);
     formData.append('kecamatan', kecamatanName);
+    formData.append('desa', desaName);
+    formData.append('kode_pos', kodepos);
     if (image) formData.append('image', image);
 
     router.post('/api/profile/update', formData, {
         forceFormData: true,
-        onFinish: () => setLoadingKomen(false),
+        onFinish: () => setLoading(false),
+        onSuccess: () => router.visit('/profile/edit')
     });
   };
 
@@ -97,7 +139,7 @@ export default function EditProfile({ user, cartCount }) {
 
       <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">
         <div className="flex flex-wrap gap-5 lg:flex-nowrap container mx-auto">
-          <UserProfile isActive="edit" user={user} />
+          <UserProfile isActive="edit" user={user} role={role} />
 
           <div className="p-5 md:mt-0 mt-40 relative overflow-x-auto bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl w-full lg:w-[75%]">
             <form
@@ -250,13 +292,26 @@ export default function EditProfile({ user, cartCount }) {
 
                 {/* Alamat */}
                 <div className="col-span-1 md:col-span-2">
+                  <label htmlFor="alamat" className="block text-sm font-medium text-gray-700 mb-2">Kode Pos</label>
+                  <input
+                    type="number"
+                    id="kodepos"
+                    value={kodepos}
+                    onChange={(e) => setKodepos(e.target.value)}
+                    placeholder="53371"
+                    className="w-full p-3 border rounded-lg border-gray-300"
+                  />
+                </div>
+
+                {/* Alamat */}
+                <div className="col-span-1 md:col-span-2">
                   <label htmlFor="alamat" className="block text-sm font-medium text-gray-700 mb-2">Alamat</label>
                   <input
                     type="text"
                     id="alamat"
                     value={alamat}
                     onChange={(e) => setAlamat(e.target.value)}
-                    placeholder="Jl. Contoh No.1"
+                    placeholder="Jl. Raya Kenanga No 1"
                     className="w-full p-3 border rounded-lg border-gray-300"
                   />
                 </div>
@@ -279,10 +334,10 @@ export default function EditProfile({ user, cartCount }) {
 
               <button
                 type="submit"
-                disabled={loadingKomen}
+                disabled={loading}
                 className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition cursor-pointer"
               >
-                {loadingKomen ? 'Menyimpan...' : 'Simpan Profil'}
+                {loading ? 'Menyimpan...' : 'Simpan Profil'}
               </button>
             </form>
           </div>
