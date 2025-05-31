@@ -109,77 +109,83 @@ export default function RagamAlatMusik({user, alatMusik, cartCount}) {
       </main>
 
       {/* Modal Detail Alat Musik */}
-      {modalOpen && selectedAlatMusik && (
-        <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-9999999999 flex items-center justify-center lg:py-[10%]">
-          <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
-            {/* Tombol Tutup Modal */}
-            <button
-              className="cursor-pointer absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-indigo-500"
-              onClick={() => setModalOpen(false)}
-            >
-              <FaTimes />
-            </button>
+        {modalOpen && selectedAlatMusik && (
+            <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-[9999999999] flex items-center justify-center overflow-y-auto">
+                <div className="relative w-full max-w-3xl mx-auto my-10">
+                    <div className="bg-white dark:bg-gray-950 rounded shadow-lg p-4 md:p-6 max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between pb-5 border-b-2 mb-5 border-b-gray-400">
 
-            {/* Konten Modal */}
-            <h1 className="text-2xl font-bold dark:text-gray-200">{selectedAlatMusik.nama}</h1>
-            <hr className="my-3 dark:border-gray-700" />
+                            {/* Konten Modal */}
+                            <h1 className="text-2xl font-bold dark:text-gray-200">{selectedAlatMusik.nama}</h1>
 
-            <div>
-              {/* Gambar */}
-              <img
-                src={selectedAlatMusik.image ? `../storage/${selectedAlatMusik.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
-                className="rounded h-[200px] object-cover w-full bg-gray-300"
-                alt={selectedAlatMusik.nama}
-              />
+                            {/* Tombol Tutup Modal */}
+                            <button
+                                className="cursor-pointer text-gray-800 dark:text-gray-200 hover:text-indigo-500 z-10"
+                                onClick={() => setModalOpen(false)}
+                            >
+                                <FaTimes />
+                            </button>
 
-              {/* Deskripsi */}
-              <p className="md:text-sm text-[13px] mt-5 dark:text-gray-300">
-                {selectedAlatMusik.deskripsi}
-              </p>
+                        </div>
 
-              {/* Cara Main */}
-              <p className="md:text-sm text-[13px] mt-5 dark:text-gray-300">
-                <b className="text-indigo-500">Cara Main:</b> {selectedAlatMusik.cara_main}
-              </p>
+                        <div>
+                        {/* Gambar */}
+                        <img
+                            src={selectedAlatMusik.image ? `../storage/${selectedAlatMusik.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                            className="rounded lg:h-[350px] h-[200px] object-cover w-full bg-gray-300"
+                            alt={selectedAlatMusik.nama}
+                        />
 
-              {/* Audio */}
-              {selectedAlatMusik.audio && (
-                <div className="mt-3">
-                  <p className="text-sm font-semibold my-3 dark:text-gray-300">Dengar Suara:</p>
-                  <audio controls className="w-full">
-                    <source src={`../storage/${selectedAlatMusik.audio}`} type="audio/mpeg" />
-                    Browser Anda tidak mendukung tag audio.
-                  </audio>
+                        {/* Deskripsi */}
+                        <p className="md:text-sm text-[13px] mt-5 dark:text-gray-300">
+                            {selectedAlatMusik.deskripsi}
+                        </p>
+
+                        {/* Cara Main */}
+                        <p className="md:text-sm text-[13px] mt-5 dark:text-gray-300">
+                            <b className="text-indigo-500">Cara Main:</b> {selectedAlatMusik.cara_main}
+                        </p>
+
+                        {/* Audio */}
+                        {selectedAlatMusik.audio && (
+                            <div className="mt-3">
+                            <p className="text-sm font-semibold my-3 dark:text-gray-300">Dengar Suara:</p>
+                            <audio controls className="w-full">
+                                <source src={`../storage/${selectedAlatMusik.audio}`} type="audio/mpeg" />
+                                Browser Anda tidak mendukung tag audio.
+                            </audio>
+                            </div>
+                        )}
+
+                        {/* Video YouTube */}
+                        {selectedAlatMusik.video && getYouTubeEmbedUrl(selectedAlatMusik.video) && (
+                            <div className="mt-3">
+                            <p className="text-sm font-semibold my-3 dark:text-gray-300">Tonton Video:</p>
+                            <iframe
+                                width="100%"
+                                src={getYouTubeEmbedUrl(selectedAlatMusik.video)!}
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                className="rounded lg:h-[400px] h-[300px]"
+                            ></iframe>
+                            </div>
+                        )}
+
+                        <hr className="my-5 dark:border-gray-700" />
+                        <div className="flex items-center justify-between">
+                            <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
+                            <FaMapLocation />
+                            {selectedAlatMusik.asal}
+                            </p>
+                        </div>
+                        </div>
+                    </div>
                 </div>
-              )}
+            </section>
+        )}
 
-              {/* Video YouTube */}
-              {selectedAlatMusik.video && getYouTubeEmbedUrl(selectedAlatMusik.video) && (
-                <div className="mt-3">
-                  <p className="text-sm font-semibold my-3 dark:text-gray-300">Tonton Video:</p>
-                  <iframe
-                    width="100%"
-                    src={getYouTubeEmbedUrl(selectedAlatMusik.video)!}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="rounded lg:h-[350] h-[300]"
-                  ></iframe>
-                </div>
-              )}
-
-              <hr className="my-5 dark:border-gray-700" />
-              <div className="flex items-center justify-between">
-                <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
-                  <FaMapLocation />
-                  {selectedAlatMusik.asal}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
     </MainLayout>
   );

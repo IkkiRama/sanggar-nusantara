@@ -103,74 +103,86 @@ export default function RagamSeniTari({ user, seniTari, cartCount }) {
       </main>
 
       {/* Modal Detail Seni Tari */}
-      {modalOpen && selectedTari && (
-        <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-9999999999 flex items-center justify-center lg:py-[10%]">
-          <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
-            {/* Tombol Tutup Modal */}
-            <button
-              className="cursor-pointer absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-yellow-500"
-              onClick={() => setModalOpen(false)}
-            >
-              <FaTimes />
-            </button>
+        {modalOpen && selectedTari && (
+            <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-[9999999999] flex items-center justify-center overflow-y-auto">
+                <div className="relative w-full max-w-3xl mx-auto my-10">
+                    <div className="bg-white dark:bg-gray-950 rounded shadow-lg p-4 md:p-6 max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between pb-5 border-b-2 mb-5 border-b-gray-400">
+                            <div className="">
+                                <h1 className="text-2xl font-bold dark:text-gray-200">{selectedTari.nama}</h1>
 
-            {/* Konten Modal */}
-            <h1 className="text-2xl font-bold dark:text-gray-200">{selectedTari.nama}</h1>
-            <p className="text-sm dark:text-gray-400">Kategori: {selectedTari.kategori}</p>
-            <hr className="my-3 border-gray-400" />
+                                <p className="text-sm dark:text-gray-400 mt-1">
+                                    Kategori: {selectedTari.kategori} &nbsp;
+                                    {selectedTari.tahun_diciptakan && (
+                                        <span>
+                                            Diciptakan tahun : {selectedTari.tahun_diciptakan}
+                                        </span>
+                                    )}
+                                </p>
+                            </div>
+                            <button
+                                className="cursor-pointer text-gray-800 dark:text-gray-200 hover:text-yellow-500 z-10"
+                                onClick={() => setModalOpen(false)}
+                            >
+                                <FaTimes />
+                            </button>
+                        </div>
 
-            <div>
-              {/* Gambar */}
-              <img
-                src={selectedTari.image ? `../storage/${selectedTari.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
-                className="rounded h-[200px] lg:h-[400px] object-cover w-full bg-gray-300"
-                alt={selectedTari.nama}
-              />
+                        <div>
+                            {/* Gambar */}
+                            <img
+                                src={selectedTari.image ? `../storage/${selectedTari.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                                className="rounded lg:h-[350px] h-[200px] object-cover w-full bg-gray-300"
+                                alt={selectedTari.nama}
+                            />
 
-              {/* Sejarah */}
-              <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
-                <b>Sejarah:</b> <br />
-                <span className="text-base text-slate-600">
-                    {selectedTari.sejarah}
-                </span>
-              </p>
+                            {/* Sejarah */}
+                            <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
+                                <b>Sejarah:</b> <br />
+                                <span className="text-base text-slate-600">
+                                    {selectedTari.sejarah}
+                                </span>
+                            </p>
 
-              {/* Deskripsi */}
-              <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
-                <b>Deskripsi:</b> <br />
-                <span className="text-base text-slate-600">
-                    {selectedTari.deskripsi}
-                </span>
-              </p>
+                            {/* Deskripsi */}
+                            <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
+                                <b>Deskripsi:</b> <br />
+                                <span className="text-base text-slate-600">
+                                    {selectedTari.deskripsi}
+                                </span>
+                            </p>
 
-              {/* Video */}
-              {selectedTari.video && getYouTubeEmbedUrl(selectedTari.video) && (
-                <div className="mt-3">
-                  <p className="text-sm font-semibold my-3 dark:text-gray-300">Tonton Video:</p>
-                  <iframe
-                    width="100%"
-                    height="315"
-                    src={getYouTubeEmbedUrl(selectedTari.video)!}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="rounded"
-                  ></iframe>
+                            {/* Video YouTube */}
+                            {selectedTari.video && getYouTubeEmbedUrl(selectedTari.video) && (
+                                <div className="mt-5">
+                                    <p className="md:text-lg text-slate-700 text-[13px] mb-3 dark:text-gray-300">
+                                        <b>Tonton Vidio:</b>
+                                    </p>
+                                <iframe
+                                    width="100%"
+                                    src={getYouTubeEmbedUrl(selectedTari.video)!}
+                                    title="YouTube video player"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    className="rounded lg:h-[400px] h-[300px]"
+                                ></iframe>
+                                </div>
+                            )}
+
+                            <hr className="my-5 dark:border-gray-700" />
+                            <div className="flex items-center justify-between">
+                                <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
+                                <FaMapLocation />
+                                {selectedTari.asal}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              )}
-            </div>
+            </section>
+        )}
 
-            <hr className="my-5 dark:border-gray-700" />
-            <div className="flex items-center justify-between">
-                <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
-                    <FaMapLocation />
-                    {selectedTari.asal}
-                </p>
-            </div>
-          </div>
-        </section>
-      )}
     </MainLayout>
   );
 }

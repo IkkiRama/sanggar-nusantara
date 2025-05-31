@@ -1,3 +1,7 @@
+UPDATE MODAL DI TIAP RAGAM
+BIKIN FITUR AUTO TRANSLATE
+CEK WORK NGGA DI USER BIASA
+
 cek per ragam, apakah ada data yang belum ditampilkan, kaya vidio di ragam tari
 
 

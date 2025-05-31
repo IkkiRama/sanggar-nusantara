@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   GoogleMap,
   InfoWindow,
@@ -26,6 +26,23 @@ function MyComponent({foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, sen
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBKDtW47ZKzT5JPduQvi3gUFNHNZmXk-FU",
   });
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedMarker("");
+  };
+
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    };
+
+    window.addEventListener("keydown", handleEsc);
+
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
 
   const [selectedMarker, setSelectedMarker] = useState("");
   const [jenis, setJenis] = useState("bahasa");
@@ -389,7 +406,7 @@ function MyComponent({foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, sen
                         </p>
 
                         <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
-                            <b>Jumlah Penutur:</b> {selectedMarker.jumlah_penutur.toLocaleString("id-ID")}
+                            <b>Jumlah Penutur:</b> {selectedMarker?.jumlah_penutur?.toLocaleString("id-ID")}
                         </p>
 
                         <hr className="my-5 border-gray-400" />
@@ -402,71 +419,76 @@ function MyComponent({foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, sen
             </section>
         )}
         {modalOpen && jenis === "alat musik" && (
-            <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-9999999999 flex items-center justify-center lg:py-[10%]">
-                <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
-                    {/* Tombol Tutup Modal */}
-                    <button
-                        className="cursor-pointer absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-indigo-500"
-                        onClick={() => setModalOpen(false)}
-                    >
-                        <FaTimes />
-                    </button>
+            <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-[9999999999] flex items-center justify-center overflow-y-auto">
+                <div className="relative w-full max-w-3xl mx-auto my-10">
+                    <div className="bg-white dark:bg-gray-950 rounded shadow-lg p-4 md:p-6 max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between pb-5 border-b-2 mb-5 border-b-gray-400">
 
-                    {/* Konten Modal */}
-                    <h1 className="text-2xl font-bold dark:text-gray-200">{selectedMarker.nama}</h1>
-                    <hr className="my-3 dark:border-gray-700" />
+                            {/* Konten Modal */}
+                            <h1 className="text-2xl font-bold dark:text-gray-200">{selectedMarker.nama}</h1>
 
-                    <div>
+                            {/* Tombol Tutup Modal */}
+                            <button
+                                className="cursor-pointer text-gray-800 dark:text-gray-200 hover:text-indigo-500 z-10"
+                                onClick={() => setModalOpen(false)}
+                            >
+                                <FaTimes />
+                            </button>
+
+                        </div>
+
+                        <div>
                         {/* Gambar */}
                         <img
-                        src={selectedMarker.image ? `../storage/${selectedMarker.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
-                        className="rounded h-[200px] object-cover w-full bg-gray-300"
-                        alt={selectedMarker.nama}
+                            src={selectedMarker.image ? `../storage/${selectedMarker.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                            className="rounded lg:h-[350px] h-[200px] object-cover w-full bg-gray-300"
+                            alt={selectedMarker.nama}
                         />
 
                         {/* Deskripsi */}
                         <p className="md:text-sm text-[13px] mt-5 dark:text-gray-300">
-                        {selectedMarker.deskripsi}
+                            {selectedMarker.deskripsi}
                         </p>
 
                         {/* Cara Main */}
                         <p className="md:text-sm text-[13px] mt-5 dark:text-gray-300">
-                        <b className="text-indigo-500">Cara Main:</b> {selectedMarker.cara_main}
+                            <b className="text-indigo-500">Cara Main:</b> {selectedMarker.cara_main}
                         </p>
 
                         {/* Audio */}
                         {selectedMarker.audio && (
-                        <div className="mt-3">
+                            <div className="mt-3">
                             <p className="text-sm font-semibold my-3 dark:text-gray-300">Dengar Suara:</p>
                             <audio controls className="w-full">
-                            <source src={`../storage/${selectedMarker.audio}`} type="audio/mpeg" />
-                            Browser Anda tidak mendukung tag audio.
+                                <source src={`../storage/${selectedMarker.audio}`} type="audio/mpeg" />
+                                Browser Anda tidak mendukung tag audio.
                             </audio>
-                        </div>
+                            </div>
                         )}
 
                         {/* Video YouTube */}
                         {selectedMarker.video && getYouTubeEmbedUrl(selectedMarker.video) && (
-                        <div className="mt-3">
+                            <div className="mt-3">
                             <p className="text-sm font-semibold my-3 dark:text-gray-300">Tonton Video:</p>
                             <iframe
-                            width="100%"
-                            src={getYouTubeEmbedUrl(selectedMarker.video)}
-                            title="YouTube video player"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="rounded lg:h-[350] h-[300]"
+                                width="100%"
+                                src={getYouTubeEmbedUrl(selectedMarker.video)}
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                className="rounded lg:h-[400px] h-[300px]"
                             ></iframe>
-                        </div>
+                            </div>
                         )}
 
                         <hr className="my-5 dark:border-gray-700" />
                         <div className="flex items-center justify-between">
-                        <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
+                            <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
                             <FaMapLocation />
                             {selectedMarker.asal}
-                        </p>
+                            </p>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -528,129 +550,177 @@ function MyComponent({foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, sen
             </section>
         )}
         {modalOpen && jenis === "seni tari" && (
-            <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-9999999999 flex items-center justify-center lg:py-[10%]">
-                <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
-                    {/* Tombol Tutup Modal */}
-                    <button
-                        className="cursor-pointer absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-yellow-500"
-                        onClick={() => setModalOpen(false)}
-                    >
-                        <FaTimes />
-                    </button>
+            <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-[9999999999] flex items-center justify-center overflow-y-auto">
+                <div className="relative w-full max-w-3xl mx-auto my-10">
+                    <div className="bg-white dark:bg-gray-950 rounded shadow-lg p-4 md:p-6 max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between pb-5 border-b-2 mb-5 border-b-gray-400">
+                            <div className="">
+                                <h1 className="text-2xl font-bold dark:text-gray-200">{selectedMarker.nama}</h1>
 
-                    {/* Konten Modal */}
-                    <h1 className="text-2xl font-bold dark:text-gray-200">{selectedMarker.nama}</h1>
-                    <p className="text-sm dark:text-gray-400">Kategori: {selectedMarker.kategori}</p>
-                    <hr className="my-3 border-gray-400" />
-
-                    <div>
-                        {/* Gambar */}
-                        <img
-                        src={selectedMarker.image ? `../storage/${selectedMarker.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
-                        className="rounded h-[200px] lg:h-[400px] object-cover w-full bg-gray-300"
-                        alt={selectedMarker.nama}
-                        />
-
-                        {/* Sejarah */}
-                        <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
-                        <b>Sejarah:</b> <br />
-                        <span className="text-base text-slate-600">
-                            {selectedMarker.sejarah}
-                        </span>
-                        </p>
-
-                        {/* Deskripsi */}
-                        <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
-                        <b>Deskripsi:</b> <br />
-                        <span className="text-base text-slate-600">
-                            {selectedMarker.deskripsi}
-                        </span>
-                        </p>
-
-                        {/* Video */}
-                        {selectedMarker.video && getYouTubeEmbedUrl(selectedMarker.video) && (
-                        <div className="mt-3">
-                            <p className="text-sm font-semibold my-3 dark:text-gray-300">Tonton Video:</p>
-                            <iframe
-                            width="100%"
-                            height="315"
-                            src={getYouTubeEmbedUrl(selectedMarker.video)}
-                            title="YouTube video player"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="rounded"
-                            ></iframe>
+                                <p className="text-sm dark:text-gray-400 mt-1">
+                                    Kategori: {selectedMarker.kategori} &nbsp;
+                                    {selectedMarker.tahun_diciptakan && (
+                                        <span>
+                                            Diciptakan tahun : {selectedMarker.tahun_diciptakan}
+                                        </span>
+                                    )}
+                                </p>
+                            </div>
+                            <button
+                                className="cursor-pointer text-gray-800 dark:text-gray-200 hover:text-yellow-500 z-10"
+                                onClick={() => setModalOpen(false)}
+                            >
+                                <FaTimes />
+                            </button>
                         </div>
-                        )}
-                    </div>
 
-                    <hr className="my-5 dark:border-gray-700" />
-                    <div className="flex items-center justify-between">
-                        <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
-                            <FaMapLocation />
-                            {selectedMarker.asal}
-                        </p>
+                        <div>
+                            {/* Gambar */}
+                            <img
+                                src={selectedMarker.image ? `../storage/${selectedMarker.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                                className="rounded lg:h-[350px] h-[200px] object-cover w-full bg-gray-300"
+                                alt={selectedMarker.nama}
+                            />
+
+                            {/* Sejarah */}
+                            <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
+                                <b>Sejarah:</b> <br />
+                                <span className="text-base text-slate-600">
+                                    {selectedMarker.sejarah}
+                                </span>
+                            </p>
+
+                            {/* Deskripsi */}
+                            <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
+                                <b>Deskripsi:</b> <br />
+                                <span className="text-base text-slate-600">
+                                    {selectedMarker.deskripsi}
+                                </span>
+                            </p>
+
+                            {/* Video YouTube */}
+                            {selectedMarker.video && getYouTubeEmbedUrl(selectedMarker.video) && (
+                                <div className="mt-5">
+                                    <p className="md:text-lg text-slate-700 text-[13px] mb-3 dark:text-gray-300">
+                                        <b>Tonton Vidio:</b>
+                                    </p>
+                                <iframe
+                                    width="100%"
+                                    src={getYouTubeEmbedUrl(selectedMarker.video)}
+                                    title="YouTube video player"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    className="rounded lg:h-[400px] h-[300px]"
+                                ></iframe>
+                                </div>
+                            )}
+
+                            <hr className="my-5 dark:border-gray-700" />
+                            <div className="flex items-center justify-between">
+                                <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
+                                <FaMapLocation />
+                                {selectedMarker.asal}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
         )}
         {modalOpen && jenis === "lagu daerah" && (
-            <section className="fixed inset-0 bg-black/40 backdrop-blur-lg flex items-center justify-center lg:py-[10%] z-9999999999">
-                <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
-                    {/* Tombol Tutup Modal */}
-                    <button
-                        className="cursor-pointer absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-emerald-500"
-                        onClick={() => setModalOpen(false)}
-                    >
-                        <FaTimes />
-                    </button>
-
-                    {/* Konten Modal */}
-                    <h1 className="text-2xl font-bold dark:text-gray-200">{selectedMarker.nama}</h1>
-                    <p className="text-sm dark:text-gray-400">Kategori: {selectedMarker.kategori}</p>
-                    <hr className="my-3 border-gray-400" />
-
-                    <div>
-                        {/* Gambar */}
-                        <img
-                        src={selectedMarker.image ? `../storage/${selectedMarker.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
-                        className="rounded h-[300px] object-cover w-full bg-gray-300"
-                        alt={selectedMarker.nama}
-                        />
-
-                        {/* Sejarah */}
-                        <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
-                        <b>Sejarah:</b> <br />
-                        <span className="text-base text-slate-600">
-                            {selectedMarker.sejarah}
-                        </span>
-                        </p>
-
-                        {/* Lirik */}
-                        <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
-                        <b>Lirik:</b> <br />
-                        <span className="text-base text-slate-600">
-                            {selectedMarker.lirik}
-                        </span>
-                        </p>
-
-                        {/* Audio */}
-                        {selectedMarker.audio && (
-                        <div className="mt-3">
-                            <p className="text-lg text-slate-700 font-semibold my-3 dark:text-gray-300">Dengarkan Lagu:</p>
-                            <audio controls className="w-full">
-                            <source src={`../storage/${selectedMarker.audio}`} type="audio/mpeg" />
-                            Browser Anda tidak mendukung tag audio.
-                            </audio>
+            <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-[9999999999] flex items-center justify-center overflow-y-auto">
+                <div className="relative w-full max-w-3xl mx-auto my-10">
+                    <div className="bg-white dark:bg-gray-950 rounded shadow-lg p-4 md:p-6 max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between pb-5 border-b-2 mb-5 border-b-gray-400">
+                            <div className="">
+                                <h1 className="text-2xl font-bold dark:text-gray-200">{selectedMarker.nama}</h1>
+                                <p className="text-sm dark:text-gray-400 mt-1">
+                                    Kategori: {selectedMarker.kategori} &nbsp;
+                                    {selectedMarker.tahun_diciptakan && (
+                                        <span>
+                                            Diciptakan tahun : {selectedMarker.tahun_diciptakan}
+                                        </span>
+                                    )}
+                                </p>
+                            </div>
+                            <button
+                                className="cursor-pointer text-gray-800 dark:text-gray-200 hover:text-emerald-500 z-10"
+                                onClick={() => setModalOpen(false)}
+                            >
+                                <FaTimes />
+                            </button>
                         </div>
-                        )}
 
-                        <hr className="my-5 border-gray-400" />
-                        <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
-                        <FaMapLocation />
-                        {selectedMarker.asal}
-                        </p>
+                        <div>
+                            {/* Gambar */}
+                            <img
+                                src={selectedMarker.image ? `../storage/${selectedMarker.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                                className="rounded lg:h-[350px] h-[200px] object-cover w-full bg-gray-300"
+                                alt={selectedMarker.nama}
+                            />
+
+                            {/* Tahun & Kategori */}
+                            {/* <p className="text-sm mt-3 text-gray-600 dark:text-gray-400">
+                                Kategori: {selectedMarker.kategori}
+                            </p>
+                            {selectedMarker.tahun_diciptakan && (
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                Tahun Diciptakan: {selectedMarker.tahun_diciptakan}
+                                </p>
+                            )} */}
+
+                            {/* Sejarah */}
+                            <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
+                                <b>Sejarah:</b> <br />
+                                <span className="text-base text-slate-600">
+                                    {selectedMarker.sejarah}
+                                </span>
+                            </p>
+
+                            {/* Lirik */}
+                            <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
+                                <b>Lirik:</b> <br />
+                                <span className="text-base text-slate-600">
+                                    {selectedMarker.lirik}
+                                </span>
+                            </p>
+
+                            {/* Audio */}
+                            {selectedMarker.audio && (
+                                <div className="mt-4">
+                                    <p className="text-sm font-semibold mb-2 dark:text-gray-300">Dengarkan Lagu:</p>
+                                    <audio controls className="w-full">
+                                        <source src={`../storage/${selectedMarker.audio}`} type="audio/mpeg" />
+                                        Browser Anda tidak mendukung tag audio.
+                                    </audio>
+                                </div>
+                            )}
+
+                            {/* Video YouTube */}
+                            {selectedMarker.video && getYouTubeEmbedUrl(selectedMarker.video) && (
+                                <div className="mt-5">
+                                    <p className="text-sm font-semibold mb-2 dark:text-gray-300">Tonton Video:</p>
+                                    <iframe
+                                        width="100%"
+                                        src={getYouTubeEmbedUrl(selectedMarker.video)}
+                                        title="YouTube video player"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        className="rounded lg:h-[400px] h-[300px]"
+                                    ></iframe>
+                                </div>
+                            )}
+
+                            <hr className="my-5 dark:border-gray-700" />
+                            <div className="flex items-center justify-between">
+                                <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
+                                <FaMapLocation />
+                                {selectedMarker.asal}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -106,66 +106,104 @@ export default function RagamLaguDaerah({ user, laguDaerah = [], cartCount }) {
       </main>
 
       {/* Modal Detail Lagu Daerah */}
-      {modalOpen && selectedLagu && (
-        <section className="fixed inset-0 bg-black/40 backdrop-blur-lg flex items-center justify-center lg:py-[10%] z-9999999999">
-          <div className="bg-white overflow-y-auto max-h-screen lg:p-6 p-4 dark:bg-gray-950 md:w-[60%] w-[95%] md:mx-0 mx-auto rounded relative">
-            {/* Tombol Tutup Modal */}
-            <button
-              className="cursor-pointer absolute right-0 top-0 m-5 dark:text-gray-200 hover:!text-emerald-500"
-              onClick={() => setModalOpen(false)}
-            >
-              <FaTimes />
-            </button>
+        {modalOpen && selectedLagu && (
+            <section className="fixed inset-0 bg-black/40 backdrop-blur-lg z-[9999999999] flex items-center justify-center overflow-y-auto">
+                <div className="relative w-full max-w-3xl mx-auto my-10">
+                    <div className="bg-white dark:bg-gray-950 rounded shadow-lg p-4 md:p-6 max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between pb-5 border-b-2 mb-5 border-b-gray-400">
+                            <div className="">
+                                <h1 className="text-2xl font-bold dark:text-gray-200">{selectedLagu.nama}</h1>
+                                <p className="text-sm dark:text-gray-400 mt-1">
+                                    Kategori: {selectedLagu.kategori} &nbsp;
+                                    {selectedLagu.tahun_diciptakan && (
+                                        <span>
+                                            Diciptakan tahun : {selectedLagu.tahun_diciptakan}
+                                        </span>
+                                    )}
+                                </p>
+                            </div>
+                            <button
+                                className="cursor-pointer text-gray-800 dark:text-gray-200 hover:text-emerald-500 z-10"
+                                onClick={() => setModalOpen(false)}
+                            >
+                                <FaTimes />
+                            </button>
+                        </div>
 
-            {/* Konten Modal */}
-            <h1 className="text-2xl font-bold dark:text-gray-200">{selectedLagu.nama}</h1>
-            <p className="text-sm dark:text-gray-400">Kategori: {selectedLagu.kategori}</p>
-            <hr className="my-3 border-gray-400" />
+                        <div>
+                            {/* Gambar */}
+                            <img
+                                src={selectedLagu.image ? `../storage/${selectedLagu.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                                className="rounded lg:h-[350px] h-[200px] object-cover w-full bg-gray-300"
+                                alt={selectedLagu.nama}
+                            />
 
-            <div>
-              {/* Gambar */}
-              <img
-                src={selectedLagu.image ? `../storage/${selectedLagu.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
-                className="rounded h-[300px] object-cover w-full bg-gray-300"
-                alt={selectedLagu.nama}
-              />
+                            {/* Tahun & Kategori */}
+                            {/* <p className="text-sm mt-3 text-gray-600 dark:text-gray-400">
+                                Kategori: {selectedLagu.kategori}
+                            </p>
+                            {selectedLagu.tahun_diciptakan && (
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                Tahun Diciptakan: {selectedLagu.tahun_diciptakan}
+                                </p>
+                            )} */}
 
-              {/* Sejarah */}
-              <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
-                <b>Sejarah:</b> <br />
-                <span className="text-base text-slate-600">
-                    {selectedLagu.sejarah}
-                </span>
-              </p>
+                            <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
+                                <b>Sejarah:</b> <br />
+                                <span className="text-base text-slate-600">
+                                    {selectedLagu.sejarah}
+                                </span>
+                            </p>
 
-              {/* Lirik */}
-              <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
-                <b>Lirik:</b> <br />
-                <span className="text-base text-slate-600">
-                    {selectedLagu.lirik}
-                </span>
-              </p>
+                            {/* Lirik */}
+                            <p className="md:text-lg text-slate-700 text-[13px] mt-5 dark:text-gray-300">
+                                <b>Lirik:</b> <br />
+                                <span className="text-base text-slate-600">
+                                    {selectedLagu.lirik}
+                                </span>
+                            </p>
 
-              {/* Audio */}
-              {selectedLagu.audio && (
-                <div className="mt-3">
-                  <p className="text-lg text-slate-700 font-semibold my-3 dark:text-gray-300">Dengarkan Lagu:</p>
-                  <audio controls className="w-full">
-                    <source src={`../storage/${selectedLagu.audio}`} type="audio/mpeg" />
-                    Browser Anda tidak mendukung tag audio.
-                  </audio>
+                            {/* Audio */}
+                            {selectedLagu.audio && (
+                                <div className="mt-4">
+                                    <p className="text-sm font-semibold mb-2 dark:text-gray-300">Dengarkan Lagu:</p>
+                                    <audio controls className="w-full">
+                                        <source src={`../storage/${selectedLagu.audio}`} type="audio/mpeg" />
+                                        Browser Anda tidak mendukung tag audio.
+                                    </audio>
+                                </div>
+                            )}
+
+                            {/* Video YouTube */}
+                            {selectedLagu.video && getYouTubeEmbedUrl(selectedLagu.video) && (
+                                <div className="mt-5">
+                                    <p className="text-sm font-semibold mb-2 dark:text-gray-300">Tonton Video:</p>
+                                    <iframe
+                                        width="100%"
+                                        src={getYouTubeEmbedUrl(selectedLagu.video)!}
+                                        title="YouTube video player"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        className="rounded lg:h-[400px] h-[300px]"
+                                    ></iframe>
+                                </div>
+                            )}
+
+                            <hr className="my-5 dark:border-gray-700" />
+                            <div className="flex items-center justify-between">
+                                <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
+                                <FaMapLocation />
+                                {selectedLagu.asal}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              )}
+            </section>
+        )}
 
-              <hr className="my-5 border-gray-400" />
-              <p className="flex gap-2 items-center text-gray-700 dark:text-gray-400 text-sm">
-                <FaMapLocation />
-                {selectedLagu.asal}
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
+
     </MainLayout>
   );
 }
