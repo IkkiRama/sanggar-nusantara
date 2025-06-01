@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 // import { ThemeProvider } from "./ThemeContext";
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+// import './i18n'; 
 
 createInertiaApp({
     resolve: name => {

@@ -161,25 +161,59 @@ class ProfileController extends Controller
         ]);
     }
 
-
     public function getSnapToken($order_id)
     {
-
         if (!Auth::check() || !Auth::user()->id) {
             return redirect('/admin/login');
         }
-
-        // Cari order milik user login
-        $order = Order::where('order_id', $order_id)
-                    // ->where('user_id', Auth::id()) // Aktifkan ini kalau perlu keamanan ekstra
-                    ->first();
-
+    
+        // Ambil order berdasarkan order_id
+        $order = Order::where('order_id', $order_id)->first();
+    
         if (!$order) {
-            return response()->json(['error' => 'Order tidak ditemukan atau bukan milik Anda'], 404);
+            return response()->json(['error' => 'Order tidak ditemukan'], 404);
         }
-
+    
+        try {
+            // Cek status transaksi di Midtrans
+            $status = \Midtrans\Transaction::status($order->order_id);
+            $transaction_status = $status->transaction_status;
+    
+            // Jika transaksi sudah sukses, tidak perlu token baru
+            if (in_array($transaction_status, ['settlement', 'capture'])) {
+                return response()->json([
+                    'message' => 'Transaksi sudah dibayar',
+                    'status' => $transaction_status
+                ]);
+            }
+    
+            // Jika transaksi masih pending dan snap_token tersedia, gunakan token lama
+            if ($transaction_status === 'pending' && $order->snap_token) {
+                return response()->json(['token' => $order->snap_token]);
+            }
+    
+            // Jika transaksi gagal / expired, buat order_id baru untuk retry
+            $new_order_id = $order->order_id . '-' . time();
+            $order->order_id = $new_order_id;
+    
+        } catch (\Exception $e) {
+            // Jika belum pernah ada transaksi di Midtrans (misalnya error 404), lanjutkan
+            if (str_contains($e->getMessage(), '404')) {
+                // Tidak ada transaksi sebelumnya, lanjut
+            } else {
+                return response()->json([
+                    'error' => 'Gagal cek status Midtrans',
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+        }
+    
+        // Generate Snap Token baru
         try {
             $snapToken = $this->midtrans->getSnapToken($order);
+            $order->snap_token = $snapToken;
+            $order->save();
+    
             return response()->json(['token' => $snapToken]);
         } catch (\Exception $e) {
             return response()->json([
@@ -188,6 +222,7 @@ class ProfileController extends Controller
             ], 500);
         }
     }
+    
 
 
 

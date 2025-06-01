@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [FrontController::class, 'index']);
 Route::get('/subscription', [FrontController::class, 'subscription']);
+Route::get('/tentang-kami', [FrontController::class, 'tentangKami']);
 Route::get('/peta-interaktif', [FrontController::class, 'petaInteraktif']);
 Route::get('/terms', function () {
     return Inertia::render('TermsAndConditions', [

@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Link } from '@inertiajs/react';
 
 export default function Footer() {
 
@@ -115,18 +116,20 @@ export default function Footer() {
             <div className="mt-10 w-full sm:w-1/2 lg:w-1/3">
                 <h2 className="text-white lg:mb-11 font-bold text-2xl mb-5 md:text-3xl">Tautan</h2>
                 <div className="flex flex-wrap">
-                    <a href="/"
-                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Beranda</a>
-                    <a href="/event"
-                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Event</a>
-                    <a href="/artikel" className="text-white mb-4 w-full hover:text-red-500 hover:underline
-                        md:text-lg">Berita</a>
-                    <a href="/subscription"
-                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Subscription</a>
-                    <a href="/peta-interaktif"
-                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Peta Interaktif</a>
-                    <a href="/ragam-indonesia"
-                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Ragam Indonesia</a>
+                    <Link href="/"
+                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Beranda</Link>
+                    <Link href="/event"
+                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Event</Link>
+                    <Link href="/artikel" className="text-white mb-4 w-full hover:text-red-500 hover:underline
+                        md:text-lg">Berita</Link>
+                    <Link href="/subscription"
+                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Subscription</Link>
+                    {/* <Link href="/tentang-kami"
+                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Tentang Kami</Link> */}
+                    <Link href="/peta-interaktif"
+                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Peta Interaktif</Link>
+                    <Link href="/ragam-indonesia"
+                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Ragam Indonesia</Link>
                 </div>
             </div>
 

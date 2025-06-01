@@ -156,9 +156,10 @@ export default function EditProfile({ user, cartCount, role }) {
                         Foto Profil <span className="text-red-600" >*</span>
                         </label>
                         <img
-                        src={image ? URL.createObjectURL(image) : `/storage/${user.image}`}
-                        alt="User Profile"
-                        className="w-32 h-32 object-cover rounded-full"
+                          src={image ? URL.createObjectURL(image) : `/storage/${user.image}`}
+                          alt="User Profile"
+                          className="w-32 h-32 object-cover rounded-full"
+                          onError={e => (e.currentTarget.src = "/images/NO IMAGE AVAILABLE.jpg")}
                         />
                     </div>
 

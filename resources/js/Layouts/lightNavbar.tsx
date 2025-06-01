@@ -13,7 +13,7 @@ import {
 } from 'react-icons/fa';
 
 import { FaEarthAsia } from 'react-icons/fa6';
-import { useAuth } from '../Hooks/useAuth';
+import LanguageSelector from './../Components/LanguageSelector';
 
 
 const NAV_ITEMS = [
@@ -258,6 +258,7 @@ const Navbar = ({user, cartCount}) => {
                             {user ? (
                                 <div className="relative">
                                     <div className="flex items-center space-x-2">
+                                        {/* <LanguageSelector /> */}
                                         <Link
                                             href="/keranjang"
                                             className={`relative px-3 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center bg-white/80 text-gray-700 hover:bg-gray-100 shadow-lg`}

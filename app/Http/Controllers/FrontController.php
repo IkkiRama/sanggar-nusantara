@@ -581,5 +581,13 @@ class FrontController extends Controller
         return response()->json(['message' => 'Password berhasil diperbarui'], 200);
     }
 
+    function tentangKami() {
+
+        return Inertia::render('TentangKami', [
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
+        ]);
+    }
+
 
 }
