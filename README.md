@@ -108,3 +108,7 @@ Langkah-langkah simulasi transaksi:
 ## ✅ Selesai
 Website Sanggar Nusantara kini siap dijalankan di lokal.
 Semoga bermanfaat untuk pelestarian kebudayaan Nusantara! 🌺
+
+# AKUN ADMIN USER:
+- email : official@ikki.com
+- password : 123
