@@ -4,6 +4,7 @@ import MainLayout from "../Layouts/mainLayout";
 import { Head } from "@inertiajs/react";
 import { toast } from "react-toastify";
 import { CreditCard } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Invoice = ({ order, user, cartCount }) => {
     // useEffect(() => {
@@ -11,6 +12,8 @@ const Invoice = ({ order, user, cartCount }) => {
     //         window.location.href = "/profile"; // Redirect ke halaman profile
     //     }
     // }, [order, user]);
+
+    const navigate = useNavigate();
 
     const [isChecking, setIsChecking] = useState(true);
     const [snapToken, setSnapToken] = useState<string | null>(null);
@@ -122,7 +125,7 @@ const Invoice = ({ order, user, cartCount }) => {
                         </div>
                     </div>
 
-                    <div className="border-2 bg-white border-gray-200 shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-lg p-4 mb:p-6 mb-4">
+                    <div className="border-2 bg-white border-gray-200 shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-lg p-4 mb:p-6">
                         <h3 className="text-xl font-semibold mb-4 text-slate-600">Daftar Produk</h3>
 
                         {/* EVENT */}
@@ -134,7 +137,7 @@ const Invoice = ({ order, user, cartCount }) => {
                                             <img
                                                 src={event.event?.image ? `/storage/${event.event.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
                                                 alt="Event"
-                                                className="bg-gray-600 object-cover lg:w-20 lg:h-20 h-36 mb-5 lg:mb-0 w-full rounded-lg"
+                                                className="bg-gray-600 object-cover lg:w-20 lg:h-20 h-36 mb-5 lg:mb-0 w-full rounded-lg lg:mr-2"
                                             />
 
                                             <div>
@@ -165,7 +168,7 @@ const Invoice = ({ order, user, cartCount }) => {
                         {order.subscription && order.subscription.plan && (
                             <div className="flex items-center gap-4 border-b border-gray-300 py-4 px-4">
                                 <div className="flex flex-wrap lg:flex-nowrap lg:w-1/2 w-full lg:border-r-2 border-gray-200">
-                                    <div className="md:mr-4 w-full lg:mr-2 flex justify-center items-center">
+                                    <div className="md:mr-4 w-full lg:w-fit lg:mr-2 flex justify-center items-center">
                                         <CreditCard className="text-gray-200 bg-gray-400 lg:w-20 lg:h-20 h-36 mb-5 lg:mb-0 rounded-md p-3 w-full" />
                                     </div>
 
@@ -203,16 +206,22 @@ const Invoice = ({ order, user, cartCount }) => {
                     </div>
 
 
-                    { order.status_pembelian === "pending" && (
-                        <div className="mt-5">
-                            <button
-                                onClick={() => handleBayar(order.order_id)}
-                                className="px-5 cursor-pointer text-white py-2 text-sm bg-blue-500 border-2 border-blue-500 hover:bg-blue-600 rounded-md font-semibold"
-                            >
-                                Bayar
-                            </button>
-                        </div>
-                    ) }
+                    <div className="flex mt-10 gap-3">
+                                <button
+                                    onClick={() => navigate(-1)}
+                                    className="px-5 cursor-pointer text-white py-2 text-sm bg-blue-500 border-2 border-blue-500 hover:bg-blue-600 rounded-md font-semibold"
+                                >
+                                    Kembali
+                                </button>
+                                <button
+                                    onClick={() => handleBayar(order.order_id)}
+                                    className="px-5 cursor-pointer text-white py-2 text-sm bg-yellow-500 border-2 border-yellow-500 hover:bg-yellow-600 rounded-md font-semibold"
+                                >
+                                    Bayar
+                                </button>
+                        {/* { order.status_pembelian === "pending" && (
+                        ) } */}
+                    </div>
 
 
                 </div>

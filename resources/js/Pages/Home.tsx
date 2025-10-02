@@ -31,6 +31,7 @@ import { changeDate } from './../Utils/changeDate';
 import { BookOpen, Calendar, CheckCircle, MapPin } from "lucide-react";
 
 interface Event {
+    harga_terendah: any;
     kategori_event_id:string;
     nama:string;
     slug:string;
@@ -985,6 +986,10 @@ const Home = ({plans}) => {
                             <h2 className={`px-4 text-lg font-bold mb-2 line-clamp-2 dark:text-gray-200`}>{event.nama}</h2>
 
                             <p className="px-4 text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px] line-clamp-3">{event.excerpt}</p>
+
+                            <h3 className="px-4 text-lg font-bold mt-2 text-red-500 blinker z-1">
+                                {event.harga_terendah ? `Rp ${event.harga_terendah.toLocaleString()}` : 'Gratis'}
+                            </h3>
 
                             <div className="mt-5 md:flex gap-5 px-4 pb-4">
                                 <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 w-[60%] items-center">

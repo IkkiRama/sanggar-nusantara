@@ -1,7 +1,7 @@
 MOHON DIPERHATIKAN DULU REQUIREMENT NODE JS DAN PHP NYA SUPAYA TIDAK EROR DALAM MENG INSTALL DEPENDENSI NYA
 
 LINK GITHUB :
-https://github.com/IkkiRama/sanggar-Nusantara/
+https://github.com/IkkiRama/sanggar-nusantara/
 
 
 KETIK
@@ -22,3 +22,8 @@ NOTEEE : INI SAYA PAKAI LARAGON, JADINYA ADA LINK (http://sanggar-nusantara.test
 
 KALAU SEMISAL ANDA TIDAK PAKAI LARAGON, HARAP LINK ITU DIGANTI JADI LOCALHOST DAHULU SUPAYA TIDAK EROR
 
+
+
+ganti gamabr jadi webp
+add sso
+add 3 fitur

@@ -124,8 +124,8 @@ export default function Footer() {
                         md:text-lg">Berita</Link>
                     <Link href="/subscription"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Subscription</Link>
-                    {/* <Link href="/tentang-kami"
-                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Tentang Kami</Link> */}
+                    <Link href="/tentang-kami"
+                        className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Tentang Kami</Link>
                     <Link href="/peta-interaktif"
                         className="text-white mb-4 w-full hover:text-red-500 hover:underline md:text-lg">Peta Interaktif</Link>
                     <Link href="/ragam-indonesia"

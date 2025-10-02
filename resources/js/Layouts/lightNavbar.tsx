@@ -347,16 +347,20 @@ const Navbar = ({user, cartCount}) => {
                                 {isDark ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
                             </button> */}
 
-                            <Link
-                                href="/keranjang"
-                                className={`relative px-3 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center bg-white/80 text-gray-700 hover:bg-gray-100 shadow-lg`}
-                            >
-                                <FaShoppingBag className="w-[20px] h-[20px]" />
 
-                                <span className="absolute -top-1 right-[-5px] bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
-                                    {cartCount ? cartCount : 0}
-                                </span>
-                            </Link>
+                            {user && (
+                                <Link
+                                    href="/keranjang"
+                                    className={`relative px-3 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center bg-white/80 text-gray-700 hover:bg-gray-100 shadow-lg`}
+                                >
+                                    <FaShoppingBag className="w-[20px] h-[20px]" />
+
+                                    <span className="absolute -top-1 right-[-5px] bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+                                        {cartCount ? cartCount : 0}
+                                    </span>
+                                </Link>
+                            )}
+
 
                             <button
                                 onClick={toggleMenu}
@@ -486,7 +490,7 @@ const Navbar = ({user, cartCount}) => {
                                                 <div className={`size-9 rounded-xl flex items-center justify-center bg-blue-50`}>
                                                     <FaUser className="w-5 h-5" />
                                                 </div>
-                                                <span className="font-medium">daftar</span>
+                                                <span className="font-medium">Masuk</span>
                                             </a>
                                         )}
 

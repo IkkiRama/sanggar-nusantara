@@ -320,11 +320,11 @@ export default function EditProfile({ user, cartCount, role }) {
 
               {/* Deskripsi */}
               <div className="mb-4">
-                <label htmlFor="komentar" className="block text-sm font-medium text-gray-700 mb-2">
-                  Komentar / Deskripsi
+                <label htmlFor="deskripsi" className="block text-sm font-medium text-gray-700 mb-2">
+                  Deskripsi
                 </label>
                 <textarea
-                  id="komentar"
+                  id="deskripsi"
                   value={komen}
                   onChange={(e) => setKomen(e.target.value)}
                   rows={4}

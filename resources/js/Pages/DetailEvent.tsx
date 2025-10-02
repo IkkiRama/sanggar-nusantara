@@ -398,7 +398,7 @@ export default function DetailEvent({user, event, hargaTiket, events, cartCount}
                                                     }
                                                 </span>
 
-                                                {new Date(ticket.tanggal_selesai) < new Date() ? ( // Cek jika event sudah berakhir
+                                                {new Date(ticket.tanggal_selesai) < new Date() ||new Date(event.tanggal) < new Date() ? ( // Cek jika event sudah berakhir
                                                     <span className="text-sm md:text-lg font-bold text-red-500">
                                                         Pemesanan telah ditutup
                                                     </span>

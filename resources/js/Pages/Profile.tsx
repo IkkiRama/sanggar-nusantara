@@ -80,7 +80,7 @@ export default function Profile({pembelianEvents, user, cartCount, subscription,
 
         try {
             const response = await fetch(`/api/event/batalkan/${orderId}`, {
-                method: "POST", // atau "PUT" tergantung API-mu
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",

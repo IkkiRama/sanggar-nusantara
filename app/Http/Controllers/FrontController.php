@@ -18,6 +18,7 @@ use App\Models\PembelianEvent;
 use App\Models\Plan;
 use App\Models\RumahAdat;
 use App\Models\SeniTari;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
@@ -38,13 +39,16 @@ class FrontController extends Controller
     {
 
         // Ambil event mendatang
-        $events = Event::select("kategori_event_id", "nama", "slug", "image", "status_event", "excerpt", "tempat", "tanggal")
-            ->where('tanggal', '>=', now())
-            ->where('status_event', '!=', 'draft')
-            ->orderBy('tanggal', 'asc')
-            ->take(3)
-            ->withoutTrashed()
-            ->get();
+        $events = Event::select(
+            "kategori_event_id", "nama", "slug", "image", "status_event", "excerpt", "tempat", "tanggal",
+            DB::raw("(SELECT MIN(harga) FROM harga_events WHERE harga_events.event_id = events.id) as harga_terendah")
+        )
+        ->where('status_event', '!=', 'draft')
+        ->where('tanggal', '>=', now())
+        ->orderBy('tanggal', 'asc')
+        ->take(3)
+        ->withoutTrashed()
+        ->get();
 
         // Jika tidak ada event mendatang, ambil 3 event terakhir yang sudah lewat
         if ($events->isEmpty()) {
@@ -180,6 +184,26 @@ class FrontController extends Controller
             ])
             ->firstOrFail();
 
+        $cekUserPremium = Subscription::where([
+            ["user_id", Auth::id()],
+            ["status", "aktif"]
+        ])->first();
+
+        if ($cekUserPremium && Auth::user()->role !== "admin") {
+            $tanggalBerakhir = Carbon::parse($cekUserPremium->tanggal_berakhir);
+
+            if (now()->greaterThanOrEqualTo($tanggalBerakhir)) {
+                // Update status subscription jadi expire
+                $cekUserPremium->update([
+                    "status" => "expired"
+                ]);
+
+                // Ubah role user jadi role biasa
+                $user = Auth::user();
+                $user->syncRoles("user"); // ganti "user" sesuai role default
+            }
+        }
+
         // Jika event premium dan user bukan premium
         if ($event->status_event === "premium" && (Auth::user()?->role !== 'premium')) {
             $eventPreview = [
@@ -293,6 +317,26 @@ class FrontController extends Controller
             // Default status dan message
             $status = 'success';
             $message = 'Artikel berhasil dimuat.';
+
+            $cekUserPremium = Subscription::where([
+                ["user_id", Auth::id()],
+                ["status", "aktif"]
+            ])->first();
+
+            if ($cekUserPremium && Auth::user()->role !== "admin") {
+                $tanggalBerakhir = Carbon::parse($cekUserPremium->tanggal_berakhir);
+
+                if (now()->greaterThanOrEqualTo($tanggalBerakhir)) {
+                    // Update status subscription jadi expire
+                    $cekUserPremium->update([
+                        "status" => "expired"
+                    ]);
+
+                    // Ubah role user jadi role biasa
+                    $user = Auth::user();
+                    $user->syncRoles("user"); // ganti "user" sesuai role default
+                }
+            }
 
 
             // Cek jika artikel premium dan user bukan premium

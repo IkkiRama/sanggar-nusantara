@@ -160,7 +160,7 @@ export default function Detail() {
       <div className="pt-20 pb-10 md:px-20 px-5 mb-8 bg-gray-100 dark:bg-gray-950 relative">
         <div className="grid lg:grid-cols-5 items-center 2xl:max-w-[2000px] mx-auto px-4 2xl:px-10">
 
-            <span className="h-full lg:w-[700px] w-full absolute right-0 lg:bg-gradient-to-l bg-gradient-to-b from-red-500/70 to-red-500/0"></span>
+            <span className="h-full lg:w-[700px] w-full absolute right-0 top-0 lg:bg-gradient-to-l bg-gradient-to-b from-red-500/70 to-red-500/0"></span>
             <div className="lg:col-span-3 order-2 lg:order-1 relative z-10 lg:text-left text-center">
             <p className="font-semibold mb-2 text-red-500 md:md:text-base text-[13px] text-sm">
                 {artikel?.kategori?.nama.toUpperCase()}
