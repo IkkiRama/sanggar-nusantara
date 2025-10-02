@@ -11,62 +11,10 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
-    {
-        return Inertia::render('Register', []);
-    }
 
     public function login(Request $request)
     {
-        return Inertia::render('Login', []);
-    }
-
-    public function postRegister(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        return response()->json([
-            'token' => $user->createToken('Sanggar Nusantara')->plainTextToken
-        ]);
-    }
-
-    public function postLogin(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('Sanggar Nusantara')->plainTextToken;
-
-            // Simpan ID pengguna ke session
-            session(['user_id' => $user->id]);
-
-            // Simpan token ke dalam session juga jika diperlukan
-            session(['api_token' => $token]);
-
-            // Mengirimkan ID pengguna dan token sebagai response
-            return response()->json([
-                'user_id' => $user->id,
-                'token' => $token
-            ])
-            ->cookie('user_id', $user->id, 60, '/', null, false, true) // ← cookie user_id
-            ->cookie('api_token', $token, 60, '/', null, false, true); // ← cookie token
-        }
-
-        return response()->json(['message' => 'Unauthorized'], 401);
+        return Inertia::render('Auth/Login', []);
     }
 
     public function loginWeb(Request $request)

@@ -47,8 +47,9 @@ Route::get('/ragam-indonesia/lagu-daerah', [FrontController::class, 'laguDaerah'
 Route::get('/ragam-indonesia/makanan-khas', [FrontController::class, 'makananKhas']);
 
 // Route::get('/admin/login', [AuthController::class, 'login'])->name("login");
-Route::post('/masuk', [AuthController::class, 'loginWeb'])->name("loginWeb");
-Route::get('/daftar', [AuthController::class, 'register']);
+Route::get('/auth-google-redirect', [AuthController::class, 'google-redirect']);
+Route::get('/auth-google-callback', [AuthController::class, 'google-callback']);
+Route::get('/masuk', [AuthController::class, 'login']);
 // Route::get('/login', function () {
 //     return redirect('/admin/login');
 // })->name('masuk');

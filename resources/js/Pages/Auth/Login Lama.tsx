@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react'; // Inertia
 import axios from 'axios';
 import { Link } from '@inertiajs/react';
-import AuthLayout from '../Layouts/authLayout';
-import AuthNavbar from '../Layouts/authNavbar';
+import AuthLayout from '../../Layouts/authLayout';
+import AuthNavbar from '../../Layouts/authNavbar';
 
-const Login = () => {
+const LoginLama = () => {
   const { data, setData, post, processing, errors } = useForm({
     email: '',
     password: '',
@@ -19,7 +19,7 @@ const Login = () => {
     e.preventDefault();
 
     // 1. Login menggunakan Session (Inertia)
-    post('/masuk');  // Ini untuk memulai session login, menggunakan Laravel default session auth
+    // post('/masuk');  // Ini untuk memulai session login, menggunakan Laravel default session auth
 
     // 2. Login menggunakan API (Sanctum)
     // try {
@@ -110,4 +110,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginLama;

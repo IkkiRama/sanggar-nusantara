@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 // icons
 import { FaArrowRight, FaBowlFood, FaMapLocation } from "react-icons/fa6";
 import { Link } from '@inertiajs/react';
-import DarkNavbar from "../layouts/darkNavbar";
+import DarkNavbar from "../../layouts/darkNavbar";
 
 // import foods from "./../data/foods.json";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import React from "react";
-import MainLayout from "../Layouts/mainLayout";
-import LightNavbar from "../layouts/lightNavbar";
+import MainLayout from "../../Layouts/mainLayout";
+import LightNavbar from "../../layouts/lightNavbar";
 
 interface FoodItem {
   nama: string;

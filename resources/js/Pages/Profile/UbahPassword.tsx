@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import ProfileLayout from '../Layouts/profileLayout';
-import LightNavbar from '../layouts/lightNavbar';
-import UserProfile from '../Components/userProfile';
+import ProfileLayout from '../../Layouts/profileLayout';
+import LightNavbar from '../../layouts/lightNavbar';
+import UserProfile from '../../Components/userProfile';
 import axios from 'axios';
 
 const UbahPassword = ({ user, cartCount, role }) => {

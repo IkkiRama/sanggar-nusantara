@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import LightNavbar from "../layouts/lightNavbar";
-import MainLayout from "../Layouts/mainLayout";
+import LightNavbar from "../../layouts/lightNavbar";
+import MainLayout from "../../Layouts/mainLayout";
 import { Head } from "@inertiajs/react";
 import { toast } from "react-toastify";
 import { CreditCard } from "lucide-react";

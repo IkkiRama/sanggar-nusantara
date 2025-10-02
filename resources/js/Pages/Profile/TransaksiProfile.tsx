@@ -1,9 +1,9 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react'
-import MainLayout from '../Layouts/mainLayout';
-import LightNavbar from '../layouts/lightNavbar';
-import UserProfile from '../Components/userProfile';
-import ProfileLayout from '../Layouts/profileLayout';
+import MainLayout from '../../Layouts/mainLayout';
+import LightNavbar from '../../layouts/lightNavbar';
+import UserProfile from '../../Components/userProfile';
+import ProfileLayout from '../../Layouts/profileLayout';
 import { toast } from 'react-toastify';
 
 

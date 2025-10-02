@@ -6,12 +6,12 @@ import {
   FaMapMarkedAlt,
   FaUser,
 } from "react-icons/fa";
-import LightNavbar from "../layouts/lightNavbar";
-import MainLayout from "../Layouts/mainLayout";
+import LightNavbar from "../../layouts/lightNavbar";
+import MainLayout from "../../Layouts/mainLayout";
 import { Link, usePage } from "@inertiajs/react";
 import axios from "axios";
-import { getRandomColor } from "../Utils/getRandomColor";
-import { changeDate } from "../Utils/changeDate";
+import { getRandomColor } from "../../Utils/getRandomColor";
+import { changeDate } from "../../Utils/changeDate";
 
 // import Swiper JS
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -22,7 +22,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import backgroundImageArtikel from "../../../public/images/NO IMAGE AVAILABLE.jpg";
+import backgroundImageArtikel from "../../../../public/images/NO IMAGE AVAILABLE.jpg";
 
 interface Kategori {
   id: number;

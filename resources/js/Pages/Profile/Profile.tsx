@@ -1,13 +1,13 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react'
-import LightNavbar from '../layouts/lightNavbar';
-import UserProfile from '../Components/userProfile';
-import { changeDate } from '../Utils/changeDate';
+import LightNavbar from '../../layouts/lightNavbar';
+import UserProfile from '../../Components/userProfile';
+import { changeDate } from '../../Utils/changeDate';
 import { LucideCalendarDays, Ticket } from 'lucide-react';
-import formatTanggal from './../Utils/formatTanggal';
-import toCapitalize from './../Utils/toCapitalize';
-import ProfileLayout from '../Layouts/profileLayout';
-import { useAuth } from '../Hooks/useAuth';
+import formatTanggal from '../../Utils/formatTanggal';
+import toCapitalize from '../../Utils/toCapitalize';
+import ProfileLayout from '../../Layouts/profileLayout';
+import { useAuth } from '../../Hooks/useAuth';
 import { toast } from 'react-toastify';
 
 

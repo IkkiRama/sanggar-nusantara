@@ -1,8 +1,8 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import React, { useEffect, useRef, useState } from 'react';
-import LightNavbar from '../layouts/lightNavbar';
-import UserProfile from '../Components/userProfile';
-import ProfileLayout from '../Layouts/profileLayout';
+import LightNavbar from '../../layouts/lightNavbar';
+import UserProfile from '../../Components/userProfile';
+import ProfileLayout from '../../Layouts/profileLayout';
 
 export default function EditProfile({ user, cartCount, role }) {
     const fileInputRef = useRef();

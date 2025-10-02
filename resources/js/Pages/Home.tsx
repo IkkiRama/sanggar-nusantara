@@ -308,7 +308,7 @@ const Home = ({plans}) => {
             </section>
 
             {/* Right Section with Image Background */}
-            <section className="lg:h-[800px] text-center items-center flex justify-center flex-wrap w-full h-[300px] sm:h-full mt-12 lg:order-2 order-1">
+            <section className="lg:h-[800px] text-center items-center flex justify-center flex-wrap w-full h-[300px] sm:h-full mt-12 lg:mt-0 lg:mb-10 lg:order-2 order-1">
                 <img
                     id="headerImg"
                     src="/images/header/header.png"

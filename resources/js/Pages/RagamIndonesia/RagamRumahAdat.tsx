@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import {FaSearch, FaTimes } from "react-icons/fa";
 import React from "react";
-import MainLayout from "../Layouts/mainLayout";
-import LightNavbar from "../layouts/lightNavbar";
+import MainLayout from "../../Layouts/mainLayout";
+import LightNavbar from "../../layouts/lightNavbar";
 import { MdHouse } from "react-icons/md";
 import { FaMapLocation } from "react-icons/fa6";
 

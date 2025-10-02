@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 
 // icons
-import MainLayout from "../Layouts/mainLayout";
-import LightNavbar from "../layouts/lightNavbar";
+import MainLayout from "../../Layouts/mainLayout";
+import LightNavbar from "../../layouts/lightNavbar";
 
 
 
@@ -10,7 +10,7 @@ import axios from "axios";
 import { motion } from 'framer-motion';
 import { FaCalendar, FaMapMarkedAlt } from 'react-icons/fa';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { changeDate } from './../Utils/changeDate';
+import { changeDate } from '../../Utils/changeDate';
 import { Filter, MapPin, Search, SlidersHorizontal, X } from "lucide-react";
 
 const fadeInUpAnimation = {

@@ -9,7 +9,11 @@ import {
     FaTicketAlt,
     FaSun,
     FaMoon,
-    FaShoppingBag
+    FaShoppingBag,
+    FaQuestionCircle,
+    FaFlagCheckered,
+    FaRobot,
+    FaMapMarkedAlt
 } from 'react-icons/fa';
 
 import { FaEarthAsia } from 'react-icons/fa6';
@@ -19,33 +23,19 @@ import LanguageSelector from './../Components/LanguageSelector';
 const NAV_ITEMS = [
     { path: '/', label: 'Beranda', icon: FaHome },
     { path: '/event', label: 'Event', icon: FaTicketAlt },
-    { path: '/ragam-indonesia', label: 'Ragam Indonesia', icon: FaEarthAsia },
+    {
+        label: 'Ragam Indonesia',
+        icon: FaEarthAsia,
+        dropdown: [
+            { path: '/ragam-indonesia', label: 'Ragam Indonesia', icon: FaEarthAsia },
+            { path: '/peta-interaktif', label: 'Peta Interaktif', icon: FaMapMarkedAlt },
+            { path: '/nusantara-ai', label: 'Nusantara AI', icon: FaRobot },
+            { path: '/ragam-challenge', label: 'Ragam Challenge', icon: FaFlagCheckered },
+            { path: '/kuis-nusantara', label: 'Kuis Nusantara', icon: FaQuestionCircle },
+        ]
+    },
     { path: '/artikel', label: 'Artikel', icon: FaBookOpen },
 ];
-
-// const BOTTOM_NAV_ITEMS = [
-//     { path: '/', label: 'Beranda', icon: FaHome },
-//     {
-//         id: 'about',
-//         label: 'Tentang',
-//         icon: FaInfoCircle,
-//         dropdown: [
-//             { path: '/genbi-point', label: 'GenBI Point', icon: FaStar },
-//             { path: '/tentang', label: 'Tentang GenBI', icon: FaInfoCircle },
-//             { path: '/organisasi', label: 'Organisasi', icon: FaBuilding }
-//         ]
-//     },
-//     {
-//         id: 'media',
-//         label: 'Media',
-//         icon: FaFolder,
-//         dropdown: [
-//             { path: '/artikel', label: 'Artikel', icon: BookOpen },
-//             { path: '/podcast', label: 'Podcast', icon: FaPodcast }
-//         ]
-//     },
-//     { path: '/contact', label: 'Kontak', icon: FaEnvelope }
-// ];
 
 // Memoized Components
 //@ts-ignore
@@ -83,7 +73,7 @@ const DesktopNavItem = memo(({ item, isActive, isDark, activeDropdown, onDropdow
             <div className="relative">
                 <button
                     onClick={() => onDropdownToggle(item.id)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center ${
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center cursor-pointer ${
                         isActive
                             ? ' text-red-500'
                             : isDark
@@ -306,35 +296,15 @@ const Navbar = ({user, cartCount}) => {
                                 </div>
                             ) : (
                                 <>
-                                    {/* <Link
-                                        href="/admin/login"
-                                        className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-white/80 text-red-600 hover:bg-blue-50 shadow-lg`}
-                                    >
-                                        Daftar
-                                    </Link> */}
-                                    <a
-                                        href="/admin/login"
+                                    <Link
+                                        href="/masuk"
                                         className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-white bg-red-500 hover:bg-red-400 shadow-lg`}
                                     >
                                         Masuk
-                                    </a>
+                                    </Link>
                                 </>
                             )}
 
-
-
-                            {/* <Link
-                                href="/admin/login"
-                                className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-white/80 text-red-600 hover:bg-blue-50 shadow-lg`}
-                            >
-                                Daftar
-                            </Link>
-                            <Link
-                                href="/admin/login"
-                                className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-white bg-red-500 hover:bg-blue-50 shadow-lg`}
-                            >
-                                Masuk
-                            </Link> */}
                         </div>
 
                         {/* Mobile Menu Button */}
@@ -470,7 +440,7 @@ const Navbar = ({user, cartCount}) => {
                                                     onClick={handleItemClick}
                                                     isActive={url === '/profile/dashboard'}
                                                 />
-                                                <a
+                                                <Link
                                                     href="/logout"
                                                     onClick={handleItemClick}
                                                     className={`w-full flex items-center space-x-3 p-3 rounded-xl text-red-600 hover:bg-red-50 transition-all duration-200`}
@@ -479,11 +449,11 @@ const Navbar = ({user, cartCount}) => {
                                                         <FaSignOutAlt className="w-5 h-5" />
                                                     </div>
                                                     <span className="font-medium">Logout</span>
-                                                </a>
+                                                </Link>
                                             </div>
                                         ) : (
-                                            <a
-                                                href="/admin/login"
+                                            <Link
+                                                href="/masuk"
                                                 className={`flex items-center space-x-3 p-3 rounded-xl text-blue-600 hover:bg-blue-50 transition-all duration-200`}
                                                 onClick={handleItemClick}
                                             >
@@ -491,7 +461,7 @@ const Navbar = ({user, cartCount}) => {
                                                     <FaUser className="w-5 h-5" />
                                                 </div>
                                                 <span className="font-medium">Masuk</span>
-                                            </a>
+                                            </Link>
                                         )}
 
                                         {/* <Link
@@ -517,7 +487,7 @@ const Navbar = ({user, cartCount}) => {
             {/* Click Away Listener */}
             {(isProfileOpen || isMenuOpen || activeDropdown) && (
                 <div
-                    className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
+                    className="fixed inset-0 z-40 bg-black/20 backdrop-blur-md"
                     onClick={() => {
                         setIsProfileOpen(false);
                         setIsMenuOpen(false);

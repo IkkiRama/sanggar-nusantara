@@ -1,4 +1,4 @@
-import HeaderSlider from "../layouts/headerSlider";
+import HeaderSlider from "../../layouts/headerSlider";
 import { useEffect, useRef, useState } from "react";
 
 import { Link, usePage } from '@inertiajs/react';
@@ -22,8 +22,8 @@ import { MdOutlinePiano } from "react-icons/md";
 import { Accordion, AccordionItem } from "react-light-accordion";
 import "react-light-accordion/demo/css/index.css";
 
-import songs from "./../data/songs.json";
-import musics from "./../data/musics.json";
+import songs from "../../data/songs.json";
+import musics from "../../data/musics.json";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -38,8 +38,8 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 import ReactCardSlider from "react-card-slider-component";
 import React from "react";
-import MainLayout from "../Layouts/mainLayout";
-import LightNavbar from "../layouts/lightNavbar";
+import MainLayout from "../../Layouts/mainLayout";
+import LightNavbar from "../../layouts/lightNavbar";
 
 export default function RagamIndonesia() {
     const { user, cartCount } = usePage().props;

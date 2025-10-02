@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { FaCalendar, FaUser } from "react-icons/fa";
 
-import content from "./../data/content.json";
+import content from "../../data/content.json";
 import React from "react";
-import LightNavbar from "../layouts/lightNavbar";
-import MainLayout from "../Layouts/mainLayout";
+import LightNavbar from "../../layouts/lightNavbar";
+import MainLayout from "../../Layouts/mainLayout";
 import { Link, usePage } from "@inertiajs/react";
-import ShareButton from './../Components/ShareButton';
-import { getRandomColor } from "../Utils/getRandomColor";
-import { changeDate } from "../Utils/changeDate";
-import { estimateReadingTime } from './../Utils/estimateReadingTime';
+import ShareButton from '../../Components/ShareButton';
+import { getRandomColor } from "../../Utils/getRandomColor";
+import { changeDate } from "../../Utils/changeDate";
+import { estimateReadingTime } from '../../Utils/estimateReadingTime';
 import { Lock } from "lucide-react";
 
 import type {
@@ -17,7 +17,7 @@ import type {
   RekomendasiArtikel as RekomendasiArtikelType,
   Komentar as KomentarType,
   IUser,
-} from '../types/artikel'; // Pastikan path-nya sesuai ya
+} from '../../types/artikel'; // Pastikan path-nya sesuai ya
 
 interface PageProps {
   user: IUser | null;

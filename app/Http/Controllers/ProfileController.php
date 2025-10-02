@@ -87,7 +87,7 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
-        return Inertia::render('Profile', [
+        return Inertia::render('Profile/Profile', [
             'user' => $user,
             'role' => $user->getRoleNames()->first(), // Ambil satu role
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
@@ -120,7 +120,7 @@ class ProfileController extends Controller
 
         return response()->json(['message' => 'Pesanan berhasil dibatalkan.']);
     }
-    
+
     public function invoice($orderId)
     {
         // Pastikan user terautentikasi
@@ -153,7 +153,7 @@ class ProfileController extends Controller
         // Hitung jumlah item di keranjang user
         $cartCount = Cart::where('user_id', $user->id)->sum('jumlah');
 
-        return Inertia::render('Invoice', [
+        return Inertia::render('Profile/Invoice', [
             'user' => $user,
             'role' => $user->getRoleNames()->first(),
             'cartCount' => $cartCount,
@@ -166,19 +166,19 @@ class ProfileController extends Controller
         if (!Auth::check() || !Auth::user()->id) {
             return redirect('/admin/login');
         }
-    
+
         // Ambil order berdasarkan order_id
         $order = Order::where('order_id', $order_id)->first();
-    
+
         if (!$order) {
             return response()->json(['error' => 'Order tidak ditemukan'], 404);
         }
-    
+
         try {
             // Cek status transaksi di Midtrans
             $status = \Midtrans\Transaction::status($order->order_id);
             $transaction_status = $status->transaction_status;
-    
+
             // Jika transaksi sudah sukses, tidak perlu token baru
             if (in_array($transaction_status, ['settlement', 'capture'])) {
                 return response()->json([
@@ -186,16 +186,16 @@ class ProfileController extends Controller
                     'status' => $transaction_status
                 ]);
             }
-    
+
             // Jika transaksi masih pending dan snap_token tersedia, gunakan token lama
             if ($transaction_status === 'pending' && $order->snap_token) {
                 return response()->json(['token' => $order->snap_token]);
             }
-    
+
             // Jika transaksi gagal / expired, buat order_id baru untuk retry
             $new_order_id = $order->order_id . '-' . time();
             $order->order_id = $new_order_id;
-    
+
         } catch (\Exception $e) {
             // Jika belum pernah ada transaksi di Midtrans (misalnya error 404), lanjutkan
             if (str_contains($e->getMessage(), '404')) {
@@ -207,13 +207,13 @@ class ProfileController extends Controller
                 ], 500);
             }
         }
-    
+
         // Generate Snap Token baru
         try {
             $snapToken = $this->midtrans->getSnapToken($order);
             $order->snap_token = $snapToken;
             $order->save();
-    
+
             return response()->json(['token' => $snapToken]);
         } catch (\Exception $e) {
             return response()->json([
@@ -222,7 +222,7 @@ class ProfileController extends Controller
             ], 500);
         }
     }
-    
+
 
 
 
@@ -263,7 +263,7 @@ class ProfileController extends Controller
         })->flatten(1); // untuk menjadikan koleksi datar jika banyak pembelian dalam satu order
 
 
-        return Inertia::render('Etiket', [
+        return Inertia::render('Profile/Etiket', [
             "user" => $user = Auth::user(),
             'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
@@ -307,7 +307,7 @@ class ProfileController extends Controller
         })->flatten(1); // untuk menjadikan koleksi datar jika banyak pembelian dalam satu order
 
 
-        return Inertia::render('DownloadEtiket', [
+        return Inertia::render('Profile/DownloadEtiket', [
             "user" => $user = Auth::user(),
             'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
@@ -346,7 +346,7 @@ class ProfileController extends Controller
 
         $user = User::with('alamat')->find(Auth::id());
 
-        return Inertia::render('EditProfile', [
+        return Inertia::render('Profile/EditProfile', [
             "user" => $user,
             'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
@@ -435,7 +435,7 @@ class ProfileController extends Controller
             }
         }
 
-        return Inertia::render('TransaksiProfile', [
+        return Inertia::render('Profile/TransaksiProfile', [
             "user" => $user = Auth::user(),
             'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
@@ -449,7 +449,7 @@ class ProfileController extends Controller
             return redirect('/admin/login');
         }
 
-        return Inertia::render('UbahPassword', [
+        return Inertia::render('Profile/UbahPassword', [
             "user" => $user = Auth::user(),
             'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,

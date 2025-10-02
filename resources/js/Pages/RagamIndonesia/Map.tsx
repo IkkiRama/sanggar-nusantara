@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import GoogleMapComponent from "../components/googlemap";
+import GoogleMapComponent from "../../components/googlemap";
 import { FaMapLocation } from "react-icons/fa6";
 import React from "react";
-import LightNavbar from "../layouts/lightNavbar";
-import MainLayout from "../Layouts/mainLayout";
+import LightNavbar from "../../layouts/lightNavbar";
+import MainLayout from "../../Layouts/mainLayout";
 
 export default function Map({user, foods, alatMusik, rumahAdat, laguDaerah, bahasaDaerah, seniTari, cartCount}) {
 

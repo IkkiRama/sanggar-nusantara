@@ -166,7 +166,7 @@ class FrontController extends Controller
             ]);
         }
 
-        return Inertia::render('Event', [
+        return Inertia::render('Event/Event', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'events' => $events,
@@ -219,7 +219,7 @@ class FrontController extends Controller
             $status = 'restricted';
             $message = 'Event ini hanya tersedia penuh untuk pengguna premium.';
 
-            return Inertia::render('DetailEvent', [
+            return Inertia::render('Event/DetailEvent', [
                 "user" => $user = Auth::user(),
                 'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
                 'event' => $eventPreview,
@@ -247,7 +247,7 @@ class FrontController extends Controller
                 ->get();
         }
 
-        return Inertia::render('DetailEvent', [
+        return Inertia::render('Event/DetailEvent', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'event' => $event,
@@ -287,7 +287,7 @@ class FrontController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return Inertia::render('Artikel', [
+        return Inertia::render('Artikel/Artikel', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'artikelTerbaru' => $dataArtikel->first(),
@@ -381,12 +381,20 @@ class FrontController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Terjadi kesalahan saat memuat artikel.',
+                'message' => 'Terjadi kesalahan saat memuat artikel/',
                 'error' => $e->getMessage() // Hapus di production kalau perlu
             ], 500);
         }
     }
 
+
+    public function detailArtikel($slug){
+        return Inertia::render('Artikel/Detail', [
+            "user" => $user = Auth::user(),
+            'slug' => $slug,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
+        ]);
+    }
 
     public function subscription(){
         $plans = Plan::whereNull('deleted_at')->get();
@@ -447,14 +455,6 @@ class FrontController extends Controller
 
 
 
-    public function detailArtikel($slug){
-        return Inertia::render('Detail', [
-            "user" => $user = Auth::user(),
-            'slug' => $slug,
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
-        ]);
-    }
-
 
     public function storeKomenAPI(Request $request)
     {
@@ -496,7 +496,7 @@ class FrontController extends Controller
         $bahasaDaerah = BahasaDaerah::latest()->get();
         $seniTari = SeniTari::latest()->get();
 
-        return Inertia::render('Map', [
+        return Inertia::render('RagamIndonesia/Map', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'foods' => $foods,
@@ -509,7 +509,7 @@ class FrontController extends Controller
     }
 
     function ragamIndonesia() {
-        return Inertia::render('RagamIndonesia', [
+        return Inertia::render('RagamIndonesia/RagamIndonesia', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
         ]);
@@ -518,7 +518,7 @@ class FrontController extends Controller
     function makananKhas() {
         $foods = MakananKhas::latest()->get();
 
-        return Inertia::render('RagamMakanan', [
+        return Inertia::render('RagamIndonesia/RagamMakanan', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'foods' => $foods,
@@ -528,7 +528,7 @@ class FrontController extends Controller
     function alatMusik() {
         $alatMusik = AlatMusik::latest()->get();
 
-        return Inertia::render('RagamAlatMusik', [
+        return Inertia::render('RagamIndonesia/RagamAlatMusik', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'alatMusik' => $alatMusik,
@@ -538,7 +538,7 @@ class FrontController extends Controller
     function rumahAdat() {
         $rumahAdat = RumahAdat::latest()->get();
 
-        return Inertia::render('RagamRumahAdat', [
+        return Inertia::render('RagamIndonesia/RagamRumahAdat', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'rumahAdat' => $rumahAdat,
@@ -549,7 +549,7 @@ class FrontController extends Controller
     function laguDaerah() {
         $laguDaerah = LaguDaerah::latest()->get();
 
-        return Inertia::render('RagamLaguDaerah', [
+        return Inertia::render('RagamIndonesia/RagamLaguDaerah', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'laguDaerah' => $laguDaerah,
@@ -559,7 +559,7 @@ class FrontController extends Controller
     function bahasaDaerah() {
         $bahasaDaerah = BahasaDaerah::latest()->get();
 
-        return Inertia::render('RagamBahasadaerah', [
+        return Inertia::render('RagamIndonesia/RagamBahasadaerah', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'bahasaDaerah' => $bahasaDaerah,
@@ -569,7 +569,7 @@ class FrontController extends Controller
     function seniTari() {
         $seniTari = SeniTari::latest()->get();
 
-        return Inertia::render('RagamSeniTari', [
+        return Inertia::render('RagamIndonesia/RagamSeniTari', [
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'seniTari' => $seniTari,

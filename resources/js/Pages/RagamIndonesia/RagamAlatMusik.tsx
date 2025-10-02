@@ -5,8 +5,8 @@ import { FaArrowRight, FaBowlFood, FaMapLocation, FaMusic } from "react-icons/fa
 
 import { FaSearch, FaTimes } from "react-icons/fa";
 import React from "react";
-import MainLayout from "../Layouts/mainLayout";
-import LightNavbar from "../layouts/lightNavbar";
+import MainLayout from "../../Layouts/mainLayout";
+import LightNavbar from "../../layouts/lightNavbar";
 import { MdOutlinePiano } from "react-icons/md";
 
 interface AlatMusikItem {
