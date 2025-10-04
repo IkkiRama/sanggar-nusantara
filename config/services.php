@@ -39,6 +39,9 @@ return [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => config('app.url'). "/auth-google-callback",
+        'guzzle' => [
+            'verify' => false,
+        ],
     ],
     'midtrans' => [
         'server_key' => env('VITE_MIDTRANS_SERVER_KEY'),

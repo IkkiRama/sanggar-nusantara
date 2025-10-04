@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Services\MidtransService;
 
 
@@ -354,7 +355,8 @@ class TransaksiController extends Controller
                 return Inertia::render('WaitingPage', [
                     'status' => $transactionStatus,
                     'order' => $order,
-                    'user' => Auth::user()
+                    'user' => $user = Auth::user(),
+                    'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
                 ]);
             }
 
@@ -445,7 +447,8 @@ class TransaksiController extends Controller
 
             return Inertia::render('SuccessPage', [
                 'order' => $order,
-                'user' => Auth::user(),
+                'user' => $user = Auth::user(),
+                'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             ]);
 
         } catch (\Exception $e) {

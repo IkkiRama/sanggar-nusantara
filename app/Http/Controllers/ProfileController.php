@@ -29,7 +29,7 @@ class ProfileController extends Controller
 
     function index() {
         if (!Auth::check() || !Auth::user()->id) {
-            return redirect('/admin/login');
+            return redirect('/masuk');
         }
 
         // Ubah status order "pending" yang sudah lebih dari 24 jam jadi "kadaluarsa"
@@ -101,7 +101,7 @@ class ProfileController extends Controller
     {
 
         if (!Auth::check() || !Auth::user()->id) {
-            return redirect('/admin/login');
+            return redirect('/masuk');
         }
 
         $order = Order::where('order_id', $orderId)->first();
@@ -125,7 +125,7 @@ class ProfileController extends Controller
     {
         // Pastikan user terautentikasi
         if (!Auth::check() || !Auth::user()->id) {
-            return redirect('/admin/login');
+            return redirect('/masuk');
         }
 
         $user = Auth::user();
@@ -164,7 +164,7 @@ class ProfileController extends Controller
     public function getSnapToken($order_id)
     {
         if (!Auth::check() || !Auth::user()->id) {
-            return redirect('/admin/login');
+            return redirect('/masuk');
         }
 
         // Ambil order berdasarkan order_id
@@ -229,7 +229,7 @@ class ProfileController extends Controller
     function etiket($orderId) {
 
         if (!Auth::check() || !Auth::user()->id) {
-            return redirect('/admin/login');
+            return redirect('/masuk');
         }
 
         // Ambil user yang sedang login
@@ -274,7 +274,7 @@ class ProfileController extends Controller
     function downloadEtiket($orderId) {
 
         if (!Auth::check() || !Auth::user()->id) {
-            return redirect('/admin/login');
+            return redirect('/masuk');
         }
 
         // Ambil user yang sedang login
@@ -319,7 +319,7 @@ class ProfileController extends Controller
     {
 
         if (!Auth::check() || !Auth::user()->id) {
-            return redirect('/admin/login');
+            return redirect('/masuk');
         }
 
         $writer = new PngWriter();
@@ -341,7 +341,7 @@ class ProfileController extends Controller
     function profileEdit() {
 
         if (!Auth::check() || !Auth::user()->id) {
-            return redirect('/admin/login');
+            return redirect('/masuk');
         }
 
         $user = User::with('alamat')->find(Auth::id());
@@ -418,7 +418,7 @@ class ProfileController extends Controller
     function transaksi() {
 
         if (!Auth::check() || !Auth::user()->id) {
-            return redirect('/admin/login');
+            return redirect('/masuk');
         }
 
         // Ambil transaksi berdasarkan user yang sedang login
@@ -446,7 +446,7 @@ class ProfileController extends Controller
     function ubahPassword() {
 
         if (!Auth::check() || !Auth::user()->id) {
-            return redirect('/admin/login');
+            return redirect('/masuk');
         }
 
         return Inertia::render('Profile/UbahPassword', [

@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\NusantaraAIController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransaksiController;
 use Illuminate\Http\Request;
@@ -20,7 +21,12 @@ use Illuminate\Cache\RateLimiting\Limit;
 Route::post('/komen', [FrontController::class, 'storeKomenAPI']);
 Route::post('/kontak', [FrontController::class, 'submitKontak']);
 
+
+
 Route::get('/artikel/{slug}', [FrontController::class, 'showArtikel']);
+
+// Route::middleware(['auth:sanctum'])->group(function () {
+// });
 
 Route::middleware(['web'])->group(function () {
     Route::post('/midtrans-callback', [TransaksiController::class, 'updateTransaction']); // Callback Midtrans

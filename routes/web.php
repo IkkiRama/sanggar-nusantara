@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\NusantaraAIController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransaksiController;
 use App\Models\Cart;
@@ -46,10 +47,16 @@ Route::get('/ragam-indonesia/seni-tari', [FrontController::class, 'seniTari']);
 Route::get('/ragam-indonesia/lagu-daerah', [FrontController::class, 'laguDaerah']);
 Route::get('/ragam-indonesia/makanan-khas', [FrontController::class, 'makananKhas']);
 
+Route::get('/nusantara-ai', [FrontController::class, 'nusantaraAI']);
+
+
 // Route::get('/admin/login', [AuthController::class, 'login'])->name("login");
-Route::get('/auth-google-redirect', [AuthController::class, 'google-redirect']);
-Route::get('/auth-google-callback', [AuthController::class, 'google-callback']);
-Route::get('/masuk', [AuthController::class, 'login']);
+Route::get('/auth-google-redirect', [AuthController::class, 'googleRedirect']);
+Route::get('/auth-google-callback', [AuthController::class, 'googleCallback']);
+Route::get('/masuk', [AuthController::class, 'login'])->name("login");
+
+Route::get('/syarat', [AuthController::class, 'syarat']);
+Route::get('/kebijakan-privasi', [AuthController::class, 'kebijakanPrivasi']);
 // Route::get('/login', function () {
 //     return redirect('/admin/login');
 // })->name('masuk');
@@ -59,11 +66,13 @@ Route::get('/masuk', [AuthController::class, 'login']);
 //     return dd(Auth::guard('sanctum')->user());
 // });
 
+Route::post('/nusantara/ask', [NusantaraAIController::class, 'ask']);
 
 // Route untuk user yang sudah login (auth)
-Route::middleware(['web'])->group(function () {
-// Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['web', 'auth'])->group(function () {
+    // Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
     Route::get('/profile/dashboard', [ProfileController::class, 'index']);
     Route::get('/profile/invoice/{orderId}', [ProfileController::class, 'invoice']);

@@ -21,7 +21,7 @@ export default function Profile({pembelianEvents, user, cartCount, subscription,
 
     useEffect(() => {
         if (!user) {
-            window.location.href = '/admin/login'; // Redirect ke halaman login jika belum login
+            window.location.href = '/masuk'; // Redirect ke halaman login jika belum login
         } else {
             setIsChecking(false);
         }
