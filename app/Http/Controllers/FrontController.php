@@ -633,5 +633,16 @@ class FrontController extends Controller
         ]);
     }
 
+    function nusantaraAI() {
+        // if (!Auth::check() || !Auth::user()->id) {
+        //     return redirect('/masuk');
+        // }
+
+        return Inertia::render('NusantaraAI/NusantaraAI', [
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
+        ]);
+    }
+
 
 }

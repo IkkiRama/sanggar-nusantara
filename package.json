@@ -18,6 +18,7 @@
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
+        "@google/genai": "^1.22.0",
         "@inertiajs/react": "^2.0.3",
         "@mui/material": "^6.4.6",
         "@react-google-maps/api": "^2.20.6",
@@ -28,12 +29,15 @@
         "aos": "^2.3.4",
         "framer-motion": "^12.4.7",
         "lucide-react": "^0.477.0",
+        "marked": "^16.3.0",
         "qrcode.react": "^4.2.0",
         "react": "^19.0.0",
         "react-card-slider-component": "^1.0.9",
         "react-dom": "^19.0.0",
+        "react-markdown": "^10.1.0",
         "react-router-dom": "^7.2.0",
         "react-toastify": "^11.0.5",
+        "remark-gfm": "^2.0.0",
         "swiper": "^11.2.5",
         "typescript": "^5.8.2",
         "yet-another-react-lightbox": "^3.21.7"

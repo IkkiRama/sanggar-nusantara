@@ -16,6 +16,10 @@ class CartController extends Controller
 
     public function index(Request $request)
     {
+        if (!$request->user() || !Auth::check()) {
+            return redirect("/masuk");
+        }
+
         $userId = $request->user()->id;
 
         // Ambil semua item cart milik user
