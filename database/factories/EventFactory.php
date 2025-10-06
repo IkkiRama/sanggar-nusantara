@@ -26,7 +26,6 @@ class EventFactory extends Factory
             'excerpt' => $this->faker->text(100),
             'deskripsi' => $this->faker->paragraphs(3, true),
             'tempat' => $this->faker->address,
-            'tanggal' => $this->faker->date,
             'link_gmap' => $this->faker->url,
         ];
     }

@@ -20,6 +20,7 @@ class HargaEventFactory extends Factory
             'event_id' => \App\Models\Event::factory(),
             'nama' => $this->faker->word,
             'harga' => $this->faker->randomFloat(2, 10000, 1000000),
+            'kuota' => $this->faker->numberBetween(10, 100),
             'deskripsi' => $this->faker->paragraph,
             'tanggal_mulai' => $this->faker->dateTimeBetween('now', '+1 month')->format('Y-m-d H:i:s'),
             'tanggal_selesai' => $this->faker->dateTimeBetween('+1 month', '+2 months')->format('Y-m-d H:i:s'),

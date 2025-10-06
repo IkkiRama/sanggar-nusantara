@@ -24,7 +24,7 @@ class AlamatFactory extends Factory
             'provinsi' => $this->faker->state(),
             'kecamatan' => $this->faker->city(),
             'desa' => $this->faker->city(),
-            'kode_pos' => $this->faker->postcode(),
+            'kode_pos' => $this->faker->numerify('#####'),
         ];
     }
 }

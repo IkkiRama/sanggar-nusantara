@@ -22,7 +22,6 @@ return new class extends Migration
             $table->text('excerpt');
             $table->longText('deskripsi');
             $table->string('tempat');
-            $table->timestamps('tanggal');
             $table->text('link_gmap')->nullable();
             $table->timestamps();
             $table->softDeletes();

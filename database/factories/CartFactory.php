@@ -19,7 +19,7 @@ class CartFactory extends Factory
         return [
             'user_id' => 1,
             'item_id' => $this->faker->randomNumber(),
-            'item_type' => $this->faker->randomElement(['event', 'produk']),
+            'item_type' => $this->faker->randomElement(['event', 'product']),
             'jumlah' => $this->faker->numberBetween(1, 10),
             'variasi' => $this->faker->numberBetween(1, 10),
             'harga' => $this->faker->numberBetween(1, 10),
