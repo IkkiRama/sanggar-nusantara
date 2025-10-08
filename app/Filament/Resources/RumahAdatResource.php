@@ -71,7 +71,9 @@ class RumahAdatResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->square()
+                    ->defaultImageUrl(url('/images/NO IMAGE AVAILABLE.jpg')),
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('asal')

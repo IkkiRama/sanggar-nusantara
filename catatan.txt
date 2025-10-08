@@ -29,5 +29,91 @@ KALAU SEMISAL ANDA TIDAK PAKAI LARAGON, HARAP LINK ITU DIGANTI JADI LOCALHOST DA
 
 
 ganti gamabr jadi webp
-add sso
-add 3 fitur
+add 2 fitur
+
+
+🎯 1. Dashboard
+
+Overview cepat buat admin
+
+Total user aktif
+
+Jumlah challenge berjalan & selesai
+
+Jumlah total poin yang diberikan
+
+Top 5 user dengan poin terbanyak
+
+Grafik partisipasi challenge per minggu
+
+(Bisa pakai Filament Widgets)
+
+
+
+
+🧩 2. Challenge Management
+
+Semua hal terkait challenge
+
+Tabs / Sections:
+
+📋 Challenge List
+CRUD untuk challenge (title, description, image, nusantara_points, durasi dsb)
+
+👥 Participants
+Lihat siapa saja yang ikut tiap challenge
+
+📆 Progress Verification
+Admin bisa melihat & verifikasi bukti harian user (proof_image, is_verified)
+
+🏁 Completed Challenges
+List challenge yang sudah selesai + user yang dapat poin
+
+
+
+💰 3. Poin Management
+
+Untuk kontrol dan monitoring sistem poin
+
+Tabs:
+
+🎁 Earned Points
+Semua poin yang diberikan (nusantara_points)
+
+💸 Point Usages
+Lihat semua penggunaan poin (nusantara_point_usages)
+
+🏆 Leaderboard
+Urutkan user berdasarkan total poin (bisa jadi widget atau table resource custom)
+
+(Tambahan bonus kalau mau: tombol “Add Manual Points” buat admin kasih bonus poin khusus)
+
+
+
+🛍️ 4. Merchandise & Event Store
+
+Manajemen penukaran poin user
+
+Tabs:
+
+🎫 Produk & Tiket
+CRUD produk & tiket event yang bisa ditukar dengan poin
+
+🧾 Transactions
+Lihat pembelian user (pakai pembelian_id)
+
+📦 Point Redemptions
+List penggunaan poin untuk pembelian (nusantara_point_usages)
+
+
+
+
+🧾 6. System Logs (Opsional)
+
+Untuk audit trail dan tracking internal
+
+Log perubahan data challenge
+
+Log verifikasi progress
+
+Log pemberian & penggunaan poin

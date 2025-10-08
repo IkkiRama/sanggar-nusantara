@@ -94,4 +94,24 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Komentar::class, 'artikel_id');
     }
+
+     // Relasi ke semua poin yang diperoleh
+    public function nusantaraPoints(): HasMany
+    {
+        return $this->hasMany(NusantaraPoint::class);
+    }
+
+    // Relasi ke semua penggunaan poin
+    public function nusantaraPointUsages(): HasMany
+    {
+        return $this->hasMany(NusantaraPointUsage::class);
+    }
+
+    // Accessor: hitung total poin yang tersedia
+    public function getTotalPointsAttribute(): int
+    {
+        $earned = $this->nusantaraPoints()->sum('amount');
+        $used = $this->nusantaraPointUsages()->sum('points_used');
+        return $earned - $used;
+    }
 }

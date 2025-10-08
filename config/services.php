@@ -47,7 +47,7 @@ return [
         'server_key' => env('VITE_MIDTRANS_SERVER_KEY'),
         'client_key' => env('VITE_MIDTRANS_CLIENT_KEY'),
         'is_production' => env('VITE_MIDTRANS_IS_PRODUCTION', false),
-        'notification_url' => env('VITE_MIDTRANS_NOTIFICATION_URL', 'http://sanggar-nusantara.test/api/midtrans/callback'),
+        'notification_url' => env('VITE_MIDTRANS_NOTIFICATION_URL', 'http://localhost:8000/api/midtrans/callback'),
     ],
 
 
