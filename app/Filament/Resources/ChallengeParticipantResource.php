@@ -47,6 +47,8 @@ class ChallengeParticipantResource extends Resource
                     ->options([
                         'in_progres' => 'In Progres',
                         'completed' => 'Completed',
+                        'failed' => 'Failed',
+                        'rejected' => 'Rejected',
                     ])
                     ->default('in_progres')
                     ->required(),
@@ -84,10 +86,14 @@ class ChallengeParticipantResource extends Resource
                     ->colors([
                         'warning' => 'in_progres',
                         'success' => 'completed',
+                        'danger' => 'failed',
+                        'danger' => 'rejected',
                     ])
                     ->icons([
-                        'heroicon-o-clock' => 'in_progres',
+                        'heroicon-o-clock' => 'in progres',
                         'heroicon-o-check-circle' => 'completed',
+                        'heroicon-o-x-circle' => 'failed',
+                        'heroicon-o-ban' => 'rejected',
                     ])
                     ->sortable(),
 
@@ -109,15 +115,18 @@ class ChallengeParticipantResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
                 SelectFilter::make('status')
+                    ->label('Status')
                     ->options([
-                        'in_progres' => 'In Progres',
+                        'in_progress' => 'In Progress',
                         'completed' => 'Completed',
+                        'failed' => 'Failed',
+                        'rejected' => 'Rejected',
                     ]),
             ])
             ->actions([
                 Tables\Actions\Action::make('view')
                     ->label('View Detail')
-                     ->color('info')
+                    ->color('info')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('Challenge Progress')
                     ->modalWidth('4xl')

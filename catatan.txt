@@ -90,23 +90,6 @@ Urutkan user berdasarkan total poin (bisa jadi widget atau table resource custom
 
 
 
-🛍️ 4. Merchandise & Event Store
-
-Manajemen penukaran poin user
-
-Tabs:
-
-🎫 Produk & Tiket
-CRUD produk & tiket event yang bisa ditukar dengan poin
-
-🧾 Transactions
-Lihat pembelian user (pakai pembelian_id)
-
-📦 Point Redemptions
-List penggunaan poin untuk pembelian (nusantara_point_usages)
-
-
-
 
 🧾 6. System Logs (Opsional)
 

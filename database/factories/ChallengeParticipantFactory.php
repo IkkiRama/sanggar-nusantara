@@ -21,7 +21,7 @@ class ChallengeParticipantFactory extends Factory
         return [
             'user_id' => User::factory(),
             'challenge_id' => Challenge::factory(),
-            'status' => $this->faker->randomElement(['in_progres', 'completed']),
+            'status' => $this->faker->randomElement(['in_progres', 'completed', 'failed', 'rejected']),
             'started_at' => now(),
             'completed_at' => now(),
         ];

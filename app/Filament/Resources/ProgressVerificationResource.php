@@ -34,18 +34,15 @@ class ProgressVerificationResource extends Resource
                 Forms\Components\Select::make('challenge_participant_id')
                     ->relationship('participant', 'id')
                     ->label('Participant')
-                    ->options(ChallengeParticipant::all()->pluck('user.name', 'id'))
-                    ->disabled(),
+                    ->options(ChallengeParticipant::all()->pluck('user.name', 'id')),
 
                 Forms\Components\Select::make('challenge_participant_id')
                     ->relationship('participant', 'id')
                     ->label('Challenge')
-                    ->options(ChallengeParticipant::all()->pluck('challenge.title', 'id'))
-                    ->disabled(),
+                    ->options(ChallengeParticipant::all()->pluck('challenge.title', 'id')),
 
                 Forms\Components\TextInput::make('day_number')
-                    ->label('Day')
-                    ->disabled(),
+                    ->label('Day'),
 
                 Forms\Components\Select::make('status')
                     ->label('Verification Status')
@@ -59,7 +56,6 @@ class ProgressVerificationResource extends Resource
                 Forms\Components\FileUpload::make('image_bukti')
                     ->label('Gambar Bukti')
                     ->image()
-                    ->disabled()
                     ->columnSpanFull(),
 
                 Forms\Components\Textarea::make('admin_note')
@@ -93,7 +89,8 @@ class ProgressVerificationResource extends Resource
                 ImageColumn::make('image_bukti')
                     ->label('Bukti')
                     ->square()
-                    ->height(50),
+                    ->height(50)
+                    ->defaultImageUrl(url('/images/NO IMAGE AVAILABLE.jpg')),
 
                 TextColumn::make('status')
                     ->badge()
@@ -122,21 +119,48 @@ class ProgressVerificationResource extends Resource
             ->actions([
                 Tables\Actions\Action::make('verify')
                     ->label('Verify')
-                    ->tooltip('Verify progress')
-                    ->icon('heroicon-o-check')
-                    ->color('success')
-                    ->visible(fn ($record) => $record->status === 'pending')
-                    ->requiresConfirmation()
-                    ->action(fn ($record) => $record->update(['status' => 'approved'])),
+                    ->icon('heroicon-o-check-circle')
+                    ->color(fn ($record) => match ($record->status) {
+                        'approved' => 'success',
+                        'rejected' => 'danger',
+                        'pending' => 'gray',
+                        default => 'gray',
+                    })
+                    ->form(function ($record) {
+                        return [
+                            Forms\Components\ViewField::make('image_bukti')
+                                ->view('filament.forms.components.image-preview')
+                                ->label('Bukti Gambar')
+                                ->columnSpanFull(),
 
-                Tables\Actions\Action::make('reject')
-                    ->label('Reject')
-                    ->icon('heroicon-o-x-mark')
-                    ->tooltip('Reject progress')
-                    ->color('danger')
-                    ->visible(fn ($record) => $record->status !== 'rejected')
-                    ->requiresConfirmation()
-                    ->action(fn ($record) => $record->update(['status' => 'rejected'])),
+                            Forms\Components\Select::make('status')
+                                ->label('Verification Status')
+                                ->options([
+                                    'approved' => 'Approved',
+                                    'pending' => 'Pending',
+                                    'rejected' => 'Rejected',
+                                ])
+                                ->default($record->status)
+                                ->required(),
+
+                            Forms\Components\Textarea::make('admin_note')
+                                ->label('Admin Note')
+                                ->default($record->admin_note)
+                                ->maxLength(255)
+                                ->placeholder('Optional note about verification result.'),
+                        ];
+                    })
+                    ->modalHeading('Verify Progress')
+                    ->modalSubmitActionLabel('Save Verification')
+                    ->modalWidth('lg')
+                    ->requiresConfirmation(false)
+                    ->action(function ($record, array $data): void {
+                        $record->update([
+                            'status' => $data['status'],
+                            'admin_note' => $data['admin_note'] ?? null,
+                        ]);
+                    }),
+
 
                 Tables\Actions\EditAction::make()
                     ->color('warning'),

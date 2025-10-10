@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('challenge_participants', function (Blueprint $table) {
+        Schema::create('quiz_attempts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('quiz_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('challenge_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['in_progress', 'completed', 'failed', 'rejected'])->default('in_progress');
+            $table->integer('score')->default(0);
+            $table->text('recomendation');
             $table->timestamp('started_at')->nullable();
-            $table->timestamp('completed_at')->nullable();
+            $table->timestamp('finished_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('challenge_participants');
+        Schema::dropIfExists('quiz_attempts');
     }
 };

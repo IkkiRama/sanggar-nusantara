@@ -114,4 +114,9 @@ class User extends Authenticatable implements FilamentUser
         $used = $this->nusantaraPointUsages()->sum('points_used');
         return $earned - $used;
     }
+
+    public function quizAttempt(): HasMany
+    {
+        return $this->hasMany(QuizAttempt::class);
+    }
 }
