@@ -35,6 +35,7 @@ class QuizResource extends Resource
     protected static ?string $navigationGroup = '🧠 Kuis Nusantara';
     protected static ?string $pluralModelLabel = 'Daftar Kuis';
     protected static ?string $slug = 'kuis';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
