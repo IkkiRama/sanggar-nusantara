@@ -369,14 +369,14 @@ const Navbar = ({user, cartCount}) => {
                                                             onClick={() => toggleDropdown(item.id)}
                                                             className={`w-full flex items-center justify-between p-3 rounded-xl ${
                                                                 isDropdownItemActive(item.dropdown)
-                                                                    ? 'bg-blue-600 text-white'
+                                                                    ? 'bg-red-600 text-white'
                                                                     : 'text-gray-700 hover:bg-gray-100'
                                                             } transition-all duration-200`}
                                                         >
                                                             <div className="flex items-center space-x-3">
                                                                 <div className={`size-9 rounded-xl flex items-center justify-center ${
                                                                     isDropdownItemActive(item.dropdown)
-                                                                        ? 'bg-blue-500'
+                                                                        ? 'bg-red-500'
                                                                         : 'bg-gray-100'
                                                                 }`}>
                                                                     <item.icon className="w-5 h-5" />
@@ -454,10 +454,10 @@ const Navbar = ({user, cartCount}) => {
                                         ) : (
                                             <Link
                                                 href="/masuk"
-                                                className={`flex items-center space-x-3 p-3 rounded-xl text-blue-600 hover:bg-blue-50 transition-all duration-200`}
+                                                className={`flex items-center space-x-3 p-3 rounded-xl text-red-600 hover:bg-red-50 transition-all duration-200`}
                                                 onClick={handleItemClick}
                                             >
-                                                <div className={`size-9 rounded-xl flex items-center justify-center bg-blue-50`}>
+                                                <div className={`size-9 rounded-xl flex items-center justify-center bg-red-50`}>
                                                     <FaUser className="w-5 h-5" />
                                                 </div>
                                                 <span className="font-medium">Masuk</span>

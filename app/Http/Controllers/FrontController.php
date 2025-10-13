@@ -6,6 +6,9 @@ use App\Models\AlatMusik;
 use App\Models\Artikel;
 use App\Models\BahasaDaerah;
 use App\Models\Cart;
+use App\Models\Challenge;
+use App\Models\ChallengeParticipant;
+use App\Models\ChallengeProgres;
 use App\Models\Discount;
 use App\Models\DiscountUser;
 use App\Models\Event;
@@ -642,6 +645,163 @@ class FrontController extends Controller
             "user" => $user = Auth::user(),
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
         ]);
+    }
+
+    function ragamChallenge() {
+        // if (!Auth::check() || !Auth::user()->id) {
+        //     return redirect('/masuk');
+        // }
+
+        return Inertia::render('RagamChallenge/Challenge', [
+            "challenges" => Challenge::orderBy('created_at', 'desc')->get(),
+            "user" => $user = Auth::user(),
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
+        ]);
+    }
+
+    public function detailRagamChallenge($slug)
+    {
+        $user = Auth::user();
+        $challenge = Challenge::where('slug', $slug)->firstOrFail();
+
+        $participant = null;
+
+        if ($user) {
+            $participant = ChallengeParticipant::where('user_id', $user->id)
+                ->where('challenge_id', $challenge->id)
+                ->whereIn('status', ['in_progres', 'completed'])
+                ->latest()
+                ->first();
+
+            // Jika participant ditemukan dan masih "in_progres"
+            if ($participant && $participant->status === 'in_progres') {
+                $durationDays = $challenge->duration_days;
+                $endDate = Carbon::parse($participant->started_at)->addDays($durationDays);
+
+                // Jika sudah lewat durasi, ubah status menjadi failed
+                if (Carbon::now()->greaterThan($endDate)) {
+                    $participant->update(['status' => 'failed']);
+                }
+            }
+        }
+
+        return Inertia::render('RagamChallenge/DetailChallenge', [
+            'user' => $user,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
+            'challenge' => $challenge,
+            'participant' => $participant,
+        ]);
+    }
+
+    // Ikuti challenge
+    public function joinChallenge($id)
+    {
+        $user = Auth::user();
+        $challenge = Challenge::findOrFail($id);
+
+        // Role validation
+        if ($challenge->status === 'premium' && !in_array($user->role, ['admin', 'premium'])) {
+            return back()->with('error', 'Challenge ini hanya untuk pengguna premium.');
+        }
+
+        // Sudah ikut?
+        $existing = ChallengeParticipant::where('user_id', $user->id)
+            ->where('challenge_id', $challenge->id)
+            ->whereIn('status', ['in_progres'])
+            ->first();
+
+        if ($existing) {
+            return back()->with('warning', 'Kamu sudah mengikuti challenge ini dan belum selesai.');
+        }
+
+        ChallengeParticipant::create([
+            'user_id' => $user->id,
+            'challenge_id' => $challenge->id,
+            'status' => 'in_progres',
+            'started_at' => Carbon::now(),
+        ]);
+
+        return back()->with('success', 'Kamu berhasil mengikuti challenge!');
+    }
+
+    // Hentikan challenge
+    public function stopChallenge($id)
+    {
+        $user = Auth::user();
+
+        $participant = ChallengeParticipant::where('user_id', $user->id)
+            ->where('challenge_id', $id)
+            ->where('status', 'in_progres')
+            ->firstOrFail();
+
+        $participant->update([
+            'status' => 'failed',
+            'completed_at' => Carbon::now(),
+        ]);
+
+        return back()->with('info', 'Challenge telah dihentikan.');
+    }
+
+    public function challengeProgres($slug)
+    {
+        $user = auth()->user();
+
+        // Cari challenge berdasarkan slug
+        $challenge = Challenge::where('slug', $slug)->firstOrFail();
+
+        // Cari participant berdasarkan user + challenge
+        $participant = ChallengeParticipant::with('challenge')
+            ->where('challenge_id', $challenge->id)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        // Hitung tanggal selesai berdasarkan duration_days
+        $duration = $challenge->duration_days;
+        $endDate = Carbon::parse($participant->started_at)->addDays($duration);
+
+        // Jika sudah lewat dari endDate dan status masih "in_progres", ubah jadi failed
+        if (Carbon::now()->greaterThan($endDate) && $participant->status === 'in_progres') {
+            $participant->update(['status' => 'failed']);
+        }
+
+        // Ambil semua progres peserta
+        $progres = ChallengeProgres::where('challenge_participant_id', $participant->id)
+            ->orderBy('day_number', 'asc')
+            ->get();
+
+        // Cek apakah sudah upload hari ini
+        $uploadedToday = $progres->contains(function ($item) {
+            return Carbon::parse($item->created_at)->isToday();
+        });
+
+        // Kirim data ke Inertia
+        return inertia('RagamChallenge/ChallengeProgres', [
+            'user' => $user,
+            'participant' => $participant,
+            'progres' => $progres,
+            'uploadedToday' => $uploadedToday,
+            'expired' => Carbon::now()->greaterThan($endDate),
+        ]);
+    }
+
+    public function storeChallengeProgres(Request $request, $participantId)
+    {
+        $request->validate([
+            'image_bukti' => 'required|image|max:2048',
+        ]);
+
+        $participant = ChallengeParticipant::findOrFail($participantId);
+
+        $path = $request->file('image_bukti')->store('challenge_progres', 'public');
+
+        ChallengeProgres::create([
+            'challenge_participant_id' => $participant->id,
+            'day_number' => ChallengeProgres::where('challenge_participant_id', $participant->id)->count() + 1,
+            'image_bukti' => $path,
+            'status' => 'pending',
+        ]);
+
+        return back()->with('success', 'Bukti berhasil dikirim!');
     }
 
 

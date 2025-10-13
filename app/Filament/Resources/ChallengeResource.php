@@ -50,8 +50,17 @@ class ChallengeResource extends Resource
                     ->label('Reward Points')
                     ->numeric()
                     ->required()
-                    ->columnSpanFull()
                     ->helperText('Poin yang akan diterima user setelah menyelesaikan challenge ini.'),
+
+                Forms\Components\Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'premium' => 'Premium',
+                        'gratis'  => 'Gratis',
+                    ])
+                    ->default('gratis')
+                    ->required()
+                    ->helperText('Tentukan apakah challenge ini berbayar (premium) atau gratis.'),
 
                 Forms\Components\FileUpload::make('image')
                     ->label('Challenge Image')

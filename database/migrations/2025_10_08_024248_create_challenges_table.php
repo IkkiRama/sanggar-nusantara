@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->unique();
             $table->string('slug')->unique();
+            $table->enum('status', ['premium', 'gratis']);
             $table->text('description');
             $table->string('image')->nullable();
             $table->integer('duration_days')->default(0);

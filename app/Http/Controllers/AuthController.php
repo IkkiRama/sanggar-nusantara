@@ -43,7 +43,7 @@ class AuthController extends Controller
         ],
         [
             'name' => $googleUser->getName(),
-            'image' => $googleUser->getAvatar(),
+            // 'image' => $googleUser->getAvatar(),
             'email_verified_at' => now()
         ]);
 

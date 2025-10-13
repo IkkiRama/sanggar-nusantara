@@ -183,7 +183,7 @@ export default function Event() {
                                 <button
                                     key={tab}
                                     onClick={() => setTabActive(tab)}
-                                    className={` font-semibold cursor-pointer px-4 py-2 ${tabActive === tab ? "text-blue-600" : "text-gray-500" }`}
+                                    className={` font-semibold cursor-pointer px-4 py-2 ${tabActive === tab ? "text-red-600" : "text-gray-500" }`}
                                 >
                                     {tab}
                                 </button>

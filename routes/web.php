@@ -48,6 +48,8 @@ Route::get('/ragam-indonesia/lagu-daerah', [FrontController::class, 'laguDaerah'
 Route::get('/ragam-indonesia/makanan-khas', [FrontController::class, 'makananKhas']);
 
 Route::get('/nusantara-ai', [FrontController::class, 'nusantaraAI']);
+Route::get('/ragam-challenge', [FrontController::class, 'ragamChallenge']);
+Route::get('/ragam-challenge/{slug}', [FrontController::class, 'detailRagamChallenge']);
 
 
 // Route::get('/admin/login', [AuthController::class, 'login'])->name("login");
@@ -72,6 +74,12 @@ Route::post('/nusantara/ask', [NusantaraAIController::class, 'ask']);
 Route::middleware(['web', 'auth'])->group(function () {
     // Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::post('/ragam-challenge/{id}/join', [FrontController::class, 'joinChallenge'])->name('challenge.join');
+    Route::post('/ragam-challenge/{id}/stop', [FrontController::class, 'stopChallenge'])->name('challenge.stop');
+
+    Route::get('/ragam-challenge/{slug}/progres', [FrontController::class, 'challengeProgres'])->name('challenge.progres');
+    Route::post('/ragam-challenge/{slug}/progres', [FrontController::class, 'storeChallengeProgres'])->name('challenge.progres.store');
 
 
     Route::get('/profile/dashboard', [ProfileController::class, 'index']);

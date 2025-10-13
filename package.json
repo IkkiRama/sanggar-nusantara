@@ -18,7 +18,7 @@
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
-        "@inertiajs/react": "^2.0.3",
+        "@inertiajs/react": "^2.2.8",
         "@mui/material": "^6.4.6",
         "@react-google-maps/api": "^2.20.6",
         "@types/node": "^22.13.8",

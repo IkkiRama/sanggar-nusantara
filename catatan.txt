@@ -30,6 +30,7 @@ KALAU SEMISAL ANDA TIDAK PAKAI LARAGON, HARAP LINK ITU DIGANTI JADI LOCALHOST DA
 
 ganti gamabr jadi webp
 add 2 fitur
+edit role dan add nusantara poin
 
 
 🎯 1. Dashboard

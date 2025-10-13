@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('challenge_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['in_progress', 'completed', 'failed', 'rejected'])->default('in_progress');
+            $table->enum('status', ['in_progres', 'completed', 'failed', 'rejected'])->default('in_progres');
             $table->timestamp('started_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
