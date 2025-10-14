@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 
 
 
-export default function Profile({pembelianEvents, user, cartCount, subscription, role}) {
+export default function Profile({pembelianEvents, user, cartCount, subscription, role, nusantaraPoints}) {
     // const { user, loading } = useAuth();
 
     const [isChecking, setIsChecking] = useState(true);
@@ -125,7 +125,7 @@ export default function Profile({pembelianEvents, user, cartCount, subscription,
         <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">
             <div className="flex flex-wrap gap-5 lg:flex-nowrap container mx-auto">
 
-                <UserProfile isActive="dashboard" user={user} role={role} />
+                <UserProfile isActive="dashboard" user={user} role={role} nusantaraPoints={nusantaraPoints} />
                 <div className="p-5 md:mt-0 mt-40 relative overflow-x-auto bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl w-full lg:w-[75%] table-scroll">
                     <div className="bg-red-500 text-white p-4 rounded-lg mb-4">
                         <h2 className="text-lg lg:text-2xl mb-2 font-semibold">Halo, {user.name}!</h2>

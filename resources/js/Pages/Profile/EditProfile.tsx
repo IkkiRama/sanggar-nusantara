@@ -4,7 +4,7 @@ import LightNavbar from '../../layouts/lightNavbar';
 import UserProfile from '../../Components/userProfile';
 import ProfileLayout from '../../Layouts/profileLayout';
 
-export default function EditProfile({ user, cartCount, role }) {
+export default function EditProfile({ user, cartCount, role, nusantaraPoints }) {
     const fileInputRef = useRef();
   const [nama, setNama] = useState(user.name || '');
   const [email, setEmail] = useState(user.email || '');
@@ -139,7 +139,7 @@ export default function EditProfile({ user, cartCount, role }) {
 
       <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">
         <div className="flex flex-wrap gap-5 lg:flex-nowrap container mx-auto">
-          <UserProfile isActive="edit" user={user} role={role} />
+          <UserProfile isActive="edit" user={user} role={role} nusantaraPoints={nusantaraPoints} />
 
           <div className="p-5 md:mt-0 mt-40 relative overflow-x-auto bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl w-full lg:w-[75%]">
             <form

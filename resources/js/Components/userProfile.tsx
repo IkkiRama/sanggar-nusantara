@@ -2,8 +2,9 @@ import { Link } from '@inertiajs/react';
 import { ArrowUpRightFromSquare, KeySquare, LayoutDashboard, LogOut, Pen, PenBox, Wallet2 } from 'lucide-react';
 import React, { useState } from 'react'
 import { ShieldCheck, Star, User } from 'lucide-react';
+import { FaFlagCheckered, FaQuestionCircle } from 'react-icons/fa';
 
-const UserProfile = ({isActive, user, role}) => {
+const UserProfile = ({isActive, user, role, nusantaraPoints}) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
 
     const toggleDescription = () => {
@@ -58,6 +59,12 @@ const UserProfile = ({isActive, user, role}) => {
       <h2 className="text-center dark:text-gray-200 text-xl font-semibold mt-5">{user.name}</h2>
       <p className="text-center text-blue-500">{user.email}</p>
 
+        {nusantaraPoints !== undefined && (
+            <p className="text-center text-sm text-amber-600 dark:text-amber-400 mt-1 font-semibold">
+            🏅 Nusantara Point: {nusantaraPoints}
+            </p>
+        )}
+
         {role && (
             <div className="mt-2 flex justify-center">
                 {(() => {
@@ -76,7 +83,7 @@ const UserProfile = ({isActive, user, role}) => {
 
         <div className="mt-5">
             <h3 className="font-semibold text-slate-800 text-lg dark:text-gray-300">Tentang Saya</h3>
-            <p className={`text-gray-700 mt-1 dark:text-gray-400 ${!showFullDescription ? "line-clamp-4" : ""}`}>
+            <p className={`text-gray-700 mt-1 dark:text-gray-400 ${!showFullDescription ? "line-clamp-2" : ""}`}>
                 {user.deskripsi}
             </p>
             {user.deskripsi?.length > 100 && (
@@ -103,11 +110,31 @@ const UserProfile = ({isActive, user, role}) => {
             `}><Wallet2 className="w-5 h-5" /> Transaksi</li>
         </Link>
 
-        {/* <Link href="/profile/ubah-password">
-            <li className={`p-3 rounded-lg dark:text-gray-300 cursor-pointer flex flex-row gap-3 mb-2
-                ${isActive === "ubahPasword" ? "bg-blue-500 text-white font-semibold" : "font-medium hover:bg-gray-300 dark:hover:bg-gray-700"}
-            `}><KeySquare className="w-5 h-5" /> Ubah Password</li>
-        </Link> */}
+        <Link href="/profile/ragam-challenge">
+          <li
+            className={`p-3 rounded-lg dark:text-gray-300 cursor-pointer flex flex-row gap-3 mb-2
+              ${
+                isActive === 'ragam-challenge'
+                  ? 'bg-blue-500 text-white font-semibold'
+                  : 'font-medium hover:bg-gray-300 dark:hover:bg-gray-700'
+              }`}
+          >
+            <FaFlagCheckered className="w-5 h-5" /> Ragam Challenge
+          </li>
+        </Link>
+
+        <Link href="/profile/kuis-nusantara">
+          <li
+            className={`p-3 rounded-lg dark:text-gray-300 cursor-pointer flex flex-row gap-3 mb-2
+              ${
+                isActive === 'kuis-nusantara'
+                  ? 'bg-blue-500 text-white font-semibold'
+                  : 'font-medium hover:bg-gray-300 dark:hover:bg-gray-700'
+              }`}
+          >
+            <FaQuestionCircle className="w-5 h-5" /> Kuis Nusantara
+          </li>
+        </Link>
 
         <a target='_blank' href="https://wa.me/+6282133320489">
             <li className="p-3 rounded-lg dark:text-gray-300 cursor-pointer flex flex-row gap-3 mb-2 font-medium hover:bg-gray-300 dark:hover:bg-gray-700"><ArrowUpRightFromSquare className="w-5 h-5" /> Gabung Forum</li>

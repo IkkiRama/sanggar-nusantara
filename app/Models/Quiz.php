@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Quiz extends Model
 {
@@ -18,17 +19,6 @@ class Quiz extends Model
         'start_at' => 'datetime',
         'end_at' => 'datetime',
     ];
-
-    // public function quizQuestions()
-    // {
-    //     return $this->belongsToMany(
-    //         \App\Models\QuizQuestion::class,
-    //         'quiz_quiz_questions', // 👉 nama tabel pivot
-    //         'quiz_id',
-    //         'quiz_question_id'
-    //     )->withTimestamps()
-    //     ->withPivot('id');
-    // }
 
     // Setiap kuis punya banyak pivot (QuizQuizQuestion)
     public function quizQuizQuestions()
@@ -55,8 +45,22 @@ class Quiz extends Model
         return $this->hasMany(QuizAttempt::class);
     }
 
+    protected static function booted()
+    {
+        static::creating(function ($quiz) {
+            if (empty($quiz->uuid)) {
+                $quiz->uuid = (string) Str::uuid();
+            }
+        });
+    }
+
     public function getQuizQuestionsCountAttribute()
     {
         return $this->quizQuestions()->count();
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'uuid';
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class ChallengeParticipant extends Model
 {
@@ -33,6 +34,21 @@ class ChallengeParticipant extends Model
     public function progres(): HasMany
     {
         return $this->hasMany(ChallengeProgres::class);
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($challenge) {
+            if (empty($challenge->slug)) {
+                $challenge->slug = Str::slug($challenge->title);
+            }
+        });
+
+        static::updating(function ($challenge) {
+            if ($challenge->isDirty('title')) {
+                $challenge->slug = Str::slug($challenge->title);
+            }
+        });
     }
 
     // Accessor: cek apakah semua hari sudah diverifikasi

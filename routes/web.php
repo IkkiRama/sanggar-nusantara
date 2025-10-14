@@ -50,33 +50,34 @@ Route::get('/ragam-indonesia/makanan-khas', [FrontController::class, 'makananKha
 Route::get('/nusantara-ai', [FrontController::class, 'nusantaraAI']);
 Route::get('/ragam-challenge', [FrontController::class, 'ragamChallenge']);
 Route::get('/ragam-challenge/{slug}', [FrontController::class, 'detailRagamChallenge']);
+Route::get('/kuis-nusantara', [FrontController::class, 'kuisNusantara']);
 
 
-// Route::get('/admin/login', [AuthController::class, 'login'])->name("login");
+
+
 Route::get('/auth-google-redirect', [AuthController::class, 'googleRedirect']);
 Route::get('/auth-google-callback', [AuthController::class, 'googleCallback']);
 Route::get('/masuk', [AuthController::class, 'login'])->name("login");
 
 Route::get('/syarat', [AuthController::class, 'syarat']);
 Route::get('/kebijakan-privasi', [AuthController::class, 'kebijakanPrivasi']);
-// Route::get('/login', function () {
-//     return redirect('/admin/login');
-// })->name('masuk');
 
-// Route::middleware('web')->get('/test-session', function () {
-// Route::middleware(['auth:sanctum'])->get('/test-session', function () {
-//     return dd(Auth::guard('sanctum')->user());
-// });
 
 Route::post('/nusantara/ask', [NusantaraAIController::class, 'ask']);
 
 // Route untuk user yang sudah login (auth)
 Route::middleware(['web', 'auth'])->group(function () {
-    // Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::post('/ragam-challenge/{id}/join', [FrontController::class, 'joinChallenge'])->name('challenge.join');
+    Route::post('/ragam-challenge/{uuid}/join', [FrontController::class, 'joinChallenge'])->name('challenge.join');
     Route::post('/ragam-challenge/{id}/stop', [FrontController::class, 'stopChallenge'])->name('challenge.stop');
+    Route::post('/ragam-challenge/claim-reward/{participant}/', [FrontController::class, 'claimReward']);
+
+
+
+    Route::get('/kuis-nusantara/mulai/{uuid}', [FrontController::class, 'mulaiKuisNusantara']);
+    Route::get('/kuis-nusantara/lihat/{uuid}/{uuidAttempt}', [FrontController::class, 'lihatAttemptKuisNusantara'])->name('kuis-nusantara.lihat');
+    Route::post('/kuis-nusantara/submit/{uuid}', [FrontController::class, 'submitQuiz']);
 
     Route::get('/ragam-challenge/{slug}/progres', [FrontController::class, 'challengeProgres'])->name('challenge.progres');
     Route::post('/ragam-challenge/{slug}/progres', [FrontController::class, 'storeChallengeProgres'])->name('challenge.progres.store');
@@ -89,6 +90,8 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'profileEdit']);
     Route::get('/profile/transaksi', [ProfileController::class, 'transaksi']);
     Route::get('/profile/ubah-password', [ProfileController::class, 'ubahPassword']);
+    Route::get('/profile/kuis-nusantara', [ProfileController::class, 'kuisNusantara']);
+    Route::get('/profile/ragam-challenge', [ProfileController::class, 'ragamChallenge']);
 
     Route::get('/download-etiket/{orderId}', [ProfileController::class, 'downloadEtiket']);
     Route::get('/qr/{orderId}/{ticketNo}', [ProfileController::class, 'generateQr']);

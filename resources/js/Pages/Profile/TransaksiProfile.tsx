@@ -7,7 +7,7 @@ import ProfileLayout from '../../Layouts/profileLayout';
 import { toast } from 'react-toastify';
 
 
-export default function Transaksi({user, transaksi, cartCount, role}) {
+export default function Transaksi({user, transaksi, cartCount, role, nusantaraPoints}) {
     const [isChecking, setIsChecking] = useState(true);
 
     const handleBayar = async (order_id: string) => {
@@ -83,7 +83,7 @@ export default function Transaksi({user, transaksi, cartCount, role}) {
         <div className="lg:-mt-[10vh] -mt-[30vh] pb-20 px-4 min-h-screen">
             <div className="flex flex-wrap lg:flex-nowrap gap-5 container mx-auto">
 
-                <UserProfile isActive="transaksi" user={user} role={role} />
+                <UserProfile isActive="transaksi" user={user} role={role} nusantaraPoints={nusantaraPoints} />
                 <div className="p-5 mt-40 md:mt-0 relative bg-white shadow-lg rounded-xl w-full lg:w-[75%]">
                     <h2 className="text-xl font-semibold mb-4">Transaksi</h2>
                     <div className="table-scroll overflow-x-auto">

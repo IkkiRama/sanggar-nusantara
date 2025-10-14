@@ -16,9 +16,14 @@ use App\Models\Komentar;
 use App\Models\Kontak;
 use App\Models\LaguDaerah;
 use App\Models\MakananKhas;
+use App\Models\NusantaraPoint;
 use App\Models\Order;
 use App\Models\PembelianEvent;
 use App\Models\Plan;
+use App\Models\Quiz;
+use App\Models\QuizAnswer;
+use App\Models\QuizAttempt;
+use App\Models\QuizAttemptAnswer;
 use App\Models\RumahAdat;
 use App\Models\SeniTari;
 use App\Models\Subscription;
@@ -35,6 +40,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class FrontController extends Controller
 {
@@ -746,43 +752,61 @@ class FrontController extends Controller
     {
         $user = auth()->user();
 
-        // Cari challenge berdasarkan slug
         $challenge = Challenge::where('slug', $slug)->firstOrFail();
 
-        // Cari participant berdasarkan user + challenge
         $participant = ChallengeParticipant::with('challenge')
             ->where('challenge_id', $challenge->id)
             ->where('user_id', $user->id)
             ->firstOrFail();
 
-        // Hitung tanggal selesai berdasarkan duration_days
         $duration = $challenge->duration_days;
-        $endDate = Carbon::parse($participant->started_at)->addDays($duration);
-
-        // Jika sudah lewat dari endDate dan status masih "in_progres", ubah jadi failed
-        if (Carbon::now()->greaterThan($endDate) && $participant->status === 'in_progres') {
-            $participant->update(['status' => 'failed']);
-        }
+        $startDate = Carbon::parse($participant->started_at);
+        $endDate = $startDate->copy()->addDays($duration);
 
         // Ambil semua progres peserta
         $progres = ChallengeProgres::where('challenge_participant_id', $participant->id)
             ->orderBy('day_number', 'asc')
             ->get();
 
-        // Cek apakah sudah upload hari ini
+        // Buat array day_number yang sudah diupload
+        $uploadedDays = $progres->pluck('day_number')->toArray();
+
+        // Hitung hari ke berapa sekarang dari start date
+        $today = Carbon::now();
+        $currentDayNumber = $startDate->diffInDays($today) + 1;
+
+        // Cek apakah ada hari yang terlewat (tidak ada progres)
+        $missedDays = [];
+        for ($i = 1; $i < $currentDayNumber && $i <= $duration; $i++) {
+            if (!in_array($i, $uploadedDays)) {
+                $missedDays[] = $i;
+            }
+        }
+
+        // Kalau ada hari yang terlewat atau sudah lewat dari batas waktu
+        if ((!empty($missedDays) || $today->greaterThan($endDate)) && $participant->status === 'in_progres') {
+            $participant->update(['status' => 'failed']);
+        }
+
         $uploadedToday = $progres->contains(function ($item) {
             return Carbon::parse($item->created_at)->isToday();
         });
 
-        // Kirim data ke Inertia
+        $rewardClaimed = NusantaraPoint::where('user_id', $user->id)
+            ->where('uuid', $participant->uuid)
+            ->exists();
+
         return inertia('RagamChallenge/ChallengeProgres', [
             'user' => $user,
             'participant' => $participant,
             'progres' => $progres,
             'uploadedToday' => $uploadedToday,
-            'expired' => Carbon::now()->greaterThan($endDate),
+            'expired' => $today->greaterThan($endDate),
+            'rewardClaimed' => $rewardClaimed,
         ]);
     }
+
+
 
     public function storeChallengeProgres(Request $request, $participantId)
     {
@@ -802,6 +826,270 @@ class FrontController extends Controller
         ]);
 
         return back()->with('success', 'Bukti berhasil dikirim!');
+    }
+
+
+    public function claimReward($participantUuid)
+    {
+        $participant = ChallengeParticipant::where('uuid', $participantUuid)->firstOrFail();
+        $user = auth()->user();
+
+        $completedDays = $participant->progres()->where('status', 'approved')->count();
+        if ($completedDays < $participant->challenge->duration_days) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Challenge belum selesai semua.'
+            ], 400);
+        }
+
+
+        $alreadyClaimed = $user->nusantaraPoints()
+            ->where('uuid', $participantUuid)
+            ->exists();
+        if ($alreadyClaimed) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Reward sudah diklaim.'
+            ], 400);
+        }
+
+        // Tambahkan poin
+        NusantaraPoint::create([
+            'uuid' => $participantUuid,
+            "user_id" => $user->id,
+            'amount' => $participant->challenge->nusantara_points ?? 50,
+            'source' => 'Challenge: '.$participant->challenge->title,
+        ]);
+
+        // Update status participant
+        $participant->update(['status' => 'completed']);
+    }
+
+
+
+    public function kuisNusantara()
+    {
+        $now = now();
+
+        $quizzes = Quiz::select('id', 'uuid', 'title', 'description', 'is_premium', 'start_at', 'end_at', 'duration_minutes')
+            ->where(function ($query) use ($now) {
+                // hanya tampilkan kuis yang sudah mulai & belum berakhir
+                $query->whereNull('start_at')->orWhere('start_at', '<=', $now);
+            })
+            ->where(function ($query) use ($now) {
+                $query->whereNull('end_at')->orWhere('end_at', '>=', $now);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($quiz) {
+                return [
+                    'id' => $quiz->id,
+                    'uuid' => $quiz->uuid,
+                    'title' => $quiz->title,
+                    'description' => $quiz->description ?? '',
+                    'is_premium' => $quiz->is_premium,
+                    'status' => $quiz->is_premium ? 'premium' : 'gratis',
+                    'start_at' => optional($quiz->start_at)->toDateTimeString(),
+                    'end_at' => optional($quiz->end_at)->toDateTimeString(),
+                    'duration_minutes' => $quiz->duration_minutes,
+                ];
+            });
+
+        return Inertia::render('KuisNusantara/Kuis', [
+            'quizzes' => $quizzes,
+            'user' => auth()->check()
+                ? [
+                    'id' => auth()->user()->id,
+                    'name' => auth()->user()->name,
+                    'email' => auth()->user()->email,
+                    'role' => auth()->user()->getRoleNames()->first(),
+                ]
+                : null,
+        ]);
+    }
+
+
+    public function mulaiKuisNusantara($uuid)
+    {
+        if (!auth()->check()) {
+            return redirect('/masuk');
+        }
+
+        $quiz = Quiz::where('uuid', $uuid)
+            ->with(['quizQuizQuestions.quizQuestion.answers'])
+            ->firstOrFail();
+
+        // Cek apakah user sudah ada attempt aktif
+        $attempt = QuizAttempt::firstOrCreate(
+            [
+                'quiz_id' => $quiz->id,
+                'user_id' => auth()->id(),
+                'finished_at' => null,
+            ],
+            ['started_at' => now()]
+        );
+
+        // Load jawaban sebelumnya kalau ada
+        $answers = $attempt->answers()->pluck('quiz_answer_id', 'quiz_question_id');
+
+        return Inertia::render('KuisNusantara/Mulai', [
+            'quiz' => [
+                'uuid' => $quiz->uuid,
+                'title' => $quiz->title,
+                'duration_minutes' => $quiz->duration_minutes,
+                'questions' => $quiz->quizQuizQuestions->map(function ($q) use ($answers) {
+                    return [
+                        'id' => $q->quizQuestion->id,
+                        'question_text' => $q->quizQuestion->question_text,
+                        'answers' => $q->quizQuestion->answers->map(fn($a) => [
+                            'id' => $a->id,
+                            'answer_text' => $a->answer_text,
+                            'selected' => $answers[$q->quizQuestion->id] ?? null,
+                        ]),
+                    ];
+                }),
+            ],
+            'attempt' => [
+                'id' => $attempt->id,
+                'started_at' => $attempt->started_at,
+            ],
+            'user' => auth()->user(),
+        ]);
+    }
+
+
+    public function submitQuiz($uuid)
+    {
+        $quiz = Quiz::where('uuid', $uuid)->firstOrFail();
+        $attempt = QuizAttempt::where('quiz_id', $quiz->id)
+            ->where('user_id', auth()->id())
+            ->whereNull('finished_at')
+            ->firstOrFail();
+
+        $answers = request('answers', []);
+
+        $totalCorrect = 0;
+        $answerDetails = [];
+
+        foreach ($answers as $questionId => $answerId) {
+            $answer = QuizAnswer::find($answerId);
+            $isCorrect = $answer?->is_correct ?? false;
+
+            if ($isCorrect) $totalCorrect++;
+
+            QuizAttemptAnswer::updateOrCreate(
+                [
+                    'quiz_attempt_id' => $attempt->id,
+                    'quiz_question_id' => $questionId,
+                ],
+                [
+                    'quiz_answer_id' => $answerId,
+                    'is_correct' => $isCorrect,
+                ]
+            );
+
+            $answerDetails[] = [
+                'question_id' => $questionId,
+                'answer_id' => $answerId,
+                'is_correct' => $isCorrect,
+            ];
+        }
+
+        $totalQuestions = $quiz->quizQuizQuestions()->count();
+        $score = round(($totalCorrect / $totalQuestions) * 100);
+
+        // Generate rekomendasi menggunakan AI GPT
+        $recommendation = $this->generateAIRecommendation($quiz->title, $score, $answerDetails);
+
+        $attempt->update([
+            'finished_at' => now(),
+            'score' => $score,
+            'recomendation' => $recommendation,
+        ]);
+
+        return redirect()->route('kuis-nusantara.lihat', [
+            'uuid' => $uuid,
+            'uuidAttempt' => $attempt->uuid,
+        ]);
+    }
+
+    protected function generateAIRecommendation(string $quizTitle, int $score, array $answerDetails): string
+    {
+        $questionsSummary = collect($answerDetails)->map(function ($a) {
+            return "QID {$a['question_id']}: " . ($a['is_correct'] ? "Benar" : "Salah");
+        })->join("\n");
+
+        $prompt = "Buat rekomendasi belajar untuk quiz berjudul '{$quizTitle}' berdasarkan jawaban user berikut:\n{$questionsSummary}\nBerikan saran yang jelas, singkat, dan membangun, gunakan bahasa Indonesia.";
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . env('VITE_OPENAI_API_KEY'),
+                'Content-Type' => 'application/json',
+            ])->post('https://api.openai.com/v1/chat/completions', [
+                'model' => 'gpt-4',
+                'messages' => [
+                    ['role' => 'system', 'content' => 'Kamu adalah ahli pendidikan dan quiz Nusantara.'],
+                    ['role' => 'user', 'content' => $prompt],
+                ],
+                'max_tokens' => 200,
+            ]);
+
+            $data = $response->json();
+
+            return $data['choices'][0]['message']['content'] ?? "Rekomendasi tidak tersedia.";
+        } catch (\Exception $e) {
+            return "Terjadi kesalahan saat membuat rekomendasi.";
+        }
+    }
+
+
+    public function lihatAttemptKuisNusantara($uuid, $uuidAttempt)
+    {
+        if (!auth()->check()) {
+            return redirect('/masuk');
+        }
+
+        $quiz = Quiz::where('uuid', $uuid)
+            ->with(['quizQuizQuestions.quizQuestion.answers'])
+            ->firstOrFail();
+
+        $attempt = QuizAttempt::where('uuid', $uuidAttempt)
+            ->where('quiz_id', $quiz->id)
+            ->where('user_id', auth()->id())
+            ->with(['answers'])
+            ->firstOrFail();
+
+        // Map jawaban user
+        $userAnswers = $attempt->answers->pluck('quiz_answer_id', 'quiz_question_id');
+
+        $questions = $quiz->quizQuizQuestions->map(function ($q) use ($userAnswers) {
+            $question = $q->quizQuestion;
+            return [
+                'id' => $question->id,
+                'question_text' => $question->question_text,
+                'answers' => $question->answers->map(function ($a) use ($userAnswers) {
+                    return [
+                        'id' => $a->id,
+                        'answer_text' => $a->answer_text,
+                        'is_correct' => $a->is_correct,
+                        'selected_by_user' => ($userAnswers[$a->quiz_question_id] ?? null) == $a->id,
+                        'answer_explanation' => $a->answer_explanation, // tambahan penjelasan jawaban
+                    ];
+                }),
+                'explanation_correct' => $question->explanation_correct,
+            ];
+        });
+
+        return Inertia::render('KuisNusantara/LihatAttempt', [
+            'quiz' => [
+                'uuid' => $quiz->uuid,
+                'title' => $quiz->title,
+                'duration_minutes' => $quiz->duration_minutes,
+                'questions' => $questions,
+            ],
+            'attempt' => $attempt,
+            'user' => auth()->user(),
+        ]);
     }
 
 

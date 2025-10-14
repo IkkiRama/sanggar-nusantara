@@ -18,6 +18,7 @@ interface PageProps {
   progres: Progres[];
   uploadedToday: boolean;
   expired: boolean;
+  rewardClaimed: boolean;
 }
 
 export default function ChallengeProgres({
@@ -26,10 +27,13 @@ export default function ChallengeProgres({
   progres,
   uploadedToday,
   expired,
+  rewardClaimed
 }: PageProps) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [claimingReward, setClaimingReward] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const handleFileChange = (file: File) => {
     setImageFile(file);
@@ -55,6 +59,28 @@ export default function ChallengeProgres({
       },
     });
   };
+
+    const handleClaimReward = () => {
+        if (rewardClaimed) return;
+        setClaimingReward(true);
+
+        router.post(`/ragam-challenge/claim-reward/${participant.uuid}`, {}, {
+            onFinish: () => setClaimingReward(false),
+            onSuccess: () => {
+                setShowModal(true); // tampilkan modal setelah klaim
+            },
+            onError: () => {
+                alert("Gagal klaim reward");
+            }
+        });
+    };
+
+  // Cek apakah semua hari sudah diunggah
+  const allDaysCompleted = progres.filter(p => p.status === "approved").length === participant.challenge.duration_days;
+
+
+
+
 
   return (
     <MainLayout title={`Progres ${participant.challenge.title} | Sanggar Nusantara`}>
@@ -135,7 +161,7 @@ export default function ChallengeProgres({
                   <button
                     type="submit"
                     disabled={isUploading || !imageFile}
-                    className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition disabled:opacity-50"
+                    className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition disabled:opacity-50 cursor-pointer "
                   >
                     {isUploading ? "Mengunggah..." : "Kirim Bukti Hari Ini"}
                   </button>
@@ -152,6 +178,59 @@ export default function ChallengeProgres({
           <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 mb-4">
             Progres Challenge ({progres.length}/{participant.challenge.duration_days})
           </h2>
+
+          {/* Tombol klaim reward */}
+          {allDaysCompleted && !rewardClaimed && (
+            <div className="mb-6">
+              <button
+                onClick={handleClaimReward}
+                disabled={claimingReward}
+                className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition disabled:opacity-50 cursor-pointer"
+              >
+                {claimingReward ? "Mengklaim..." : "Klaim Reward Challenge 🎉"}
+              </button>
+            </div>
+          )}
+
+          {allDaysCompleted && rewardClaimed && (
+            <div className="mb-6 p-4 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg">
+              Reward sudah diklaim.
+            </div>
+          )}
+
+            {showModal && (
+                <div className="fixed inset-0 bg-white/80 backdrop-blur-md shadow-md dark:bg-gray-950 flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 w-full max-w-md shadow-lg transform transition-all scale-100 animate-fadeIn relative">
+                        <h2 className="text-xl font-bold text-center mb-4">🎉 Reward Berhasil Diklaim!</h2>
+                        <p className="text-center text-gray-700 dark:text-gray-200 mb-6">
+                            Kamu telah mendapatkan reward dari challenge ini.
+                        </p>
+                        <div className="flex justify-around gap-4">
+                            <button
+                                onClick={() => router.visit(`/ragam-challenge`)}
+                                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition cursor-pointer"
+                            >
+                                Lanjut ke Challenge
+                            </button>
+
+                            <button
+                                onClick={() => router.visit(`/profile/dashboard`)}
+                                className="bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 font-semibold py-2 px-4 rounded-lg transition cursor-pointer"
+                            >
+                                Lihat Profile
+                            </button>
+                        </div>
+                        <button
+                            onClick={() => setShowModal(false)}
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold cursor-pointer"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            )}
+
+
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
             {Array.from({ length: participant.challenge.duration_days }).map((_, index) => {
@@ -299,7 +378,7 @@ export default function ChallengeProgres({
 
           <button
             onClick={() => window.history.back()}
-            className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all w-full md:w-auto"
+            className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all w-full md:w-auto cursor-pointer"
           >
             ← Kembali
           </button>

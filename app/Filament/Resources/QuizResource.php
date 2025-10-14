@@ -45,6 +45,13 @@ class QuizResource extends Resource
                 Forms\Components\Section::make('Informasi Dasar')
                     ->description('Isi detail dasar tentang kuis.')
                     ->schema([
+                        TextInput::make('uuid')
+                        ->label('UUID')
+                        ->disabled()
+                        ->dehydrated(false)
+                        ->visibleOn('edit')
+                        ->columnSpanFull(),
+
                         TextInput::make('title')
                             ->label('Judul Kuis')
                             ->required()

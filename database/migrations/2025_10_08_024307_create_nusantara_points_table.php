@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('nusantara_points', function (Blueprint $table) {
             $table->id();
+            $table->string('_uuid'); // misal "Challenge: Pakai Batik"
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('amount')->default(0); // berapa poin yang ditambah
             $table->string('source')->nullable(); // misal "Challenge: Pakai Batik"

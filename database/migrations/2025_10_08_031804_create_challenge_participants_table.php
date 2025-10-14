@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('challenge_participants', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('challenge_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['in_progres', 'completed', 'failed', 'rejected'])->default('in_progres');

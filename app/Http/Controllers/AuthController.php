@@ -35,17 +35,23 @@ class AuthController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    public function googleCallback() {
+    public function googleCallback()
+    {
         $googleUser = Socialite::driver('google')->user();
 
-        $dataUser = User::updateOrCreate([
-            'email' => $googleUser->getEmail(),
-        ],
-        [
-            'name' => $googleUser->getName(),
-            // 'image' => $googleUser->getAvatar(),
-            'email_verified_at' => now()
-        ]);
+        $dataUser = User::updateOrCreate(
+            ['email' => $googleUser->getEmail()],
+            [
+                'name' => $googleUser->getName(),
+                // 'image' => $googleUser->getAvatar(),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        // Kalau user baru dibuat, langsung kasih role 'user'
+        if ($dataUser->wasRecentlyCreated) {
+            $dataUser->syncRoles(['user']);
+        }
 
         Auth::login($dataUser);
 

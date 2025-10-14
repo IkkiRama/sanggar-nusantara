@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href={{ asset("favicon.png") }} type="image/x-icon">
     <link rel="apple-touch-icon" href={{ asset("favicon.png") }}>
 
-    <meta http-equiv="Content-Security-Policy" content="img-src 'self' data: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://*.googleusercontent.com;">
+    {{-- <meta http-equiv="Content-Security-Policy" content="img-src 'self' data: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://*.googleusercontent.com;"> --}}
 
 
 

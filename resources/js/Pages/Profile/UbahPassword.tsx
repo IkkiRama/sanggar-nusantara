@@ -4,7 +4,7 @@ import LightNavbar from '../../layouts/lightNavbar';
 import UserProfile from '../../Components/userProfile';
 import axios from 'axios';
 
-const UbahPassword = ({ user, cartCount, role }) => {
+const UbahPassword = ({ user, cartCount, role, nusantaraPoints }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -38,7 +38,7 @@ const UbahPassword = ({ user, cartCount, role }) => {
             <div className="bg-blue-500 h-[30vh]"></div>
 
             <div className="flex flex-wrap lg:flex-nowrap lg:-mt-[10vh] -mt-[30vh] gap-5 pb-20 px-4 min-h-screen">
-                <UserProfile isActive="ubahPasword" user={user} role={role} />
+                <UserProfile isActive="ubahPasword" user={user} role={role} nusantaraPoints={nusantaraPoints} />
 
                 <div className="p-5 mt-40 md:mt-0 relative overflow-x-auto bg-white shadow-[0_0.6rem_1.3rem_rgba(0,0,0,0.1)] rounded-xl w-full lg:w-[75%] table-scroll">
                     <h2 className="text-xl font-semibold mb-4">Ubah Password</h2>

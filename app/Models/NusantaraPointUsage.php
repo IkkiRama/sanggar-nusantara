@@ -12,7 +12,7 @@ class NusantaraPointUsage extends Model
     /** @use HasFactory<\Database\Factories\NusantaraPointUsageFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'order_id', 'points_used'];
+    protected $guarded = ["id"];
 
     public function user(): BelongsTo
     {

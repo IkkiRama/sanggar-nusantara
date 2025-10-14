@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\NusantaraPoint;
 use App\Models\Order;
 use App\Models\PembelianEvent;
+use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -87,12 +89,15 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
+        $totalPoints = NusantaraPoint::where('user_id', Auth::user()->id)->sum('amount');
+
         return Inertia::render('Profile/Profile', [
             'user' => $user,
             'role' => $user->getRoleNames()->first(), // Ambil satu role
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
             'pembelianEvents' => $pembelianEvents,
             'subscription' => $subscriptions, // Tambahkan subscriptions ke props
+            'nusantaraPoints' => $totalPoints,
         ]);
     }
 
@@ -345,11 +350,13 @@ class ProfileController extends Controller
         }
 
         $user = User::with('alamat')->find(Auth::id());
+        $totalPoints = NusantaraPoint::where('user_id', Auth::user()->id)->sum('amount');
 
         return Inertia::render('Profile/EditProfile', [
             "user" => $user,
             'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
+            'nusantaraPoints' => $totalPoints,
         ]);
     }
 
@@ -435,11 +442,14 @@ class ProfileController extends Controller
             }
         }
 
+        $totalPoints = NusantaraPoint::where('user_id', Auth::user()->id)->sum('amount');
+
         return Inertia::render('Profile/TransaksiProfile', [
             "user" => $user = Auth::user(),
             'role' => Auth::user()->getRoleNames()->first(), // Ambil satu role
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
             'transaksi' => $transaksi,
+            'nusantaraPoints' => $totalPoints,
         ]);
     }
 
@@ -455,4 +465,80 @@ class ProfileController extends Controller
             'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
         ]);
     }
+
+    public function ragamChallenge()
+    {
+        $user = auth()->user();
+
+        $challenges = \App\Models\ChallengeParticipant::with('challenge')
+            ->where('user_id', $user->id)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->challenge->id,
+                    'slug' => $item->challenge->slug,
+                    'uuid' => $item->uuid,
+                    'title' => $item->challenge->title,
+                    'description' => $item->challenge->description,
+                    'image' => $item->challenge->image,
+                    'duration_days' => $item->challenge->duration_days,
+                    'nusantara_points' => $item->challenge->nusantara_points,
+                    'status' => $item->status,
+                    'started_at' => $item->started_at,
+                    'completed_at' => $item->completed_at,
+                ];
+            });
+
+        $totalPoints = NusantaraPoint::where('user_id', $user->id)->sum('amount');
+
+        return inertia('Profile/RagamChallenge', [
+            'user' => $user,
+            'role' => Auth::user()->getRoleNames()->first(),
+            'nusantaraPoints' => $totalPoints,
+            'challenges' => $challenges,
+            'cartCount' => 0,
+        ]);
+    }
+
+    public function kuisNusantara()
+    {
+        $user = auth()->user();
+
+        $quizzes = Quiz::with(['attempts' => function ($q) use ($user) {
+            $q->where('user_id', $user->id);
+        }])
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->map(function ($quiz) {
+            $attempt = $quiz->attempts->first();
+            return [
+                'id' => $quiz->id,
+                'uuid' => $quiz->uuid,
+                'title' => $quiz->title,
+                'description' => $quiz->description,
+                'image' => $quiz->image ?? null,
+                'is_premium' => $quiz->is_premium,
+                'duration_minutes' => $quiz->duration_minutes,
+                'start_at' => $quiz->start_at,
+                'end_at' => $quiz->end_at,
+                'attempt' => $attempt ? [
+                    'uuid' => $attempt->uuid,
+                    'score' => $attempt->score,
+                    'finished_at' => $attempt->finished_at,
+                ] : null,
+            ];
+        });
+
+        $totalPoints = NusantaraPoint::where('user_id', $user->id)->sum('amount');
+
+        return inertia('Profile/KuisNusantara', [
+            'user' => $user,
+            'role' => Auth::user()->getRoleNames()->first(),
+            'nusantaraPoints' => $totalPoints,
+            'quizzes' => $quizzes,
+            'cartCount' => 0,
+        ]);
+    }
+
+
 }
