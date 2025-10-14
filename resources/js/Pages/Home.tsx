@@ -28,7 +28,8 @@ import {
 import LightNavbar from "../layouts/lightNavbar";
 import MainLayout from './../Layouts/mainLayout';
 import { changeDate } from './../Utils/changeDate';
-import { BookOpen, Calendar, CheckCircle, MapPin } from "lucide-react";
+import { BookOpen, Calendar, CheckCircle, HelpCircle, MapPin, Trophy } from "lucide-react";
+import { motion } from 'framer-motion';
 
 interface Event {
     harga_terendah: any;
@@ -82,10 +83,12 @@ const Home = ({plans}) => {
   const tabs = ["Bulanan", "Triwulanan", "Tahunan"];
   const [tabActiveSubscription, setTabActiveSubscription] = useState("Bulanan");
 
-  const { events = [], artikels = [] } = usePage<PageProps>().props;  // Ambil data dari Laravel
+  const { events = [], artikels = [], challenges=[], quizzes=[] } = usePage<PageProps>().props;  // Ambil data dari Laravel
 
   const artikelPertama = artikels.length > 0 ? artikels[0] : null;
   const dataArtikel = artikels.length > 3 ? artikels.slice(1, 4) : [];
+
+    const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null);
 
   const [isDark, setIsDark] = useState(false);
 
@@ -792,231 +795,465 @@ const Home = ({plans}) => {
 
       <section className="lg:px-4 mt-10">
         <div className="mx-auto flex max-w-[1350px] space-x-[1px] lg:justify-center lg:space-x-6">
+            <button
+                className={[tabActive === "news" ? "bg-red-500 text-white" : "bg-red-50 text-red-500 hover:bg-red-100", "flex items-center px-4 py-3 text-sm font-semibold transition-colors md:text-base cursor-pointer lg:rounded-t-xl"].join(" ")}
+                onClick={() => setTabActive("news")}
+            >
+                <BookOpen className="w-[25px] h-[25px]" />
+                <span className="ml-3">Berita</span>
+            </button>
 
-          <button
-            className={[ tabActive === "news" ? "bg-red-500 flex-1 text-white" : "bg-red-50 text-red-500 hover:bg-red-100"  ," flex items-center px-4 py-3 text-sm font-semibold transition-colors md:text-base cursor-pointer lg:rounded-t-xl lg:px-6  lg:flex-[unset]"].join("")}
-            onClick={() => {
-                setTabActive("news");
-            }}
-          >
-            <div className="relative h-6 w-6 lg:h-9 lg:w-9">
-              <BookOpen className="w-[30px] h-[30px]" />
-            </div>
-            <span className="ml-3 lg:ml-4 inline">Berita</span>
-          </button>
+            <button
+                className={[tabActive === "event" ? "bg-red-500 text-white" : "bg-red-50 text-red-500 hover:bg-red-100", "flex items-center px-4 py-3 text-sm font-semibold transition-colors md:text-base cursor-pointer lg:rounded-t-xl"].join(" ")}
+                onClick={() => setTabActive("event")}
+            >
+                <Calendar className="w-[25px] h-[25px]" />
+                <span className="ml-3">Event</span>
+            </button>
 
-          <button
-            className={[ tabActive !== "news" ? "bg-red-500 flex-1 text-white" : "bg-red-50 text-red-500 hover:bg-red-100"  ," flex items-center px-4 py-3 text-sm font-semibold transition-colors md:text-base cursor-pointer lg:rounded-t-xl lg:px-6  lg:flex-[unset]"].join("")}
-            onClick={() => {
-              setTabActive("event");
-            }}
-          >
-            <div className="relative h-6 w-6 lg:h-9 lg:w-9">
-              <Calendar className="w-[30px] h-[30px]" />
-            </div>
-            <span className="ml-3 lg:ml-4 inline">Event</span>
-          </button>
+            <button
+                className={[tabActive === "challenge" ? "bg-red-500 text-white" : "bg-red-50 text-red-500 hover:bg-red-100", "flex items-center px-4 py-3 text-sm font-semibold transition-colors md:text-base cursor-pointer lg:rounded-t-xl"].join(" ")}
+                onClick={() => setTabActive("challenge")}
+            >
+                <Trophy className="w-[25px] h-[25px]" />
+                <span className="ml-3">Challenge</span>
+            </button>
+
+            <button
+                className={[tabActive === "quiz" ? "bg-red-500 text-white" : "bg-red-50 text-red-500 hover:bg-red-100", "flex items-center px-4 py-3 text-sm font-semibold transition-colors md:text-base cursor-pointer lg:rounded-t-xl"].join(" ")}
+                onClick={() => setTabActive("quiz")}
+            >
+                <HelpCircle className="w-[25px] h-[25px]" />
+                <span className="ml-3">Kuis</span>
+            </button>
 
         </div>
       </section>
 
 
-      <section className="lg:mb-20 mb-10 bg-red-500">
-        <div className="max-w-[1600px] h-full mx-auto px-4">
+        <section className="lg:mb-20 mb-10 bg-red-500">
+            <div className="max-w-[1600px] h-full mx-auto px-4">
 
-            {tabActive == "news" ? (
-                <>
-                    <Link href={`/artikel/${artikelPertama.slug}`} className="grid lg:grid-cols-5 gap-10 items-center lg:px-20 md:px-10 px-5 pt-10">
-                        <div className="h-[200px] md:h-[350px] w-full rounded-md overflow-hidden lg:col-span-2 relative">
-                            <img
-                                src={artikelPertama.image ? `./storage/${artikelPertama.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
-                                alt={`image artikel ${artikelPertama.nama}`}
-                                className="object-cover h-full w-full"
-                                data-aos-once="true"
-                                data-aos="fade-left"
-                            />
 
-                            {artikelPertama.status_artikel === "premium" && (
-                                <span
-                                data-aos-once="true"
-                                data-aos="fade-right"
-                                className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
-                                    Premium
-                                </span>
-                            )}
-                        </div>
+        {/* MODAL DETAIL QUIZ */}
+        {selectedQuiz && (
+            <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+                onClick={() => setSelectedQuiz(null)} // klik luar → tutup modal
+            >
+                <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                onClick={(e) => e.stopPropagation()} // biar klik dalam modal nggak nutup
+                className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl max-w-lg w-[90%] p-6 border border-gray-200 dark:border-gray-700"
+                >
+                    <h2 className="text-2xl font-bold mb-3 text-gray-900 dark:text-gray-100">
+                        {selectedQuiz.title}
+                    </h2>
 
-                        <div
-                        className="lg:col-span-3"
-                        data-aos-once="true"
-                        data-aos="fade-right"
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        {selectedQuiz.description || "Tidak ada deskripsi."}
+                    </p>
+
+                    <div className="flex justify-between text-sm mb-4">
+                        <span className="text-gray-500 dark:text-gray-400">
+                        ⏱️ Durasi: {selectedQuiz.duration_minutes} menit
+                        </span>
+                        <span
+                        className={`${
+                            selectedQuiz.is_premium
+                            ? "text-yellow-600 dark:text-yellow-400"
+                            : "text-green-600 dark:text-green-400"
+                        } font-semibold`}
                         >
+                        {selectedQuiz.is_premium ? "Premium" : "Gratis"}
+                        </span>
+                    </div>
 
-                        {artikelPertama && (
-                            <>
-                            <h5 className="text-white font-semibold md:mb-5 mb-3 md:text-base text-sm">
-                                {artikelPertama.kategori.nama}
-                            </h5>
+                    <h3 className={`my-5 font-semibold text-lg lg:text-2xl text-center text-red-500 ${
+                            user?.role === "user" || user?.role === null
+                                ? "block"
+                                : "hidden"
+                            }`}>
+                        {selectedQuiz.is_premium && (user?.role === "user" || user?.role === null) ? "Anda Bukan Premium" : "" }
+                    </h3>
 
-                            <h2 className="font-bold md:text-3xl text-xl text-white ">
-                                {artikelPertama.title}
-                            </h2>
+                    {/* Tombol Mulai Kuis */}
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => {
+                            if (!user) {
+                                // belum login
+                                alert("Silakan login terlebih dahulu untuk mulai kuis.");
+                                window.location.href = "/masuk";
+                                return;
+                            }
 
-                            <p className="mt-5 md:text-base text-[12px] text-white">
-                                {artikelPertama.excerpt}
-                            </p>
+                            if (selectedQuiz.is_premium && user?.is_premium) {
+                                // user login tapi bukan premium
+                                alert("Kuis ini khusus untuk member premium. Upgrade dulu ya!");
+                                return;
+                            }
 
-                            <div className="flex gap-5 mt-10 text-slate-200 md:text-base text-sm">
-                                <span className="flex gap-2 items-center">
-                                <FaEye />
-                                <small>{artikelPertama.views.toLocaleString()} views</small>
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                    <FaCalendar />
-                                    <small>{changeDate(new Date(artikelPertama.published_at))}</small>
-                                </span>
-                                <span className="flex gap-2 artikelPertamas-center">
-                                    <FaUser />
-                                    <small>Penulis : {artikelPertama.user.name}</small>
-                                </span>
+                            // Jika lolos semua kondisi
+                            router.visit(`/kuis-nusantara/mulai/${selectedQuiz?.uuid}`);
+                            }}
+                            disabled={user?.role === "user" || user?.role === null ? true : false}
+                            className={`py-3 rounded-lg font-semibold text-white transition ${
+                            user?.role === "user" || user?.role === null
+                                ? "hidden flex-1/6 bg-yellow-600 hover:bg-yellow-700"
+                                : "w-full bg-red-500 hover:bg-red-600 cursor-pointer"
+                            }`}
+                        >
+                            {selectedQuiz.is_premium && (user?.role === "user" || user?.role === null) ? "Anda Bukan Premium" : "Mulai Kuis" }
+                        </button>
+                        {selectedQuiz.is_premium && (user?.role === "user" || user?.role === null) && (
+                            <Link
+                                href="/subscription"
+                                className="flex-1 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-600 transition-all"
+                            >
+                                Langganan Sekarang
+                            </Link>
+                        )}
+                    </div>
+                </motion.div>
+            </div>
+        )}
 
+                {tabActive == "news" && (
+                    <>
+                        <Link href={`/artikel/${artikelPertama.slug}`} className="grid lg:grid-cols-5 gap-10 items-center lg:px-20 md:px-10 px-5 pt-10">
+                            <div className="h-[200px] md:h-[350px] w-full rounded-md overflow-hidden lg:col-span-2 relative">
+                                <img
+                                    src={artikelPertama.image ? `./storage/${artikelPertama.image}` : "/images/NO IMAGE AVAILABLE.jpg"}
+                                    alt={`image artikel ${artikelPertama.nama}`}
+                                    className="object-cover h-full w-full"
+                                    data-aos-once="true"
+                                    data-aos="fade-left"
+                                />
+
+                                {artikelPertama.status_artikel === "premium" && (
+                                    <span
+                                    data-aos-once="true"
+                                    data-aos="fade-right"
+                                    className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                        Premium
+                                    </span>
+                                )}
                             </div>
 
-                            </>
-                        )}
+                            <div
+                            className="lg:col-span-3"
+                            data-aos-once="true"
+                            data-aos="fade-right"
+                            >
+
+                            {artikelPertama && (
+                                <>
+                                <h5 className="text-white font-semibold md:mb-5 mb-3 md:text-base text-sm">
+                                    {artikelPertama.kategori.nama}
+                                </h5>
+
+                                <h2 className="font-bold md:text-3xl text-xl text-white ">
+                                    {artikelPertama.title}
+                                </h2>
+
+                                <p className="mt-5 md:text-base text-[12px] text-white">
+                                    {artikelPertama.excerpt}
+                                </p>
+
+                                <div className="flex gap-5 mt-10 text-slate-200 md:text-base text-sm">
+                                    <span className="flex gap-2 items-center">
+                                    <FaEye />
+                                    <small>{artikelPertama.views.toLocaleString()} views</small>
+                                    </span>
+                                    <span className="flex gap-2 items-center">
+                                        <FaCalendar />
+                                        <small>{changeDate(new Date(artikelPertama.published_at))}</small>
+                                    </span>
+                                    <span className="flex gap-2 artikelPertamas-center">
+                                        <FaUser />
+                                        <small>Penulis : {artikelPertama.user.name}</small>
+                                    </span>
+
+                                </div>
+
+                                </>
+                            )}
+                            </div>
+
+                        </Link>
+                        {moreNews ? (
+                        <>
+                            <section className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-10 md:px-20 px-4 mt-10">
+                            {dataArtikel.length > 0 && dataArtikel.map((artikel) => (
+                                <Link key={artikel.slug} href={`/artikel/${artikel.slug}`} className="mt-5">
+
+                                    <div className="h-[200px] sm:h-[250px] relative">
+                                        {artikel.status_artikel === "premium" && (
+                                            <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                                Premium
+                                            </span>
+                                        )}
+                                        <img
+                                            src={`./storage/${artikel.image}`} // Menggunakan gambar dari API
+                                            alt={artikel.title}
+                                            className="h-full object-cover w-full rounded"
+                                        />
+                                    </div>
+
+                                    <h3 className="mt-3 text-xl font-bold text-white">
+                                    {artikel.title} {/* Menampilkan judul artikel */}
+                                    </h3>
+
+                                    <div className="my-3 md:my-5 flex gap-5">
+                                    <span className="flex gap-2 items-center text-white">
+                                        <FaUser />
+                                        <small>{artikel.user.name}</small> {/* Menampilkan nama penulis */}
+                                    </span>
+                                    <span className="flex gap-2 items-center text-white">
+                                        <FaCalendar />
+                                        <small>{new Date(artikel.published_at).toLocaleDateString("id-ID", {
+                                        day: "2-digit",
+                                        month: "long",
+                                        year: "numeric",
+                                        })}</small> {/* Menampilkan tanggal terbit dalam format lokal */}
+                                    </span>
+                                    </div>
+                                    <p className="text-white mt-2 text-sm">
+                                    {artikel.excerpt} {/* Menampilkan ringkasan artikel */}
+                                    </p>
+                                </Link>
+                            ))}
+                            </section>
+
+                            <div className="flex flex-wrap justify-center text-center pb-10 ">
+                            <button
+                                className="w-full sm:w-[unset] mx-3 sm:mx-0 bg-white border-2 border-white hover:bg-slate-200 hover:border-red-400 text-red-500 text-sm sm:px-5 py-2 mt-10 rounded-full inline-flex items-center justify-center sm:gap-2 cursor-pointer "
+                                onClick={() => {
+                                setMoreNews(false);
+                                }}
+                            >
+                                {"Lebih Sedikit"}
+                                <MdKeyboardDoubleArrowUp className="ml-5" />
+                            </button>
+                            <Link
+                                href={"/artikel"}
+                                className="w-full sm:w-[unset] mx-3 sm:mx-0 border-2 border-white hover:bg-white text-white hover:text-red-500 text-sm sm:px-5 py-2 mt-10 rounded-full inline-flex items-center sm:gap-2 justify-center md:ml-5"
+                            >
+                                {"Semua Berita"}
+                                <MdKeyboardDoubleArrowRight className="ml-5" />
+                            </Link>
+                            </div>
+                        </>
+                        ) : (
+                        <div className="text-center pb-10 lg:block">
+                            <button
+                            className="bg-white hover:bg-red-400 text-red-500 mx-auto text-sm px-5 py-2 mt-10 rounded-full cursor-pointer inline-flex items-center gap-2"
+                            onClick={() => {
+                                setMoreNews(true);
+                            }}
+                            >
+                            {"Lihat Lainnya"}
+                            <MdKeyboardDoubleArrowDown />
+                            </button>
                         </div>
+                        )}
+                    </>
+                )}
 
-                    </Link>
-                    {moreNews ? (
-                    <>
-                        <section className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-10 md:px-20 px-4 mt-10">
-                        {dataArtikel.length > 0 && dataArtikel.map((artikel) => (
-                            <Link key={artikel.slug} href={`/artikel/${artikel.slug}`} className="mt-5">
+                {tabActive == "event" && (
+                    <div className="max-w-[1700px] py-10 lg:px-10 px-3 grid lg:grid-cols-3 grid-cols-1 gap-0 md:gap-10 items-center">
+                        {events.length > 0 && events.map((event, index) => (
+                            <Link key={index} href={`/event/${event.slug}`} className="bg-white rounded-lg shadow-sm mb-5 md:mb-0 dark:bg-gray-950">
 
-                                <div className="h-[200px] sm:h-[250px] relative">
-                                    {artikel.status_artikel === "premium" && (
+                                <div className="h-[200px] md:h-[270px] relative mb-5">
+
+                                    {event.status_event === "premium" && (
                                         <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
                                             Premium
                                         </span>
                                     )}
                                     <img
-                                        src={`./storage/${artikel.image}`} // Menggunakan gambar dari API
-                                        alt={artikel.title}
-                                        className="h-full object-cover w-full rounded"
+                                    src={event.image ? `./storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
+                                    alt={event.nama}
+                                    className="w-full h-full object-cover rounded-lg"
                                     />
-                                </div>
 
-                                <h3 className="mt-3 text-xl font-bold text-white">
-                                {artikel.title} {/* Menampilkan judul artikel */}
+                                </div>
+                                <h2 className={`px-4 text-lg font-bold mb-2 line-clamp-2 dark:text-gray-200`}>{event.nama}</h2>
+
+                                <p className="px-4 text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px] line-clamp-3">{event.excerpt}</p>
+
+                                <h3 className="px-4 text-lg font-bold mt-2 text-red-500 blinker z-1">
+                                    {event.harga_terendah ? `Rp ${event.harga_terendah.toLocaleString()}` : 'Gratis'}
                                 </h3>
 
-                                <div className="my-3 md:my-5 flex gap-5">
-                                <span className="flex gap-2 items-center text-white">
-                                    <FaUser />
-                                    <small>{artikel.user.name}</small> {/* Menampilkan nama penulis */}
-                                </span>
-                                <span className="flex gap-2 items-center text-white">
-                                    <FaCalendar />
-                                    <small>{new Date(artikel.published_at).toLocaleDateString("id-ID", {
-                                    day: "2-digit",
-                                    month: "long",
-                                    year: "numeric",
-                                    })}</small> {/* Menampilkan tanggal terbit dalam format lokal */}
-                                </span>
+                                <div className="mt-5 md:flex gap-5 px-4 pb-4">
+                                    <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 w-[60%] items-center">
+                                        <MapPin className="w-[25px] h-[25px]" />
+                                        <span className="line-clamp-2 text-sm">{event.tempat}</span>
+                                    </p>
+                                    <p className="flex gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
+                                        <FaCalendar />
+                                        <span className="line-clamp-2 text-sm">{changeDate(new Date(event.tanggal))}</span>
+                                    </p>
                                 </div>
-                                <p className="text-white mt-2 text-sm">
-                                {artikel.excerpt} {/* Menampilkan ringkasan artikel */}
-                                </p>
+
+                                <div
+                                    className={`p-5 rounded-b-lg text-center
+                                        ${new Date(event.tanggal) >= new Date() ? "bg-green-100 text-green-600" : "bg-red-100 text-red-500"}
+                                    `}
+                                >
+                                    <p className="lg:text-base md:text-sm text-[12px] font-semibold">
+                                        {new Date(event.tanggal) >= new Date() ? "Pendaftaran Masih Dibuka" : "Event Sudah Berakhir"}
+                                    </p>
+                                </div>
                             </Link>
                         ))}
-                        </section>
-
-                        <div className="flex flex-wrap justify-center text-center pb-10 ">
-                        <button
-                            className="w-full sm:w-[unset] mx-3 sm:mx-0 bg-white border-2 border-white hover:bg-slate-200 hover:border-red-400 text-red-500 text-sm sm:px-5 py-2 mt-10 rounded-full inline-flex items-center justify-center sm:gap-2 cursor-pointer "
-                            onClick={() => {
-                            setMoreNews(false);
-                            }}
-                        >
-                            {"Lebih Sedikit"}
-                            <MdKeyboardDoubleArrowUp className="ml-5" />
-                        </button>
-                        <Link
-                            href={"/artikel"}
-                            className="w-full sm:w-[unset] mx-3 sm:mx-0 border-2 border-white hover:bg-white text-white hover:text-red-500 text-sm sm:px-5 py-2 mt-10 rounded-full inline-flex items-center sm:gap-2 justify-center md:ml-5"
-                        >
-                            {"Semua Berita"}
-                            <MdKeyboardDoubleArrowRight className="ml-5" />
-                        </Link>
-                        </div>
-                    </>
-                    ) : (
-                    <div className="text-center pb-10 lg:block">
-                        <button
-                        className="bg-white hover:bg-red-400 text-red-500 mx-auto text-sm px-5 py-2 mt-10 rounded-full cursor-pointer inline-flex items-center gap-2"
-                        onClick={() => {
-                            setMoreNews(true);
-                        }}
-                        >
-                        {"Lihat Lainnya"}
-                        <MdKeyboardDoubleArrowDown />
-                        </button>
                     </div>
-                    )}
-                </>
-            ) : (
-                <div className="max-w-[1700px] py-10 lg:px-10 px-3 grid lg:grid-cols-3 grid-cols-1 gap-0 md:gap-10 items-center">
-                    {events.length > 0 && events.map((event, index) => (
-                        <Link key={index} href={`/event/${event.slug}`} className="bg-white rounded-lg shadow-sm mb-5 md:mb-0 dark:bg-gray-950">
+                )}
 
-                            <div className="h-[200px] md:h-[270px] relative mb-5">
-
-                                {event.status_event === "premium" && (
-                                    <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
-                                        Premium
+                {tabActive === "challenge" && (
+                    <div className="max-w-[1700px] py-10 lg:px-10 px-3 grid lg:grid-cols-3 grid-cols-1 gap-10">
+                        {challenges.length > 0 ? (
+                            challenges.map((challenge, index) => (
+                                <Link
+                                    key={index}
+                                    href={`/ragam-challenge/${challenge.slug}`}
+                                    className="bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden flex flex-col border border-gray-200 dark:border-gray-700"
+                                    >
+                                    {/* Badge */}
+                                    <span
+                                        className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold uppercase ${
+                                        challenge.status === "premium"
+                                            ? "bg-yellow-500 text-white"
+                                            : "bg-green-500 text-white"
+                                        }`}
+                                    >
+                                        {challenge.status}
                                     </span>
-                                )}
-                                <img
-                                src={event.image ? `./storage/${event.image}` : "./images/NO IMAGE AVAILABLE.jpg"}
-                                alt={event.nama}
-                                className="w-full h-full object-cover rounded-lg"
-                                />
 
-                            </div>
-                            <h2 className={`px-4 text-lg font-bold mb-2 line-clamp-2 dark:text-gray-200`}>{event.nama}</h2>
+                                    {/* Image */}
+                                    <img
+                                        src={
+                                        challenge.image
+                                            ? `./storage/${challenge.image}`
+                                            : "/images/NO IMAGE AVAILABLE.jpg"
+                                        }
+                                        alt={challenge.title}
+                                        className="w-full h-[220px] object-cover"
+                                    />
 
-                            <p className="px-4 text-gray-700 dark:text-gray-300 lg:text-base md:text-sm text-[12px] line-clamp-3">{event.excerpt}</p>
+                                    {/* Content */}
+                                    <div className="flex-1 flex flex-col justify-between p-5">
+                                        <div>
+                                        <h2 className="text-lg font-bold text-slate-800 dark:text-gray-100 mb-2">
+                                            {challenge.title}
+                                        </h2>
+                                        <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-4">
+                                            {challenge.description}
+                                        </p>
+                                        </div>
 
-                            <h3 className="px-4 text-lg font-bold mt-2 text-red-500 blinker z-1">
-                                {event.harga_terendah ? `Rp ${event.harga_terendah.toLocaleString()}` : 'Gratis'}
-                            </h3>
+                                        <div className="flex items-center justify-between text-sm font-semibold">
+                                        <span className="text-red-500 flex items-center gap-1">
+                                            🪙 {challenge.nusantara_points} poin
+                                        </span>
+                                        <span className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                            ⏱️ {challenge.duration_days} hari
+                                        </span>
+                                        </div>
+                                    </div>
 
-                            <div className="mt-5 md:flex gap-5 px-4 pb-4">
-                                <p className="flex md:mb-0 mb-2 md:text-base text-[12px] gap-2 text-sm text-gray-600 dark:text-gray-400 w-[60%] items-center">
-                                    <MapPin className="w-[25px] h-[25px]" />
-                                    <span className="line-clamp-2 text-sm">{event.tempat}</span>
-                                </p>
-                                <p className="flex gap-2 text-sm text-gray-600 dark:text-gray-400 items-center">
-                                    <FaCalendar />
-                                    <span className="line-clamp-2 text-sm">{changeDate(new Date(event.tanggal))}</span>
-                                </p>
-                            </div>
+                                    {/* Footer */}
+                                    <div
+                                        className={`text-center p-5 ${
+                                        challenge.status === "premium"
+                                            ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"
+                                            : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                                        }`}
+                                    >
+                                        <p className="text-capitalize lg:text-base md:text-sm text-[12px] font-semibold">
+                                        {challenge.status === "premium"
+                                            ? "Khusus Member Premium"
+                                            : "Gratis diikuti"}
+                                        </p>
+                                    </div>
+                                </Link>
+                            ))
+                        ) : (
+                            <p className="text-center text-white col-span-3">Belum ada challenge aktif</p>
+                        )}
+                    </div>
+                )}
 
-                            <div
-                                className={`p-5 rounded-b-lg text-center
-                                    ${new Date(event.tanggal) >= new Date() ? "bg-green-100 text-green-600" : "bg-red-100 text-red-500"}
-                                `}
-                            >
-                                <p className="lg:text-base md:text-sm text-[12px] font-semibold">
-                                    {new Date(event.tanggal) >= new Date() ? "Pendaftaran Masih Dibuka" : "Event Sudah Berakhir"}
-                                </p>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-            )}
+                {tabActive === "quiz" && (
+                    <div className="max-w-[1700px] py-10 lg:px-10 px-3 grid lg:grid-cols-3 grid-cols-1 gap-10">
+                        {quizzes.length > 0 ? (
+                            quizzes.map((quiz, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => setSelectedQuiz(quiz)}
+                                    className="cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden flex flex-col border border-gray-200 dark:border-gray-700"
+                                    >
+                                    {/* <span
+                                        className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold uppercase ${
+                                        quiz.status === "premium"
+                                            ? "bg-yellow-500 text-white"
+                                            : "bg-green-500 text-white"
+                                        }`}
+                                    >
+                                        {quiz.status}
+                                    </span> */}
 
-        </div>
+                                    <div className="flex-1 flex flex-col justify-between p-5">
+                                        <div>
+                                        <h2 className="text-lg font-bold text-slate-800 dark:text-gray-100 mb-2">
+                                            {quiz.title}
+                                        </h2>
+                                        <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-4">
+                                            {quiz.description ?? "Tidak ada deskripsi."}
+                                        </p>
+                                        </div>
+
+                                        <div className="flex items-center justify-between text-sm font-semibold">
+                                        <span className="text-blue-500 flex items-center gap-1">
+                                            ⏱️ {quiz.duration_minutes} menit
+                                        </span>
+                                        {quiz.start_at && (
+                                            <span className="text-gray-500 dark:text-gray-400 text-xs">
+                                            Mulai:{" "}
+                                            {new Date(quiz.start_at).toLocaleDateString("id-ID")}
+                                            </span>
+                                        )}
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        className={`text-center p-5 ${
+                                        quiz.status === "premium"
+                                            ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"
+                                            : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                                        }`}
+                                    >
+                                        <p className="lg:text-base md:text-sm text-[12px] font-semibold">
+                                        {quiz.status === "premium"
+                                            ? "Khusus Member Premium"
+                                            : "Gratis untuk semua pengguna"}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-center text-white col-span-3">Belum ada kuis aktif</p>
+                        )}
+                    </div>
+                )}
+
+
+            </div>
         </section>
 
         <section id="map" className="px-4"

@@ -46,23 +46,23 @@ class FrontController extends Controller
 {
     public function index()
     {
+        $today = now();
 
-        // Ambil event mendatang
+        // === EVENTS ===
         $events = Event::select(
             "kategori_event_id", "nama", "slug", "image", "status_event", "excerpt", "tempat", "tanggal",
             DB::raw("(SELECT MIN(harga) FROM harga_events WHERE harga_events.event_id = events.id) as harga_terendah")
         )
         ->where('status_event', '!=', 'draft')
-        ->where('tanggal', '>=', now())
+        ->where('tanggal', '>=', $today)
         ->orderBy('tanggal', 'asc')
         ->take(3)
         ->withoutTrashed()
         ->get();
 
-        // Jika tidak ada event mendatang, ambil 3 event terakhir yang sudah lewat
         if ($events->isEmpty()) {
             $events = Event::select("kategori_event_id", "nama", "slug", "image", "status_event", "excerpt", "tempat", "tanggal")
-                ->where('tanggal', '<', now())
+                ->where('tanggal', '<', $today)
                 ->where('status_event', '!=', 'draft')
                 ->orderBy('tanggal', 'desc')
                 ->take(3)
@@ -70,43 +70,44 @@ class FrontController extends Controller
                 ->get();
         }
 
+        // === CHALLENGE ===
+        $challenges = Challenge::orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        // === KUIS ===
+        $quizzes = Quiz::orderBy('created_at', 'desc')
+            ->take(6)
+            ->get();
+
+        // === ARTIKEL & PLAN (seperti sebelumnya) ===
         $artikels = Artikel::select('title','views', "slug", "image", "excerpt", "published_at", "user_id", "kategori_id", "status_artikel")
             ->withoutTrashed()
             ->where('status_artikel', '!=', 'draft')
             ->with(["kategori:id,nama", "user:id,name"])
-            ->where("status_artikel", '!=', "draft")
             ->orderBy('created_at', 'desc')
-            ->limit(4)->get();
+            ->limit(4)
+            ->get();
 
-                $plans = Plan::whereNull('deleted_at')->get();
-
-        $specialTags = [
-            "🎉 Mulai Gratis",
-            "🔥 Populer",
-            "💼 Terbaik untuk Profesional"
-        ];
+        $plans = Plan::whereNull('deleted_at')->get();
+        $specialTags = ["🎉 Mulai Gratis", "🔥 Populer", "💼 Terbaik untuk Profesional"];
 
         $response = $plans->map(function ($plan) use ($specialTags) {
-            // Konversi durasi ke label
             $durationMap = [
                 '30' => 'Bulanan',
                 '90' => 'Triwulanan',
                 '365' => 'Tahunan',
             ];
-
             $durationLabel = $durationMap[$plan->durasi] ?? 'lainnya';
 
-            // Pecah fitur menjadi array
             $features = array_filter(array_map(function ($line) {
                 return trim(preg_replace('/^-/', '', $line));
             }, preg_split('/\r\n|\r|\n/', $plan->fitur)));
 
-            // Pecah deskripsi menjadi dua paragraf
             $deskripsiParts = preg_split('/\r\n|\r|\n/', $plan->deskripsi);
             $description = trim($deskripsiParts[0] ?? '');
             $specialNote = trim($deskripsiParts[1] ?? '');
 
-            // Mapping specialTag berdasarkan nama plan
             $tagMap = [
                 "Gratis" => $specialTags[0],
                 "Pelajar" => $specialTags[1],
@@ -129,12 +130,15 @@ class FrontController extends Controller
 
         return Inertia::render('Home', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
             'events' => $events,
+            'challenges' => $challenges,
+            'quizzes' => $quizzes,
             'artikels' => $artikels,
             "plans" => $response,
         ]);
     }
+
 
     public function event(Request $request)
     {
@@ -158,13 +162,18 @@ class FrontController extends Controller
         $totalEvents = $query->count();
         $totalPages = ceil($totalEvents / $perPage);
 
-        $events = $query->orderBy('tanggal', 'asc')
+        // Urutkan agar event yang masih open (tanggal >= hari ini) muncul dulu
+        $events = $query
+            ->orderByRaw("CASE WHEN tanggal >= ? THEN 0 ELSE 1 END", [$today]) // open dulu, baru yang lewat
+            ->orderBy('tanggal', 'asc') // dalam masing-masing kategori, urut berdasar tanggal terdekat
             ->skip($skip)
             ->take($perPage)
             ->withoutTrashed()
             ->get()
             ->map(function ($event) use ($today) {
-                $event->status = ($event->tanggal < $today) ? "Event Sudah Berakhir" : "Pendaftaran Masih Dibuka";
+                $event->status = ($event->tanggal < $today)
+                    ? "Event Sudah Berakhir"
+                    : "Pendaftaran Masih Dibuka";
                 return $event;
             });
 
@@ -177,11 +186,12 @@ class FrontController extends Controller
 
         return Inertia::render('Event/Event', [
             "user" => $user = Auth::user(),
-            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah')  : 0,
+            'cartCount' => $user ? Cart::where('user_id', $user->id)->sum('jumlah') : 0,
             'events' => $events,
             'totalPages' => $totalPages,
         ]);
     }
+
 
 
     function showEvent($slug)
