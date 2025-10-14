@@ -16,9 +16,6 @@
 
 
 -- Membuang struktur basisdata untuk sanggar_nusantara
-CREATE DATABASE IF NOT EXISTS `u1275496_sanggar-nusantara` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `u1275496_sanggar-nusantara`;
-
 -- membuang struktur untuk table sanggar_nusantara.alamats
 CREATE TABLE IF NOT EXISTS `alamats` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -205,7 +202,7 @@ INSERT INTO `carts` (`id`, `user_id`, `item_id`, `item_type`, `jumlah`, `variasi
 CREATE TABLE IF NOT EXISTS `challenges` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'Tidak Ada Slug',
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Tidak Ada Slug',
   `status` enum('premium','gratis') DEFAULT NULL,
   `description` text NOT NULL,
   `image` varchar(255) DEFAULT NULL,
@@ -215,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `challenges` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.challenges: ~5 rows (lebih kurang)
 DELETE FROM `challenges`;
@@ -232,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `challenge_participants` (
   `uuid` char(36) NOT NULL,
   `user_id` bigint unsigned NOT NULL,
   `challenge_id` bigint unsigned NOT NULL,
-  `status` enum('in_progres','completed','failed','rejected') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'in_progres',
+  `status` enum('in_progres','completed','failed','rejected') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'in_progres',
   `started_at` timestamp NULL DEFAULT NULL,
   `completed_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -244,7 +241,7 @@ CREATE TABLE IF NOT EXISTS `challenge_participants` (
   KEY `fk_participant_challenge` (`challenge_id`),
   CONSTRAINT `fk_participant_challenge` FOREIGN KEY (`challenge_id`) REFERENCES `challenges` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_participant_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.challenge_participants: ~6 rows (lebih kurang)
 DELETE FROM `challenge_participants`;
@@ -261,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `challenge_progres` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `challenge_participant_id` bigint unsigned NOT NULL,
   `day_number` int NOT NULL,
-  `image_bukti` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `image_bukti` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status` enum('pending','approved','rejected') DEFAULT 'pending',
   `admin_note` varchar(255) DEFAULT NULL,
   `verified_by` bigint unsigned DEFAULT NULL,
@@ -274,7 +271,7 @@ CREATE TABLE IF NOT EXISTS `challenge_progres` (
   KEY `fk_progres_verifier` (`verified_by`),
   CONSTRAINT `fk_progres_participant` FOREIGN KEY (`challenge_participant_id`) REFERENCES `challenge_participants` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_progres_verifier` FOREIGN KEY (`verified_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.challenge_progres: ~9 rows (lebih kurang)
 DELETE FROM `challenge_progres`;
@@ -719,7 +716,7 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 -- membuang struktur untuk table sanggar_nusantara.nusantara_points
 CREATE TABLE IF NOT EXISTS `nusantara_points` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `uuid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `user_id` bigint unsigned NOT NULL,
   `amount` int DEFAULT '0',
   `source` varchar(255) DEFAULT NULL,
@@ -729,7 +726,7 @@ CREATE TABLE IF NOT EXISTS `nusantara_points` (
   PRIMARY KEY (`id`),
   KEY `fk_nusantara_points_user` (`user_id`),
   CONSTRAINT `fk_nusantara_points_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.nusantara_points: ~6 rows (lebih kurang)
 DELETE FROM `nusantara_points`;
@@ -755,7 +752,7 @@ CREATE TABLE IF NOT EXISTS `nusantara_point_usages` (
   KEY `fk_pointusages_order` (`order_id`),
   CONSTRAINT `fk_pointusages_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_pointusages_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.nusantara_point_usages: ~3 rows (lebih kurang)
 DELETE FROM `nusantara_point_usages`;
@@ -1248,7 +1245,7 @@ INSERT INTO `plans` (`id`, `nama`, `harga`, `harga_diskon`, `durasi`, `deskripsi
 -- membuang struktur untuk table sanggar_nusantara.quizzes
 CREATE TABLE IF NOT EXISTS `quizzes` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `title` varchar(255) NOT NULL,
   `description` text,
   `is_premium` tinyint(1) DEFAULT '0',
@@ -1261,7 +1258,7 @@ CREATE TABLE IF NOT EXISTS `quizzes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`),
   UNIQUE KEY `uuid` (`uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.quizzes: ~7 rows (lebih kurang)
 DELETE FROM `quizzes`;
@@ -1287,7 +1284,7 @@ CREATE TABLE IF NOT EXISTS `quiz_answers` (
   PRIMARY KEY (`id`),
   KEY `fk_quiz_answers_question` (`quiz_question_id`),
   CONSTRAINT `fk_quiz_answers_question` FOREIGN KEY (`quiz_question_id`) REFERENCES `quiz_questions` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.quiz_answers: ~80 rows (lebih kurang)
 DELETE FROM `quiz_answers`;
@@ -1460,7 +1457,7 @@ CREATE TABLE IF NOT EXISTS `quiz_attempts` (
   `quiz_id` bigint unsigned NOT NULL,
   `user_id` bigint unsigned NOT NULL,
   `score` int DEFAULT '0',
-  `recomendation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `recomendation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `started_at` timestamp NULL DEFAULT NULL,
   `finished_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1472,7 +1469,7 @@ CREATE TABLE IF NOT EXISTS `quiz_attempts` (
   KEY `fk_quiz_attempts_user` (`user_id`),
   CONSTRAINT `fk_quiz_attempts_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_quiz_attempts_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.quiz_attempts: ~2 rows (lebih kurang)
 DELETE FROM `quiz_attempts`;
@@ -1500,7 +1497,7 @@ CREATE TABLE IF NOT EXISTS `quiz_attempt_answers` (
   CONSTRAINT `fk_attempt_answers_answer` FOREIGN KEY (`quiz_answer_id`) REFERENCES `quiz_answers` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_attempt_answers_attempt` FOREIGN KEY (`quiz_attempt_id`) REFERENCES `quiz_attempts` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_attempt_answers_question` FOREIGN KEY (`quiz_question_id`) REFERENCES `quiz_questions` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.quiz_attempt_answers: ~6 rows (lebih kurang)
 DELETE FROM `quiz_attempt_answers`;
@@ -1539,7 +1536,7 @@ CREATE TABLE IF NOT EXISTS `quiz_questions` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.quiz_questions: ~40 rows (lebih kurang)
 DELETE FROM `quiz_questions`;
@@ -1598,7 +1595,7 @@ CREATE TABLE IF NOT EXISTS `quiz_quiz_questions` (
   KEY `fk_quiz_quiz_questions_question` (`quiz_question_id`),
   CONSTRAINT `fk_quiz_quiz_questions_question` FOREIGN KEY (`quiz_question_id`) REFERENCES `quiz_questions` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_quiz_quiz_questions_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel sanggar_nusantara.quiz_quiz_questions: ~11 rows (lebih kurang)
 DELETE FROM `quiz_quiz_questions`;

@@ -1009,7 +1009,7 @@ class FrontController extends Controller
         $score = round(($totalCorrect / $totalQuestions) * 100);
 
         // Generate rekomendasi menggunakan AI GPT
-        $recommendation = $this->generateAIRecommendation($quiz->title, $score, $answerDetails);
+        $recommendation = $this->generateRecommendation($quiz->title, $score, $answerDetails);
 
         $attempt->update([
             'finished_at' => now(),
@@ -1021,6 +1021,17 @@ class FrontController extends Controller
             'uuid' => $uuid,
             'uuidAttempt' => $attempt->uuid,
         ]);
+    }
+
+    // Contoh fungsi generateRecommendation menggunakan AI (dummy)
+    protected function generateRecommendation($quiz, $score, $answers)
+    {
+        // Bisa pakai API GPT seperti di JS-mu, tapi di PHP
+        // Untuk contoh sederhana:
+        if ($score === 100) return "Kerja bagus! Semua jawaban benar, terus pertahankan.";
+        if ($score >= 70) return "Hampir sempurna! Perhatikan beberapa jawaban yang kurang tepat.";
+        if ($score >= 50) return "Perlu latihan lebih, review jawaban yang salah dan pelajari penjelasannya.";
+        return "Skor rendah, sebaiknya pelajari ulang materi dan coba lagi.";
     }
 
     protected function generateAIRecommendation(string $quizTitle, int $score, array $answerDetails): string

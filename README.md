@@ -19,6 +19,9 @@
   - Seni Tari  
   - Lagu Daerah  
   - Makanan Khas
+- **Nusantara AI**: Chatbot interaktif berbasis AI yang dapat menjawab pertanyaan seputar budaya Indonesia, memberikan rekomendasi konten, serta membantu pengguna menjelajahi warisan Nusantara secara personal dan edukatif.
+- **Ragam Challenge**: Fitur interaktif berupa tantangan mingguan atau bulanan yang mengajak pengguna untuk berpartisipasi dalam kegiatan budaya digital, seperti kuis, tebak budaya, hingga misi berbagi konten budaya untuk mendapatkan poin dan badge.
+- **Kuis Nusantara**: Permainan edukatif untuk menguji pengetahuan tentang budaya Indonesia, mulai dari sejarah, adat istiadat, hingga seni tradisional. Pengguna dapat bersaing di papan peringkat dan memperoleh hadiah virtual atau reward eksklusif.
 
 ---
 
@@ -27,6 +30,7 @@
 - **Frontend**: React.js, Tailwind CSS
 - **Backend**: Laravel, Livewire, Filament
 - **Payment Gateway**: Midtrans (QRIS Sandbox)
+- **API Integration**: RapidAPI - untuk menghubungkan layanan eksternal AI assistant
 
 ---
 

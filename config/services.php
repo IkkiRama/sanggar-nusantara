@@ -42,7 +42,7 @@ return [
         'guzzle' => [
             'verify' => false,
         ],
-    ],
+    ], 
     'midtrans' => [
         'server_key' => env('VITE_MIDTRANS_SERVER_KEY'),
         'client_key' => env('VITE_MIDTRANS_CLIENT_KEY'),
