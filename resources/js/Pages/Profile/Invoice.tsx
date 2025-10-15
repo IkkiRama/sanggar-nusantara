@@ -213,14 +213,14 @@ const Invoice = ({ order, user, cartCount }) => {
                                 >
                                     Kembali
                                 </button>
+                        { order.status_pembelian === "pending" && (
                                 <button
                                     onClick={() => handleBayar(order.order_id)}
                                     className="px-5 cursor-pointer text-white py-2 text-sm bg-yellow-500 border-2 border-yellow-500 hover:bg-yellow-600 rounded-md font-semibold"
                                 >
                                     Bayar
                                 </button>
-                        {/* { order.status_pembelian === "pending" && (
-                        ) } */}
+                        ) }
                     </div>
 
 

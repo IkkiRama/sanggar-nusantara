@@ -17,6 +17,7 @@ interface Challenge {
 interface Participant {
   id: number;
   status: "in_progres" | "completed" | "failed" | "rejected";
+  uuid:string;
 }
 
 interface PageProps {
@@ -24,6 +25,7 @@ interface PageProps {
   cartCount: number;
   challenge: Challenge;
   participant: Participant | null;
+
 }
 
 export default function DetailChallenge() {
@@ -126,18 +128,19 @@ export default function DetailChallenge() {
                   </>
                 ) : completed ? (
                   <>
-                    <button
-                      disabled
-                      className="bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-6 py-3 rounded-lg font-semibold cursor-not-allowed w-full sm:w-auto"
-                    >
-                      Challenge Selesai
-                    </button>
                     <Link
-                      href={`/ragam-challenge/${challenge.slug}/progres`}
+                      href={`/ragam-challenge/${challenge.slug}/progres/${participant.uuid}`}
                       className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all w-full sm:w-auto text-center"
                     >
                       Lihat Progres
                     </Link>
+
+                    <button
+                        onClick={handleJoin}
+                        className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all w-full sm:w-auto cursor-pointer"
+                    >
+                        Ikuti Challenge Lagi
+                    </button>
                   </>
                 ) : canJoin ? (
                   <button
