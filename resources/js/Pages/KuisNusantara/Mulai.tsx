@@ -36,9 +36,10 @@ interface Props {
   quiz: Quiz;
   attempt: Attempt;
   user: any;
+  cartCount:number;
 }
 
-const Mulai: React.FC<Props> = ({ quiz, attempt, user }) => {
+const Mulai: React.FC<Props> = ({ quiz, attempt, user, cartCount }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<{ [key: number]: number | null }>({});
 
@@ -113,7 +114,7 @@ const Mulai: React.FC<Props> = ({ quiz, attempt, user }) => {
 
   return (
     <MainLayout title={`${quiz.title} | Sanggar Nusantara`}>
-      <LightNavbar user={user} />
+      <LightNavbar user={user} cartCount={cartCount} />
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 lg:py-0 py-20 px-4 lg:pt-30 lg:pb-20">
         <div className="max-w-7xl mx-auto">
           {/* Header */}

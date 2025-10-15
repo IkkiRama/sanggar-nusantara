@@ -39,9 +39,10 @@ interface Props {
   quiz: Quiz;
   attempt: Attempt;
   user: any;
+  cartCount:number;
 }
 
-const LihatAttempt: React.FC<Props> = ({ quiz, attempt, user }) => {
+const LihatAttempt: React.FC<Props> = ({ quiz, attempt, user, cartCount }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentQuestion = quiz.questions[currentIndex];
 
@@ -105,7 +106,7 @@ const LihatAttempt: React.FC<Props> = ({ quiz, attempt, user }) => {
 
   return (
     <MainLayout title={`Lihat Attempt | ${quiz.title}`}>
-      <LightNavbar user={user} />
+      <LightNavbar user={user} cartCount={cartCount} />
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 py-20 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header: Judul, Score, Recommendation */}
@@ -217,6 +218,12 @@ const LihatAttempt: React.FC<Props> = ({ quiz, attempt, user }) => {
               </div>
             </div>
           </div>
+            <button
+                onClick={() => window.history.back()}
+                className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all w-full md:w-auto cursor-pointer mt-5"
+            >
+                ← Kembali
+            </button>
         </div>
       </div>
     </MainLayout>

@@ -496,7 +496,7 @@ class ProfileController extends Controller
             'role' => Auth::user()->getRoleNames()->first(),
             'nusantaraPoints' => $totalPoints,
             'challenges' => $challenges,
-            'cartCount' => 0,
+            'cartCount' => $user ? Cart::where('user_id', Auth::user()->id)->sum('jumlah')  : 0,
         ]);
     }
 
@@ -536,7 +536,7 @@ class ProfileController extends Controller
             'role' => Auth::user()->getRoleNames()->first(),
             'nusantaraPoints' => $totalPoints,
             'quizzes' => $quizzes,
-            'cartCount' => 0,
+            'cartCount' => $user ? Cart::where('user_id', Auth::user()->id)->sum('jumlah')  : 0,
         ]);
     }
 

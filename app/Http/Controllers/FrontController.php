@@ -831,6 +831,7 @@ class FrontController extends Controller
             'uploadedToday' => $uploadedToday,
             'expired' => $today->greaterThan($endDate),
             'rewardClaimed' => $rewardClaimed,
+            'cartCount' => Auth::user() ? Cart::where('user_id', Auth::user()->id)->sum('jumlah')  : 0,
         ]);
     }
 
@@ -935,6 +936,7 @@ class FrontController extends Controller
                     'role' => auth()->user()->getRoleNames()->first(),
                 ]
                 : null,
+            'cartCount' => Auth::user() ? Cart::where('user_id', Auth::user()->id)->sum('jumlah')  : 0,
         ]);
     }
 
@@ -984,6 +986,7 @@ class FrontController extends Controller
                 'started_at' => $attempt->started_at,
             ],
             'user' => auth()->user(),
+            'cartCount' => Auth::user() ? Cart::where('user_id', Auth::user()->id)->sum('jumlah')  : 0,
         ]);
     }
 
@@ -1028,8 +1031,16 @@ class FrontController extends Controller
         $totalQuestions = $quiz->quizQuizQuestions()->count();
         $score = round(($totalCorrect / $totalQuestions) * 100);
 
-        // Generate rekomendasi menggunakan AI GPT
-        $recommendation = $this->generateRecommendation($quiz->title, $score, $answerDetails);
+        // Generate rekomendasi
+        if ($score === 100){
+            $recommendation = "Kerja bagus! Semua jawaban benar, terus pertahankan.";
+        } else if ($score >= 70){
+            $recommendation = "Hampir sempurna! Perhatikan beberapa jawaban yang kurang tepat.";
+        } else if ($score >= 50){
+            $recommendation = "Perlu latihan lebih, review jawaban yang salah dan pelajari penjelasannya.";
+        } else{
+            $recommendation = "Skor rendah, sebaiknya pelajari ulang materi dan coba lagi.";
+        }
 
         $attempt->update([
             'finished_at' => now(),
@@ -1040,6 +1051,7 @@ class FrontController extends Controller
         return redirect()->route('kuis-nusantara.lihat', [
             'uuid' => $uuid,
             'uuidAttempt' => $attempt->uuid,
+            'cartCount' => Auth::user() ? Cart::where('user_id', Auth::user()->id)->sum('jumlah')  : 0,
         ]);
     }
 
@@ -1130,6 +1142,7 @@ class FrontController extends Controller
             ],
             'attempt' => $attempt,
             'user' => auth()->user(),
+            'cartCount' => Auth::user() ? Cart::where('user_id', Auth::user()->id)->sum('jumlah')  : 0,
         ]);
     }
 

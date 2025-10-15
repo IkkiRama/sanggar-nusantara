@@ -19,6 +19,7 @@ interface PageProps {
   uploadedToday: boolean;
   expired: boolean;
   rewardClaimed: boolean;
+  cartCount:number;
 }
 
 export default function ChallengeProgres({
@@ -27,7 +28,8 @@ export default function ChallengeProgres({
   progres,
   uploadedToday,
   expired,
-  rewardClaimed
+  rewardClaimed,
+  cartCount
 }: PageProps) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -79,10 +81,9 @@ export default function ChallengeProgres({
   const allDaysCompleted = progres.filter(p => p.status === "approved").length === participant.challenge.duration_days;
 
 
-
   return (
     <MainLayout title={`Progres ${participant.challenge.title} | Sanggar Nusantara`}>
-      <LightNavbar user={user} cartCount={0} />
+      <LightNavbar user={user} cartCount={cartCount} />
 
       <div className="px-4 py-20 lg:pt-28 lg:pb-20 min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
         <div className="container mx-auto max-w-5xl bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 sm:p-8 md:p-10 transition-all duration-300">
