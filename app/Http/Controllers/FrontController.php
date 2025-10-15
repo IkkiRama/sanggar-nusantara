@@ -709,7 +709,6 @@ class FrontController extends Controller
         ]);
     }
 
-    // Ikuti challenge
     public function joinChallenge($id)
     {
         $user = Auth::user();
@@ -720,25 +719,33 @@ class FrontController extends Controller
             return back()->with('error', 'Challenge ini hanya untuk pengguna premium.');
         }
 
-        // Sudah ikut?
+        // Cek apakah user sudah ikut challenge ini
         $existing = ChallengeParticipant::where('user_id', $user->id)
             ->where('challenge_id', $challenge->id)
             ->whereIn('status', ['in_progres'])
             ->first();
 
         if ($existing) {
-            return back()->with('warning', 'Kamu sudah mengikuti challenge ini dan belum selesai.');
+            // Langsung arahkan ke halaman progres yang sudah ada
+            return redirect()->route('challenge.progres', ['slug' => $challenge->slug]);
         }
 
-        ChallengeParticipant::create([
+        // Buat participant baru
+        $participant = ChallengeParticipant::create([
             'user_id' => $user->id,
             'challenge_id' => $challenge->id,
             'status' => 'in_progres',
             'started_at' => Carbon::now(),
         ]);
 
-        return back()->with('success', 'Kamu berhasil mengikuti challenge!');
+        // Setelah join, langsung arahkan ke progres challenge
+        return redirect()->route('challenge.progres', [
+                'slug' => $challenge->slug,
+                'uuid' => $participant->uuid,
+            ])
+            ->with('success', 'Kamu berhasil mengikuti challenge!');
     }
+
 
     // Hentikan challenge
     public function stopChallenge($id)
@@ -758,42 +765,53 @@ class FrontController extends Controller
         return back()->with('info', 'Challenge telah dihentikan.');
     }
 
-    public function challengeProgres($slug)
+
+    public function challengeProgres($slug, $uuid)
     {
         $user = auth()->user();
 
         $challenge = Challenge::where('slug', $slug)->firstOrFail();
 
         $participant = ChallengeParticipant::with('challenge')
+            ->where('uuid', $uuid)
             ->where('challenge_id', $challenge->id)
             ->where('user_id', $user->id)
             ->firstOrFail();
 
-        $duration = $challenge->duration_days;
-        $startDate = Carbon::parse($participant->started_at);
-        $endDate = $startDate->copy()->addDays($duration);
+        $duration = (int) $challenge->duration_days;
+        $startDate = Carbon::parse($participant->started_at)->startOfDay();
+        $endDate = $startDate->copy()->addDays($duration - 1)->endOfDay(); // durasi N hari: day 1..N
+        $today = Carbon::now()->startOfDay();
 
-        // Ambil semua progres peserta
+        // Ambil semua progres peserta -> pastikan day_number int
         $progres = ChallengeProgres::where('challenge_participant_id', $participant->id)
             ->orderBy('day_number', 'asc')
             ->get();
 
-        // Buat array day_number yang sudah diupload
-        $uploadedDays = $progres->pluck('day_number')->toArray();
+        $uploadedDays = $progres->pluck('day_number')->map(function($v){ return (int) $v; })->toArray();
 
-        // Hitung hari ke berapa sekarang dari start date
-        $today = Carbon::now();
-        $currentDayNumber = $startDate->diffInDays($today) + 1;
+        // Tentukan batas pengecekan: hari yang kita periksa adalah sampai "hari kemarin" maksimal sampai endDate
+        $lastCheckDate = $today->copy()->subDay();              // hari kemarin
+        if ($lastCheckDate->greaterThan($endDate)) {
+            $lastCheckDate = $endDate->copy();
+        }
 
-        // Cek apakah ada hari yang terlewat (tidak ada progres)
+        // Kalau lastCheckDate masih sebelum startDate -> tidak ada yang perlu dicek
         $missedDays = [];
-        for ($i = 1; $i < $currentDayNumber && $i <= $duration; $i++) {
-            if (!in_array($i, $uploadedDays)) {
-                $missedDays[] = $i;
+        if ($lastCheckDate->gte($startDate)) {
+            // hitung nomor hari terakhir yang perlu dicek (1-based)
+            $lastDayNumberToCheck = $startDate->diffInDays($lastCheckDate) + 1;
+            // Pastikan tidak melebihi durasi
+            $lastDayNumberToCheck = min($lastDayNumberToCheck, $duration);
+
+            for ($i = 1; $i <= $lastDayNumberToCheck; $i++) {
+                if (!in_array($i, $uploadedDays, true)) {
+                    $missedDays[] = $i;
+                }
             }
         }
 
-        // Kalau ada hari yang terlewat atau sudah lewat dari batas waktu
+        // Gagal hanya jika ada missedDays (yang artinya ada hari sebelum hari ini yang terlewat)
         if ((!empty($missedDays) || $today->greaterThan($endDate)) && $participant->status === 'in_progres') {
             $participant->update(['status' => 'failed']);
         }
@@ -815,6 +833,8 @@ class FrontController extends Controller
             'rewardClaimed' => $rewardClaimed,
         ]);
     }
+
+
 
 
 

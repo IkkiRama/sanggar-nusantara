@@ -38,16 +38,8 @@ class ChallengeParticipant extends Model
 
     protected static function booted()
     {
-        static::creating(function ($challenge) {
-            if (empty($challenge->slug)) {
-                $challenge->slug = Str::slug($challenge->title);
-            }
-        });
-
-        static::updating(function ($challenge) {
-            if ($challenge->isDirty('title')) {
-                $challenge->slug = Str::slug($challenge->title);
-            }
+        static::creating(function ($participant) {
+            $participant->uuid = (string) Str::uuid();
         });
     }
 

@@ -27,10 +27,9 @@ export default function RagamChallenge({ user, role, nusantaraPoints, cartCount,
         );
     }
 
-    const handleAction = (slug) => {
-        router.visit(`/ragam-challenge/${slug}/progres`);
+    const handleAction = (slug, uuid) => {
+        router.visit(`/ragam-challenge/${slug}/progres/${uuid}`);
     };
-
 
     return (
         <ProfileLayout title={`Ragam Challenge | Sanggar Nusantara`}>
@@ -101,33 +100,33 @@ export default function RagamChallenge({ user, role, nusantaraPoints, cartCount,
 
                                         <div className="flex gap-3 mt-2 md:mt-0">
                                             {item.status === 'in_progres' ? (
-                                                <button
-                                                    onClick={() => handleAction(item.slug)}
-                                                    className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md font-semibold hover:bg-blue-600 cursor-pointer"
+                                                <Link
+                                                    href={`/ragam-challenge/${item.slug}/progres/${item.uuid}`}
+                                                    className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md font-semibold hover:bg-blue-600 cursor-pointer text-center"
                                                 >
                                                     Lanjutkan
-                                                </button>
+                                                </Link>
                                             ) : item.status === 'completed' ? (
-                                                <button
-                                                    onClick={() => handleAction(item.slug)}
-                                                    className="px-4 py-2 bg-green-500 text-white text-sm rounded-md font-semibold cursor-pointer"
+                                                <Link
+                                                    href={`/ragam-challenge/${item.slug}/progres/${item.uuid} `}
+                                                    className="px-4 py-2 bg-green-500 text-white text-sm rounded-md font-semibold cursor-pointer text-center"
                                                 >
                                                     Lihat Detail
-                                                </button>
+                                                </Link>
                                             ) : item.status === 'failed' || item.status === 'rejected' ? (
-                                                <button
-                                                    onClick={() => handleAction(item.slug)}
-                                                    className="px-4 py-2 bg-red-500 text-white text-sm rounded-md font-semibold cursor-pointer"
+                                                <Link
+                                                    href={`/ragam-challenge/${item.slug}/progres/${item.uuid}`}
+                                                    className="px-4 py-2 bg-red-500 text-white text-sm rounded-md font-semibold cursor-pointer text-center"
                                                 >
                                                     Lihat Detail
-                                                </button>
+                                                </Link>
                                             ) : (
-                                                <button
-                                                    onClick={() => handleAction(item.slug)}
-                                                    className="px-4 py-2 bg-yellow-500 text-white text-sm rounded-md font-semibold hover:bg-yellow-600 cursor-pointer"
+                                                <Link
+                                                    href={`/ragam-challenge/${item.slug}/progres/${item.uuid}`}
+                                                    className="px-4 py-2 bg-yellow-500 text-white text-sm rounded-md font-semibold hover:bg-yellow-600 cursor-pointer text-center"
                                                 >
                                                     Mulai Challenge
-                                                </button>
+                                                </Link>
                                             )}
                                         </div>
                                     </div>

@@ -69,18 +69,18 @@ Route::post('/nusantara/ask', [NusantaraAIController::class, 'ask']);
 Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::post('/ragam-challenge/{uuid}/join', [FrontController::class, 'joinChallenge'])->name('challenge.join');
+    Route::post('/ragam-challenge/{id}/join', [FrontController::class, 'joinChallenge'])->name('challenge.join');
     Route::post('/ragam-challenge/{id}/stop', [FrontController::class, 'stopChallenge'])->name('challenge.stop');
     Route::post('/ragam-challenge/claim-reward/{participant}/', [FrontController::class, 'claimReward']);
+
+    Route::get('/ragam-challenge/{slug}/progres/{uuid}', [FrontController::class, 'challengeProgres'])->name('challenge.progres');
+    Route::post('/ragam-challenge/{slug}/progres', [FrontController::class, 'storeChallengeProgres'])->name('challenge.progres.store');
 
 
 
     Route::get('/kuis-nusantara/mulai/{uuid}', [FrontController::class, 'mulaiKuisNusantara']);
     Route::get('/kuis-nusantara/lihat/{uuid}/{uuidAttempt}', [FrontController::class, 'lihatAttemptKuisNusantara'])->name('kuis-nusantara.lihat');
     Route::post('/kuis-nusantara/submit/{uuid}', [FrontController::class, 'submitQuiz']);
-
-    Route::get('/ragam-challenge/{slug}/progres', [FrontController::class, 'challengeProgres'])->name('challenge.progres');
-    Route::post('/ragam-challenge/{slug}/progres', [FrontController::class, 'storeChallengeProgres'])->name('challenge.progres.store');
 
 
     Route::get('/profile/dashboard', [ProfileController::class, 'index']);

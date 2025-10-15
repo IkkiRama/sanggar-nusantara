@@ -80,8 +80,6 @@ export default function ChallengeProgres({
 
 
 
-
-
   return (
     <MainLayout title={`Progres ${participant.challenge.title} | Sanggar Nusantara`}>
       <LightNavbar user={user} cartCount={0} />

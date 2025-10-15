@@ -38,6 +38,7 @@ export default function DetailChallenge() {
     post(`/ragam-challenge/${challenge.id}/stop`);
   };
 
+
   const canJoin =
     user && (challenge.status === "gratis" || ["admin", "premium"].includes(user.role));
 
@@ -111,7 +112,7 @@ export default function DetailChallenge() {
                 ) : alreadyJoined ? (
                   <>
                     <Link
-                      href={`/ragam-challenge/${challenge.slug}/progres`}
+                      href={`/ragam-challenge/${challenge.slug}/progres/${participant.uuid}`}
                       className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all w-full sm:w-auto text-center"
                     >
                       Lihat Progres
@@ -141,7 +142,7 @@ export default function DetailChallenge() {
                 ) : canJoin ? (
                   <button
                     onClick={handleJoin}
-                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all w-full sm:w-auto"
+                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all w-full sm:w-auto cursor-pointer"
                   >
                     Ikuti Challenge
                   </button>
